@@ -16,6 +16,7 @@ namespace RepoExperimental.FacadeLayer
 
 open RepoExperimental
 
+/// Implementation of an element.
 type Element() = 
     interface IElement with
         member this.Attributes = raise (System.NotImplementedException())
