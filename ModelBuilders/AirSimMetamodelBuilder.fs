@@ -51,7 +51,7 @@ type AirSimMetamodelBuilder() =
                 edge.Target <- Some target
                 edge.TargetName <- targetName
 
-                infrastructure.Element.SetAttributeValue edge "shape" "Pictures/Edge.png"
+                infrastructure.Element.SetAttributeValue edge "shape" "View/Pictures/Edge.png"
                 infrastructure.Element.SetAttributeValue edge "name" linkName
 
                 edge
@@ -62,21 +62,21 @@ type AirSimMetamodelBuilder() =
                 edge.Target <- Some target
                 edge.TargetName <- targetName
 
-                infrastructure.Element.SetAttributeValue edge "shape" "Pictures/Edge.png"
+                infrastructure.Element.SetAttributeValue edge "shape" "View/Pictures/Edge.png"
                 infrastructure.Element.SetAttributeValue edge "name" linkName
 
                 edge
 
             let abstractNode = +("AbstractNode", "", true)
-            let initialNode = +("InitialNode", "Pictures/initialBlock.png", false)
-            let finalNode = +("FinalNode", "Pictures/finalBlock.png", false)
+            let initialNode = +("InitialNode", "View/Pictures/initialBlock.png", false)
+            let finalNode = +("FinalNode", "View/Pictures/finalBlock.png", false)
 
-            let takeoff = +("Takeoff", "Pictures/takeoff.png", false)
-            let landing = +("Land", "Pictures/land.png", false)
-            let move = +("Move", "Pictures/move.png", false)
-            let hover = +("Hover", "Pictures/hover.png", false)
-            let timer = +("Timer", "Pictures/timerBlock.png", false)
-            let ifNode = +("IfNode", "Pictures/if.png", false)
+            let takeoff = +("Takeoff", "View/Pictures/takeoff.png", false)
+            let landing = +("Land", "View/Pictures/land.png", false)
+            let move = +("Move", "View/Pictures/move.png", false)
+            let hover = +("Hover", "View/Pictures/hover.png", false)
+            let timer = +("Timer", "View/Pictures/timerBlock.png", false)
+            let ifNode = +("IfNode", "View/Pictures/if.png", false)
             
             let link = abstractNode ---> (abstractNode, "target", "Link")
             let ifLink = abstractNode --->> (abstractNode, "ifTarget", "If Link")
