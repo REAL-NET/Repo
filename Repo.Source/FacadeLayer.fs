@@ -123,6 +123,9 @@ type IAttribute =
 /// Element is a general term for nodes or edges.
 and [<AllowNullLiteral>] IElement =
     interface
+        /// The primary key of element in model. Should be unique inside model
+        abstract Id: int with get
+    
         /// Name of an element, to be displayed on a scene and in various menus. Does not need to be unique.
         abstract Name: string with get, set
 
