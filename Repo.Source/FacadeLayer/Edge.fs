@@ -24,16 +24,15 @@ type Edge
         element: DataLayer.IEdge,
         elementRepository: IElementRepository,
         attributeRepository: AttributeRepository,
-        id: int,
         info: IVisualEdgeInfo
     ) =
 
-    inherit Element(infrastructure, element, elementRepository, attributeRepository, id)
+    inherit Element(infrastructure, element, elementRepository, attributeRepository)
 
     let mutable visualInfo = info
 
-    new(infrastructure, element, elementRepository, attributeRepository, id) 
-        = Edge(infrastructure, element, elementRepository, attributeRepository, id, VisualEdgeInfo()) 
+    new(infrastructure, element, elementRepository, attributeRepository) 
+        = Edge(infrastructure, element, elementRepository, attributeRepository, VisualEdgeInfo()) 
 
     interface IEdge with
         member this.From

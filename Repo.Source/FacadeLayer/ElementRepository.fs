@@ -22,8 +22,7 @@ open Repo.InfrastructureSemanticLayer
 /// Repository for element wrappers. Contains already created wrappers and creates new wrappers if needed.
 type ElementRepository(infrastructure: InfrastructureSemantic, attributeRepository: AttributeRepository) =
     let elements = Dictionary<_, _>()
-    let mutable addingCounter = 0
-    
+
     let findMetatype (element : DataLayer.IElement) =
         if infrastructure.Metamodel.IsNode element then
             Metatype.Node
@@ -51,8 +50,7 @@ type ElementRepository(infrastructure: InfrastructureSemantic, attributeReposito
                                     infrastructure,
                                     element :?> DataLayer.IEdge,
                                     this :> IElementRepository,
-                                    attributeRepository,
-                                    addingCounter
+                                    attributeRepository
                                 ) :> IElement
                     | Metatype.Node ->
                         if not <| element :? DataLayer.INode then
@@ -66,11 +64,9 @@ type ElementRepository(infrastructure: InfrastructureSemantic, attributeReposito
                                     infrastructure,
                                     element :?> DataLayer.INode,
                                     this :> IElementRepository,
-                                    attributeRepository,
-                                    addingCounter
+                                    attributeRepository
                                 ) :> IElement
                     | _ -> failwith "Unknown metatype"
-                addingCounter <- addingCounter + 1
                 elements.Add(element, newElement)
                 newElement
 
