@@ -22,6 +22,7 @@ namespace Repo.CSharp.Tests
     public class PluginLaunchTest
     {
         [Test]
+        [Ignore("Not implemented yet")]
         public void RepoShallAllowToCreateAMetamodelProgrammatically()
         {
             var repo = RepoFactory.Create();
