@@ -14,6 +14,7 @@
 
 namespace Repo.LanguageMetamodel.Details.Elements
 
+open Repo.CoreMetamodel
 open Repo.LanguageMetamodel
 open Repo.AttributeMetamodel
 
@@ -40,10 +41,10 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.cast<ILanguageAssociation>
 
         member this.DirectSupertypes =
-            failwith "Not implemented"
+            failwith "not implemented"
 
         member this.Attributes =
-            failwith "Not implemented"
+            failwith "not implemented"
 
         member this.Slots =
             failwith "Not implemented"
