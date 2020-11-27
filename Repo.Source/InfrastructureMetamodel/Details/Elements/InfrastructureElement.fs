@@ -21,22 +21,53 @@ open Repo.LanguageMetamodel
 [<AbstractClass>]
 type InfrastructureElement(element: ILanguageElement, pool: InfrastructurePool, repo: ILanguageRepository) =
 
+    let languageMetamodel =
+        repo.Model Repo.InfrastructureMetamodel.Consts.infrastructureMetamodel
+    
+    let attributesAssociationMetatype =
+        languageMetamodel.Association Consts.attributesEdge
+    
+    let wrap = pool.Wrap 
+    
     /// Returns underlying CoreElement.
     member this.UnderlyingElement = element
 
     interface IInfrastructureElement with
-
+        
+        member this.OutgoingEdges =
+            element.OutgoingEdges
+            |> Seq.map pool.Wrap
+            |> Seq.cast<IInfrastructureEdge>
+        
         member this.OutgoingAssociations = 
-            failwith "Not implemented"
+            element.OutgoingAssociations
+            |> Seq.map pool.Wrap
+            |> Seq.cast<IInfrastructureAssociation>
 
         member this.IncomingAssociations =
-            failwith "Not implemented"
+            element.IncomingAssociations
+            |> Seq.map pool.Wrap
+            |> Seq.cast<IInfrastructureAssociation>
 
         member this.DirectSupertypes =
-            failwith "Not implemented"
+            element.OutgoingEdges
+            |> Seq.filter (fun e -> e :? IInfrastructureGeneralization)
+            |> Seq.map (fun e -> e.Target)
+            |> Seq.map wrap
+          
 
         member this.Attributes =
-            failwith "Not implemented"
+             let selfAttributes =
+                element.OutgoingAssociations
+                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> ILanguageElement))
+                |> Seq.map (fun a -> a.Target)
+                |> Seq.map wrap
+                |> Seq.cast<IInfrastructureAttribute>
+                
+             (this :> IInfrastructureElement).DirectSupertypes
+            |> Seq.map (fun e -> e.Attributes)
+            |> Seq.concat
+            |> Seq.append selfAttributes    
 
         member this.Slots =
             failwith "Not implemented"

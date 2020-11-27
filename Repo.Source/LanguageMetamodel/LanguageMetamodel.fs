@@ -17,6 +17,9 @@ namespace Repo.LanguageMetamodel
 /// Element, most general thing that can be in a model.
 type ILanguageElement =
     interface
+         /// Outgoing edges (all of possible kinds) for that element.
+        abstract OutgoingEdges: ILanguageEdge seq with get
+        
         /// Outgoing associations for that element.
         abstract OutgoingAssociations: ILanguageAssociation seq with get
 

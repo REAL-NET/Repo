@@ -17,6 +17,9 @@ namespace Repo.InfrastructureMetamodel
 /// Element, most general thing that can be in a model.
 type IInfrastructureElement =
     interface
+        /// Outgoing edges (all of possible kinds) for that element.
+        abstract OutgoingEdges: IInfrastructureEdge seq with get
+        
         /// Outgoing associations for that element.
         abstract OutgoingAssociations: IInfrastructureAssociation seq with get
 

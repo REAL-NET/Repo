@@ -68,7 +68,12 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
         | _ -> "unknown"
 
     interface ILanguageElement with
-
+        member this.OutgoingEdges =
+            element.OutgoingEdges
+            |> Seq.map pool.Wrap
+            |> Seq.cast<ILanguageEdge>
+        
+        
         member this.OutgoingAssociations =
             element.OutgoingAssociations
             |> Seq.map pool.Wrap
