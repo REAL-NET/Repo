@@ -12,12 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
+using System.Linq;
+using NUnit.Framework;
+
 namespace Repo.CSharp.Tests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using NUnit.Framework;
-
     [TestFixture]
     public class PluginLaunchTest
     {

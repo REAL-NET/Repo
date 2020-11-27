@@ -40,7 +40,7 @@ type LanguagePool(factory: ILanguageFactory) =
         if not <| pool.Remove element then 
             failwith "Removing non-existent element"
 
-    /// Wraps given CoreElement to AttributeElement. Creates new wrapper if needed, otherwise returns cached copy.
+    /// Wraps given IAttribute element to LanguageElement. Creates new wrapper if needed, otherwise returns cached copy.
     member this.Wrap (element: IAttributeElement): ILanguageElement =
         wrap elementsPool (fun e -> factory.CreateElement e this) element
 
@@ -56,7 +56,7 @@ type LanguagePool(factory: ILanguageFactory) =
     member this.UnregisterAttribute (element: IAttributeAttribute): unit =
         unregister attributesPool element
 
-    /// Wraps given CoreElement to AttributeSlot. Creates new wrapper if needed, otherwise returns cached copy.
+    /// Wraps given AttributeElement to LanguageSlot. Creates new wrapper if needed, otherwise returns cached copy.
     member this.WrapSlot (slot: IAttributeSlot): ILanguageSlot =
         wrap slotsPool (fun e -> factory.CreateSlot e this) slot
 

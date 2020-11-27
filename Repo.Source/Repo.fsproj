@@ -92,6 +92,7 @@
     <Compile Include="Facade\Repo.fs" />
     <Compile Include="Facade\FacadeFactory.fs" />
     <Compile Include="RepoFactory.fs" />
+    <Compile Include="Visual.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

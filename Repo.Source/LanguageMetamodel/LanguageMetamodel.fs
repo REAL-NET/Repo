@@ -33,6 +33,9 @@ type ILanguageElement =
 
         /// A list of all attributes available for an element.
         abstract Attributes: ILanguageAttribute seq with get
+        
+        /// Adds a new attribute to a node.
+        abstract AddAttribute: name: string -> ``type``: ILanguageElement -> unit
 
         /// A list of all slots for an element.
         abstract Slots: ILanguageSlot seq with get

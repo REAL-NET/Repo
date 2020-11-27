@@ -14,45 +14,6 @@
 
 namespace Repo
 
-/// Type of file which represents visual information
-type TypeOfVisual =
-   /// Xml file
-   | XML = 0
-
-   /// Just image connected to element
-   | Image = 1
-
-   /// No file provided
-   | NoFile = 2
-
-/// This interface represents information about how element is shown on screen.
-type IVisualInfo =
-   interface
-       /// Address to  file. 
-       abstract LinkToFile : string with get, set
-       
-       /// Type of linked file.
-       abstract Type : TypeOfVisual with get, set 
-   end
-
-/// This interface represents information about how node is shown on screen.
-type IVisualNodeInfo =
-   interface
-       inherit IVisualInfo
-
-       /// Position of node on screen.
-       abstract Position : (int * int) option with get, set          
-   end
-
-// This interface represents information about how edge is shown on screen.
-type IVisualEdgeInfo =
-   interface
-       inherit IVisualInfo
-
-       /// Coordinates of routing points without ends.
-       abstract RoutingPoints : (int * int) list with get, set
-   end
-
 /// Enumeration with all kinds of attributes supported by repository
 type AttributeKind =
    /// Attribute whose value is a string.
@@ -160,7 +121,6 @@ type INode =
        inherit IElement
 
        /// Info how element should be represented on screen
-       abstract member VisualInfo: IVisualNodeInfo with get, set
    end
 
 /// Edge --- an edge in a model. Note that here it can connect not only nodes, but edges too. It is needed to model
@@ -177,7 +137,6 @@ type IEdge =
        abstract To: IElement with get, set
 
        /// Info how element should be represented on screen
-       abstract member VisualInfo: IVisualEdgeInfo with get, set
    end
 
 /// Model is one "graph", represented by one diagram on a scene. Has name, consists of nodes and edges.

@@ -22,25 +22,39 @@ open Repo.CoreMetamodel
 [<AbstractClass>]
 type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRepository) =
 
-    let coreMetamodel = repo.Model CoreMetamodel.Consts.coreMetamodel
-    let coreAssociation = coreMetamodel.Node CoreMetamodel.Consts.association
+    let coreMetamodel =
+        repo.Model CoreMetamodel.Consts.coreMetamodel
+
+    let coreAssociation =
+        coreMetamodel.Node CoreMetamodel.Consts.association
+
     let model () = element.Model
 
     let attributeMetamodel = repo.Model Consts.attributeMetamodel
     let attributeMetatype = attributeMetamodel.Node Consts.attribute
-    let attributesAssociationMetatype = attributeMetamodel.Association Consts.attributesEdge
-    let slotsAssociationMetatype = attributeMetamodel.Association Consts.slotsEdge
-    let typeAssociationMetatype = attributeMetamodel.Association Consts.typeEdge
+
+    let attributesAssociationMetatype =
+        attributeMetamodel.Association Consts.attributesEdge
+
+    let slotsAssociationMetatype =
+        attributeMetamodel.Association Consts.slotsEdge
+
+    let typeAssociationMetatype =
+        attributeMetamodel.Association Consts.typeEdge
 
     let wrap = pool.Wrap
-    let unwrap (element: IAttributeElement) = (element :?> AttributeElement).UnderlyingElement
 
-    let (--->) source (target, metatype) = (model ()).InstantiateAssociation source target metatype |> ignore
+    let unwrap (element: IAttributeElement) =
+        (element :?> AttributeElement).UnderlyingElement
+
+    let (--->) source (target, metatype) =
+        (model ()).InstantiateAssociation source target metatype
+        |> ignore
 
     /// Returns underlying CoreElement.
     member this.UnderlyingElement = element
 
-    override this.ToString () = 
+    override this.ToString() =
         match element with
         | :? ICoreNode as n -> n.Name
         | :? ICoreAssociation as a -> a.TargetName
@@ -48,6 +62,11 @@ type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRep
         | _ -> "unknown"
 
     interface IAttributeElement with
+        member this.OutgoingEdges =
+            element.OutgoingEdges
+            |> Seq.map wrap
+            |> Seq.cast<IAttributeEdge>
+
 
         member this.OutgoingAssociations =
             element.OutgoingAssociations
@@ -56,11 +75,15 @@ type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRep
             |> Seq.cast<IAttributeAssociation>
 
         member this.OutgoingAssociation name =
-            element.OutgoingAssociation name |> wrap |> (fun a -> a :?> IAttributeAssociation)
+            element.OutgoingAssociation name
+            |> wrap
+            |> (fun a -> a :?> IAttributeAssociation)
 
         member this.IncomingAssociations =
             element.IncomingEdges
-            |> Seq.choose (function | :? ICoreAssociation as a -> Some a | _ -> None)
+            |> Seq.choose (function
+                | :? ICoreAssociation as a -> Some a
+                | _ -> None)
             |> Seq.filter (fun a -> a.IsInstanceOf coreAssociation)
             |> Seq.map wrap
             |> Seq.cast<IAttributeAssociation>
@@ -83,13 +106,20 @@ type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRep
             |> Seq.concat
             |> Seq.append selfAttributes
 
+        // TODO: incorrect adding element
         member this.AddAttribute name ``type`` =
-            if (this :> IAttributeElement).Attributes |> Seq.filter (fun a -> a.Name = name) |> Seq.length = 1 then
+            if (this :> IAttributeElement).Attributes
+               |> Seq.filter (fun a -> a.Name = name)
+               |> Seq.length = 1 then
                 raise <| AmbiguousAttributesException(name)
 
-            let attributeNode = (model ()).InstantiateNode name attributeMetatype
-            attributeNode ---> (unwrap ``type``, typeAssociationMetatype)
-            element ---> (attributeNode, attributesAssociationMetatype)
+            let attributeNode =
+                (model ()).InstantiateNode name attributeMetatype
+
+            attributeNode
+            ---> (unwrap ``type``, typeAssociationMetatype)
+            element
+            ---> (attributeNode, attributesAssociationMetatype)
 
         member this.Slots =
             element.OutgoingAssociations
@@ -98,15 +128,12 @@ type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRep
             |> Seq.map pool.WrapSlot
 
         member this.Slot name =
-            (this :> IAttributeElement).Slots 
+            (this :> IAttributeElement).Slots
             |> Seq.filter (fun s -> s.Attribute.Name = name)
             |> Helpers.exactlyOneElement name
 
-        member this.Model: IAttributeModel =
-            pool.WrapModel element.Model
+        member this.Model: IAttributeModel = pool.WrapModel element.Model
 
-        member this.HasMetatype =
-            failwith "Not implemented"
+        member this.HasMetatype = failwith "Not implemented"
 
-        member this.Metatype =
-            pool.Wrap element.Metatype
+        member this.Metatype = pool.Wrap element.Metatype

@@ -17,6 +17,9 @@ namespace Repo.AttributeMetamodel
 /// Element, most general thing that can be in a model.
 type IAttributeElement =
     interface
+        /// Outgoing edges (all of possible kinds) for that element.
+        abstract OutgoingEdges: IAttributeEdge seq with get
+        
         /// Outgoing associations for that element.
         abstract OutgoingAssociations: IAttributeAssociation seq with get
 
@@ -191,7 +194,7 @@ and IAttributeModel =
         /// Returns true if a node with given name exists in a model.
         abstract HasNode: name: string -> bool
 
-        /// Searches association with given traget name in a model. If there are none or more than one association 
+        /// Searches association with given target name in a model. If there are none or more than one association 
         /// with given name, throws an exception.
         abstract Association: name: string -> IAttributeAssociation
 

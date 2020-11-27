@@ -14,6 +14,8 @@
 
 namespace Repo.LanguageMetamodel.Details.Elements
 
+open System
+open Repo
 open Repo.CoreMetamodel
 open Repo.LanguageMetamodel
 open Repo.AttributeMetamodel
@@ -22,38 +24,99 @@ open Repo.AttributeMetamodel
 [<AbstractClass>]
 type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttributeRepository) =
 
+    let languageMetamodel =
+        repo.Model Repo.LanguageMetamodel.Consts.languageMetamodel
+
+    let languageAssociation =
+        languageMetamodel.Node Repo.LanguageMetamodel.Consts.association
+
+    let attributeMetamodel = repo.Model Consts.attributeMetamodel
+    let attributeMetatype = attributeMetamodel.Node Consts.attribute
+
+    let attributesAssociationMetatype =
+        attributeMetamodel.Association Consts.attributesEdge
+
+    let slotsAssociationMetatype =
+        attributeMetamodel.Association Consts.slotsEdge
+
+    let typeAssociationMetatype =
+        attributeMetamodel.Association Consts.typeEdge
+
+    let slotsAssociationMetatype =
+        attributeMetamodel.Association Consts.slotsEdge
+
+    let wrap = pool.Wrap
+
+    let model () = element.Model
+
+    let unwrap (element: ILanguageElement) =
+        (element :?> LanguageElement).UnderlyingElement
+
+    let (--->) source (target, metatype) =
+        (model ()).InstantiateAssociation source target metatype
+        |> ignore
+
+
     /// Returns underlying AttributeElement.
     member this.UnderlyingElement = element
+
+    override this.ToString() =
+        match element with
+        | :? ILanguageNode as n -> n.Name
+        | :? ILanguageAssociation as a -> a.TargetName
+        | :? ILanguageGeneralization -> "generalization"
+        | _ -> "unknown"
 
     interface ILanguageElement with
 
         member this.OutgoingAssociations =
-            element.OutgoingAssociations 
-            |> Seq.map pool.Wrap 
+            element.OutgoingAssociations
+            |> Seq.map pool.Wrap
             |> Seq.cast<ILanguageAssociation>
 
         member this.OutgoingAssociation name =
             element.OutgoingAssociation name |> pool.Wrap :?> ILanguageAssociation
 
         member this.IncomingAssociations =
-            element.IncomingAssociations 
-            |> Seq.map pool.Wrap 
+            element.IncomingAssociations
+            |> Seq.map pool.Wrap
             |> Seq.cast<ILanguageAssociation>
 
         member this.DirectSupertypes =
-            failwith "not implemented"
+            element.OutgoingEdges
+            |> Seq.filter (fun e -> e :? IAttributeGeneralization)
+            |> Seq.map (fun e -> e.Target)
+            |> Seq.map wrap
 
         member this.Attributes =
-            failwith "not implemented"
+            let selfAttributes =
+                element.OutgoingAssociations
+                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
+                |> Seq.map (fun a -> a.Target)
+                |> Seq.map wrap
+                |> Seq.cast<ILanguageAttribute>
+
+            (this :> ILanguageElement).DirectSupertypes
+            |> Seq.map (fun e -> e.Attributes)
+            |> Seq.concat
+            |> Seq.append selfAttributes
+
+        // TODO: correct adding element
+        member this.AddAttribute name ``type`` =
+            if (this :> ILanguageElement).Attributes
+               |> Seq.filter (fun a -> a.Name = name)
+               |> Seq.length = 1 then
+                raise <| AmbiguousAttributesException(name)
 
         member this.Slots =
-            failwith "Not implemented"
+            element.OutgoingAssociations
+            |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> IAttributeElement))
+            |> Seq.map (fun a -> a.Target)
+            |> Seq.cast<IAttributeSlot>
+            |> Seq.map (pool.WrapSlot)
 
-        member this.Model: ILanguageModel =
-            pool.WrapModel element.Model
+        member this.Model: ILanguageModel = pool.WrapModel element.Model
 
-        member this.HasMetatype =
-            failwith "Not implemented"
+        member this.HasMetatype = failwith "Not implemented"
 
-        member this.Metatype =
-            pool.Wrap element.Metatype
+        member this.Metatype = pool.Wrap element.Metatype
