@@ -53,10 +53,4 @@ type Edge(element: IInfrastructureElement, pool: FacadePool, repo: IInfrastructu
                 //let dataElement = (v :?> Element).UnderlyingElement
                 //element.Target <- Some dataElement
         
-        member this.VisualInfo
-            with get () = 
-                failwith "Not implemented"
-                //visualInfo
-            and set (info) = 
-                failwith "Not implemented"
-                //visualInfo <- info
+       

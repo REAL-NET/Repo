@@ -27,13 +27,6 @@ type Node(element: IInfrastructureElement, pool: FacadePool, repo: IInfrastructu
     //new(infrastructure, element, elementRepository, attributeRepository) 
     //    = Node(infrastructure, element, elementRepository, attributeRepository, VisualNodeInfo()) 
 
-    interface INode with
-        
-        member this.VisualInfo
-            with get () = 
-                failwith "Not implemented"
-                //visualInfo
-            and set (info) = 
-                failwith "Not implemented"
-                //visualInfo <- info
+   
+   
  
