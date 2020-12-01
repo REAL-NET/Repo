@@ -48,6 +48,8 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
     let wrap = pool.Wrap
 
     let model () = element.Model
+    
+    let mutable AttributeMap = Map.empty
 
     let unwrap (element: ILanguageElement) =
         (element :?> LanguageElement).UnderlyingElement
@@ -106,12 +108,17 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.concat
             |> Seq.append selfAttributes
 
-        // TODO: correct adding element
         member this.AddAttribute name ``type`` =
             if (this :> ILanguageElement).Attributes
                |> Seq.filter (fun a -> a.Name = name)
                |> Seq.length = 1 then
                 raise <| AmbiguousAttributesException(name)
+            let attributeNode = (model ()).InstantiateNode name attributeMetatype AttributeMap
+            attributeNode
+            ---> (unwrap ``type``, typeAssociationMetatype)
+            element
+            ---> (attributeNode, attributesAssociationMetatype)
+            AttributeMap <- AttributeMap.Add(name, attributeNode)
 
         member this.Slots =
             element.OutgoingAssociations

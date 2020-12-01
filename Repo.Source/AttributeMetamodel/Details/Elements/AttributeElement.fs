@@ -106,7 +106,6 @@ type AttributeElement(element: ICoreElement, pool: AttributePool, repo: ICoreRep
             |> Seq.concat
             |> Seq.append selfAttributes
 
-        // TODO: incorrect adding element
         member this.AddAttribute name ``type`` =
             if (this :> IAttributeElement).Attributes
                |> Seq.filter (fun a -> a.Name = name)
