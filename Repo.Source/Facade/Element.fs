@@ -16,6 +16,7 @@ namespace Repo.Facade
 
 open Repo
 open Repo.InfrastructureMetamodel
+open Repo.InfrastructureMetamodel.Details.Elements
 
 /// Implementation of an element wrapper.
 [<AbstractClass>]
@@ -49,24 +50,15 @@ type Element(element: IInfrastructureElement, pool: FacadePool, repo: IInfrastru
     interface IElement with
         member this.Name
             with get (): string =
-                failwith "Not implemented"
-                //match element with
-                //| :? DataLayer.IDataNode as n-> n.Name
-                //| _ ->
-                //    if elementSemantics.HasSlot "name" element then
-                //        elementSemantics.StringSlotValue "name" element 
-                //    else
-                //        ""
+                match element with
+                | :? InfrastructureNode as n -> (n :> IInfrastructureNode).Name 
+                | _ -> failwith "Not implemented"
 
             and set (v: string): unit =
-                failwith "Not implemented"
-                //match element with
-                //| :? DataLayer.IDataNode as n-> n.Name <- v
-                //| _ ->
-                //    if elementSemantics.HasSlot "name" element  then
-                //        elementSemantics.SetStringSlotValue "name" element v
-                //    else
-                //        raise (Repo.InvalidSemanticOperationException "Trying to set a name to an element which does not have one")
+                match element with
+                | :? InfrastructureNode as n -> (n :> IInfrastructureNode).Name <- v
+                | _ -> failwith "Not implemented"
+                                
 
         member this.Attributes = 
             failwith "Not implemented"
