@@ -1,22 +1,24 @@
 namespace Repo.DeepMetamodel
 
-/// Element, most general thing that can be in a model.
-type IDeepElement =
+
+type IDeepContext =
     interface
-        abstract Name: string with get, set
         abstract Level: int with get, set
         abstract Potency: int with get, set
+    end
+
+/// Element, most general thing that can be in a model.
+and IDeepElement =
+    interface
+        inherit IDeepContext
+        
+        abstract Name: string with get, set
         
          /// Outgoing edges (all of possible kinds) for that element.
         abstract OutgoingEdges: IDeepRelationship seq with get
         
         /// Outgoing associations for that element.
         abstract OutgoingAssociations: IDeepAssociation seq with get
-
-        /// Returns outgoing association with a given target name if there is exactly one such edge. 
-        /// Throws ElementNotFoundException if there is no edge with such name and MultipleElementsException 
-        /// if there are many.
-        abstract OutgoingAssociation: name: string -> IDeepAssociation
 
         /// Incoming associations for that element.
         abstract IncomingAssociations: IDeepAssociation seq with get
@@ -27,9 +29,6 @@ type IDeepElement =
         /// A list of all attributes available for an element.
         abstract Attributes: IDeepAttribute seq with get
         
-        /// Adds a new attribute to a node.
-        abstract AddAttribute: name: string -> ``type``: IDeepElement -> unit
-
         /// A list of all slots for an element.
         abstract Slots: IDeepSlot seq with get
 
@@ -48,6 +47,7 @@ type IDeepElement =
 /// (a set of possible values) and name.
 and IDeepAttribute =
     interface
+        inherit IDeepContext
         /// A type of an attribute. Restricts a set of possible values for corresponding slot.
         abstract Type: IDeepElement with get
 
@@ -58,6 +58,8 @@ and IDeepAttribute =
 /// An instance of attribute. Contains actual value.
 and IDeepSlot =
     interface
+        inherit IDeepContext
+
         /// Attribute that this slot is an instance of.
         abstract Attribute: IDeepAttribute with get
 
@@ -69,9 +71,6 @@ and IDeepSlot =
 and IDeepNode =
     interface
         inherit IDeepElement
-
-        /// Name of a node, possibly not unique.
-        abstract Name: string with get, set
     end
 
 /// Edge is a kind of element which can connect to everything.
@@ -136,13 +135,15 @@ and IDeepModel =
         abstract Metamodel: IDeepModel with get
 
         /// Creates a new node in a model by instantiating Attribute Metamodel "Node".
-        abstract CreateNode: name: string -> IDeepNode
+        abstract CreateNode: name: string -> level: int -> potency: int -> IDeepNode
 
         /// Creates new Generalization edge with given source and target by instantiating 
         /// Attribute Metamodel "Generalization"
         abstract CreateGeneralization: 
             source: IDeepElement 
-            -> target: IDeepElement 
+            -> target: IDeepElement
+            -> level: int
+            -> potency: int
             -> IDeepGeneralization
 
         /// Creates new Association edge with given source and target by instantiating 
@@ -151,6 +152,12 @@ and IDeepModel =
             source: IDeepElement
             -> target: IDeepElement
             -> targetName: string
+            -> level: int
+            -> potency: int
+            -> minSource: int
+            -> maxSource: int
+            -> minTarget: int
+            -> maxTarget: int
             -> IDeepAssociation
 
         /// Creates a new node in a model by instantiating given node from metamodel, supplying given values
@@ -159,6 +166,8 @@ and IDeepModel =
             name: string
             -> metatype: IDeepNode
             -> attributeValues: Map<string, IDeepElement>
+            -> level: int
+            -> potency: int
             -> IDeepNode
 
         /// Creates a new association in a model by instantiating given association from metamodel.
@@ -167,6 +176,12 @@ and IDeepModel =
             -> target: IDeepElement 
             -> metatype: IDeepAssociation 
             -> attributeValues: Map<string, IDeepElement>
+            -> level: int
+            -> potency: int
+            -> minSource: int
+            -> maxSource: int
+            -> minTarget: int
+            -> maxTarget: int
             -> IDeepAssociation
 
         /// Returns all elements in a model.
