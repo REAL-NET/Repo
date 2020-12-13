@@ -23,9 +23,9 @@ type FacadeFactory(repo: IInfrastructureRepository) =
         member this.CreateElement element pool =
             match element with
             | :? IInfrastructureNode as n -> Node(n, pool, repo) :> IElement
-            //| :? IInfrastructureGeneralization as g -> Generalization(g, pool, repo) :> IElement
-            //| :? IInfrastructureInstanceOf as i -> InstanceOf(i, pool, repo) :> IElement
-            //| :? IInfrastructureAssociation as a -> Association(a, pool, repo) :> IElement
+//            | :? IInfrastructureGeneralization as g -> Generalization(g, pool, repo) :> IElement
+//            | :? IInfrastructureInstanceOf as i -> InstanceOf(i, pool, repo) :> IElement
+//            | :? IInfrastructureAssociation as a -> Association(a, pool, repo) :> IElement
             | _ -> failwith "Unknown subtype"
 
         member this.CreateModel model pool =

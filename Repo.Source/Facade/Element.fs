@@ -60,11 +60,9 @@ type Element(element: IInfrastructureElement, pool: FacadePool, repo: IInfrastru
                 | :? InfrastructureNode as n -> (n :> IInfrastructureNode).Name <- v
                 | :? InfrastructureEdge as e -> invalidOp "Edges don't have names."
                 | _ -> invalidOp "Unknown type, it's no edge and node either."
-                                
 
         member this.Attributes = 
-            failwith "Not implemented"
-            //elementSemantics.Attributes element |> Seq.map attributeRepository.GetAttribute
+            failwith "not implemented"
 
         member this.Class =
             failwith "Not implemented"
