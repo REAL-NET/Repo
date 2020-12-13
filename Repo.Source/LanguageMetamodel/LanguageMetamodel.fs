@@ -46,10 +46,6 @@ type ILanguageElement =
         /// Returns a model to which this element belongs.
         abstract Model: ILanguageModel with get
 
-        /// False when metatype of an element can not be represented in terms of Attribute Metamodel.
-        /// InstanceOf edges always have this property set to false, to avoid infinite recursion.
-        abstract HasMetatype: bool with get
-
         /// Returns an element that this element is an instance of (target of an "instanceOf" association).
         abstract Metatype: ILanguageElement with get
     end

@@ -129,6 +129,4 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
 
         member this.Model: ILanguageModel = pool.WrapModel element.Model
 
-        member this.HasMetatype = failwith "Not implemented"
-
         member this.Metatype = pool.Wrap element.Metatype

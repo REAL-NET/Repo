@@ -26,6 +26,9 @@ type InfrastructureElement(element: ILanguageElement, pool: InfrastructurePool, 
     
     let attributesAssociationMetatype =
         languageMetamodel.Association Consts.attributesEdge
+        
+    let slotsAssociationMetatype =
+        languageMetamodel.Association Consts.slotsEdge
     
     let wrap = pool.Wrap 
     
@@ -70,13 +73,14 @@ type InfrastructureElement(element: ILanguageElement, pool: InfrastructurePool, 
             |> Seq.append selfAttributes    
 
         member this.Slots =
-            failwith "Not implemented"
+            element.OutgoingAssociations
+            |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> ILanguageElement))
+            |> Seq.map (fun a -> a.Target)
+            |> Seq.cast<ILanguageSlot>
+            |> Seq.map (pool.WrapSlot)
 
         member this.Model: IInfrastructureModel =
             pool.WrapModel element.Model
-
-        member this.HasMetatype =
-            failwith "Not implemented"
 
         member this.Metatype =
             pool.Wrap element.Metatype

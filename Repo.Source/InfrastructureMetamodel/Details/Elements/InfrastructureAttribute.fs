@@ -37,4 +37,5 @@ type InfrastructureAttribute(attribute: ILanguageAttribute, pool: Infrastructure
         member this.Type = attribute.Type |> pool.Wrap
 
         member this.DefaultValue =
+            // TODO set default value depending on Type
             failwith "Not implemented"

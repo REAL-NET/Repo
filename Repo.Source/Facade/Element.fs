@@ -52,12 +52,14 @@ type Element(element: IInfrastructureElement, pool: FacadePool, repo: IInfrastru
             with get (): string =
                 match element with
                 | :? InfrastructureNode as n -> (n :> IInfrastructureNode).Name 
-                | _ -> failwith "Not implemented"
+                | :? InfrastructureEdge as e -> invalidOp "Edges don't have names."
+                | _ -> invalidOp "Unknown type, it's no edge and node either."
 
             and set (v: string): unit =
                 match element with
                 | :? InfrastructureNode as n -> (n :> IInfrastructureNode).Name <- v
-                | _ -> failwith "Not implemented"
+                | :? InfrastructureEdge as e -> invalidOp "Edges don't have names."
+                | _ -> invalidOp "Unknown type, it's no edge and node either."
                                 
 
         member this.Attributes = 
