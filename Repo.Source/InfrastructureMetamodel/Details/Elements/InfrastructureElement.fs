@@ -60,24 +60,12 @@ type InfrastructureElement(element: ILanguageElement, pool: InfrastructurePool, 
           
 
         member this.Attributes =
-             let selfAttributes =
-                element.OutgoingAssociations
-                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> ILanguageElement))
-                |> Seq.map (fun a -> a.Target)
-                |> Seq.map wrap
-                |> Seq.cast<IInfrastructureAttribute>
-                
-             (this :> IInfrastructureElement).DirectSupertypes
-            |> Seq.map (fun e -> e.Attributes)
-            |> Seq.concat
-            |> Seq.append selfAttributes    
+             element.Attributes
+             |> Seq.map pool.WrapAttribute
 
         member this.Slots =
-            element.OutgoingAssociations
-            |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> ILanguageElement))
-            |> Seq.map (fun a -> a.Target)
-            |> Seq.cast<ILanguageSlot>
-            |> Seq.map (pool.WrapSlot)
+            element.Slots
+            |> Seq.map pool.WrapSlot
 
         member this.Model: IInfrastructureModel =
             pool.WrapModel element.Model
