@@ -1,30 +1,16 @@
-﻿(* Copyright 2019 REAL.NET group
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. *)
+﻿namespace Repo.LanguageMetamodel.Elements.Tests
 
-namespace Repo.AttributeMetamodel.Elements.Tests
-
-open Repo
-open Repo.AttributeMetamodel
 open NUnit.Framework
 open FsUnitTyped
+open Repo
+open Repo.AttributeMetamodel
 
 [<TestFixture>]
-type AttributeElementTests() =
-
+type LanguageElementsTests() =
+    
     let mutable repo = AttributeMetamodelRepoFactory.Create ()
     let mutable model = repo.InstantiateAttributeMetamodel "TestModel"
-
+    
     let (~+) name = model.CreateNode name
 
     let (--->) (node1: IAttributeElement) (node2: IAttributeElement) =
@@ -32,12 +18,12 @@ type AttributeElementTests() =
 
     let (--|>) (node1: IAttributeElement) (node2: IAttributeElement) =
         model.CreateGeneralization node1 node2 |> ignore
-
+        
     [<SetUp>]
     member this.Setup () =
         repo <- AttributeMetamodelRepoFactory.Create ()
-        model <- repo.InstantiateAttributeMetamodel "TestModel"
-
+        model <- repo.InstantiateAttributeMetamodel "TestModel"        
+    
     [<Test>]
     member this.OutgoingAssociationsTest () =
         let node1 = +"Node1"
@@ -46,15 +32,15 @@ type AttributeElementTests() =
         node1.OutgoingAssociations |> shouldContain edge
         node1.OutgoingAssociations |> shouldHaveLength 1
         ()
-
+        
     [<Test>]
     member this.AttributesTest () =
         let node = +"Node"
         let ``type`` = +"Type"
-        node.AddAttribute "attribute" ``type``
-
+        node.AddAttribute "attribute" ``type`` 
+        
         node.Attributes |> Seq.filter (fun a -> a.Name = "attribute") |> shouldHaveLength 1
-
+        
     [<Test>]
     member this.AddingTwoAttributesWithTheSameNameAreNotAllowedTest () =
         let node = +"Node"
@@ -74,7 +60,7 @@ type AttributeElementTests() =
         child --|> parent
 
         child.Attributes |> Seq.filter (fun a -> a.Name = "attribute") |> shouldHaveLength 1
-
+        
     [<Test>]
     member this.SlotsTest () =
         let node = +"Node"
