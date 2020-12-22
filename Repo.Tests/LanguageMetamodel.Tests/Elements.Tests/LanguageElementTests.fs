@@ -6,7 +6,7 @@ open Repo
 open Repo.AttributeMetamodel
 
 [<TestFixture>]
-type LanguageElementsTests() =
+type LanguageElementTests() =
     
     let mutable repo = AttributeMetamodelRepoFactory.Create ()
     let mutable model = repo.InstantiateAttributeMetamodel "TestModel"
