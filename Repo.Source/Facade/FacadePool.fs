@@ -25,7 +25,7 @@ type FacadePool(factory: IFacadeFactory) =
     let elementsPool = Dictionary<IInfrastructureElement, IElement>() :> IDictionary<_, _>
     let modelsPool = Dictionary<IInfrastructureModel, IModel>() :> IDictionary<_, _>
 
-    /// Wraps given CoreElement to AttributeElement. Creates new wrapper if needed, otherwise returns cached copy.
+    /// Wraps given InfrastructureElement to FacadeElement. Creates new wrapper if needed, otherwise returns cached copy.
     member this.Wrap (element: IInfrastructureElement): IElement =
         if elementsPool.ContainsKey element then
             elementsPool.[element]
