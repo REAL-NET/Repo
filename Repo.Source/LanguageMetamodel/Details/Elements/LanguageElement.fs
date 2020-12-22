@@ -117,6 +117,11 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
         member this.Slots =
             element.Slots
             |> Seq.map pool.WrapSlot
+            
+        member this.Slot name =
+            (this :> ILanguageElement).Slots
+            |> Seq.filter (fun s -> s.Attribute.Name = name)
+            |> Helpers.exactlyOneElement name
 
         member this.Model: ILanguageModel = pool.WrapModel element.Model
 

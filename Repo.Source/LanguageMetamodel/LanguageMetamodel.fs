@@ -42,6 +42,9 @@ type ILanguageElement =
 
         /// A list of all slots for an element.
         abstract Slots: ILanguageSlot seq with get
+        
+        /// Returns a slot with given name.
+        abstract Slot: name: string -> ILanguageSlot
 
         /// Returns a model to which this element belongs.
         abstract Model: ILanguageModel with get

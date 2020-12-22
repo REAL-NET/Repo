@@ -31,9 +31,4 @@ type LanguageEnumerationTests() =
         repo <- LanguageMetamodelRepoFactory.Create ()
         model <- repo.InstantiateLanguageMetamodel "TestModel"
 
-    [<Test>]
-    member this.EnumerationElementsTest () =
-        let enum = model.CreateEnumeration "TestEnum" ["true"; "false"]
-        enum.Elements |> shouldHaveLength 2
-        enum.Elements |> Seq.filter (fun n -> n.Name = "true") |> shouldHaveLength 1
-        enum.Elements |> Seq.filter (fun n -> n.Name = "false") |> shouldHaveLength 1
+    

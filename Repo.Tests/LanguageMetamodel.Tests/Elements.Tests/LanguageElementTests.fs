@@ -3,26 +3,28 @@
 open NUnit.Framework
 open FsUnitTyped
 open Repo
-open Repo.AttributeMetamodel
+open Repo.LanguageMetamodel
+
+type ElementType = ILanguageElement
 
 [<TestFixture>]
 type LanguageElementTests() =
     
-    let mutable repo = AttributeMetamodelRepoFactory.Create ()
-    let mutable model = repo.InstantiateAttributeMetamodel "TestModel"
+    let mutable repo = LanguageMetamodelRepoFactory.Create ()
+    let mutable model = repo.InstantiateLanguageMetamodel "TestModel"
     
     let (~+) name = model.CreateNode name
 
-    let (--->) (node1: IAttributeElement) (node2: IAttributeElement) =
+    let (--->) (node1: ElementType) (node2: ElementType) =
         model.CreateAssociation node1 node2 "testEdge"
 
-    let (--|>) (node1: IAttributeElement) (node2: IAttributeElement) =
+    let (--|>) (node1: ElementType) (node2: ElementType) =
         model.CreateGeneralization node1 node2 |> ignore
         
     [<SetUp>]
     member this.Setup () =
-        repo <- AttributeMetamodelRepoFactory.Create ()
-        model <- repo.InstantiateAttributeMetamodel "TestModel"        
+        repo <- LanguageMetamodelRepoFactory.Create ()
+        model <- repo.InstantiateLanguageMetamodel "TestModel"        
     
     [<Test>]
     member this.OutgoingAssociationsTest () =
@@ -70,10 +72,12 @@ type LanguageElementTests() =
 
         let instanceModel = repo.InstantiateModel "InstanceModel" model
 
-        let value = instanceModel.InstantiateNode "Value" ``type`` Map.empty :> IAttributeElement
+        let value = instanceModel.InstantiateNode "Value" ``type`` Map.empty :> ElementType
         let instance = instanceModel.InstantiateNode "Instance" node (Map.empty.Add("attribute", value))
         
         instance.Slots |> shouldHaveLength 1
 
         (instance.Slot "attribute").Value |> shouldEqual value
         (instance.Slot "attribute").Attribute |> shouldEqual (Seq.head node.Attributes)
+        
+   
