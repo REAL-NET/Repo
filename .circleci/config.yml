@@ -8,9 +8,7 @@ jobs:
       shell: powershell.exe
     step
       - checkout
-      - run:
-        name: "Install dotnet 5"      
-        command: https://dotnet.microsoft.com/download/dotnet-core/scripts/v1/dotnet-install.ps1
+      
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
