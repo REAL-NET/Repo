@@ -6,11 +6,11 @@ jobs:
     executor:
       name: win/vs2019
       shell: powershell.exe
-    steps:
+    step
+      - checkout
       - run:
         name: "Install dotnet 5"      
         command: https://dotnet.microsoft.com/download/dotnet-core/scripts/v1/dotnet-install.ps1
-      - checkout
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
