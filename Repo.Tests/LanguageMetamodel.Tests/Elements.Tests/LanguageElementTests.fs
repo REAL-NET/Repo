@@ -80,4 +80,9 @@ type LanguageElementTests() =
         (instance.Slot "attribute").Value |> shouldEqual value
         (instance.Slot "attribute").Attribute |> shouldEqual (Seq.head node.Attributes)
         
+    [<Test>]    
+    member this.EnumerationTest () =
+        let valuesInsideEnum = Seq.ofList[ "1"; "2" ]
+        let enumeration = model.CreateEnumeration "1 and 2" valuesInsideEnum
+        enumeration.Name |> shouldEqual "1 and 2"
    

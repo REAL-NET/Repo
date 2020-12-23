@@ -33,7 +33,7 @@ type LanguageFactory(repo: IAttributeRepository) =
             LanguageModel(model, pool, repo) :> _
 
         member this.CreateEnumeration element pool =
-            LanguageEnumeration(element :?> IAttributeNode, pool, repo) :> _
+            LanguageEnumeration(element :?> IAttributeNode, pool, repo) :> ILanguageEnumeration
 
         member this.CreateAttribute attribute pool =
             LanguageAttribute(attribute, pool, repo) :> ILanguageAttribute

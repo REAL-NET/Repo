@@ -26,24 +26,10 @@ type LanguageEnumeration(node: IAttributeNode, pool: LanguagePool, repo: IAttrib
     let coreMetamodel =
         repo.Model CoreMetamodel.Consts.coreMetamodel
 
-    let coreAssociation =
-        coreMetamodel.Node CoreMetamodel.Consts.association
-
     let attributeMetamodel = repo.Model Consts.attributeMetamodel
-    
-    let attributeMetatype = attributeMetamodel.Node Consts.attribute
     
     let enumMetatype = attributeMetamodel.Node Consts.enumeration
 
-    let attributesAssociationMetatype =
-        attributeMetamodel.Association Consts.attributesEdge
-
-    let slotsAssociationMetatype =
-        attributeMetamodel.Association Consts.slotsEdge
-
-    let typeAssociationMetatype =
-        attributeMetamodel.Association Consts.typeEdge
-    
     let languageMetamodel =
         repo.Model LanguageMetamodel.Consts.languageMetamodel
         
