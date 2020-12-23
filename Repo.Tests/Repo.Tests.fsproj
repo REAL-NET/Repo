@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BasicMetamodel.Tests\Elements.Tests\BasicElementTests.fs" />
