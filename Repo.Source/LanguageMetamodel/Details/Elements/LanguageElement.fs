@@ -99,9 +99,20 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.map wrap
 
         member this.Attributes =
-                element.Attributes
+            let selfAttributes =
+                element.OutgoingAssociations
+                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
+                |> Seq.map (fun a -> a.Target)
+                |> Seq.cast<IAttributeAttribute>
                 |> Seq.map pool.WrapAttribute
 
+            (this :> ILanguageElement).DirectSupertypes
+            |> Seq.map (fun e -> e.Attributes)
+            |> Seq.concat
+            |> Seq.append selfAttributes            
+                                
+              
+             
         member this.AddAttribute name ``type`` =
             if (this :> ILanguageElement).Attributes
                |> Seq.filter (fun a -> a.Name = name)
