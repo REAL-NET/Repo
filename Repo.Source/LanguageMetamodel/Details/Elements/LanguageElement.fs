@@ -51,7 +51,7 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
    
     let model () = element.Model
     
-    let mutable AttributeMap = Map.empty
+    let mutable AttributeMap = Map.empty: Map<string, IAttributeElement>
 
     let unwrap (element: ILanguageElement) =
         (element :?> LanguageElement).UnderlyingElement
@@ -99,18 +99,12 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.map wrap
 
         member this.Attributes =
-            let selfAttributes =
-                element.OutgoingAssociations
-                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
-                |> Seq.map (fun a -> a.Target)
-                |> Seq.cast<IAttributeAttribute>
-                |> Seq.map pool.WrapAttribute
-
-            (this :> ILanguageElement).DirectSupertypes
-            |> Seq.map (fun e -> e.Attributes)
+            AttributeMap
+            |> Map.toSeq
+            |> Seq.map (fun (_, node) -> node)
+            |> Seq.map (fun node -> node.Attributes)
             |> Seq.concat
-            |> Seq.append selfAttributes            
-                                
+            |> Seq.map (pool.WrapAttribute)
               
              
         member this.AddAttribute name ``type`` =
