@@ -73,6 +73,7 @@ type LanguageElementTests() =
         let instanceModel = repo.InstantiateModel "InstanceModel" model
 
         let value = instanceModel.InstantiateNode "Value" ``type`` Map.empty :> ElementType
+//        TODO to fix bug next line crashes
         let instance = instanceModel.InstantiateNode "Instance" node (Map.empty.Add("attribute", value))
         
         instance.Slots |> shouldHaveLength 1
