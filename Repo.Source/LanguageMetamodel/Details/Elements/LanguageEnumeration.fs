@@ -22,18 +22,13 @@ open Repo.AttributeMetamodel
 type LanguageEnumeration(node: IAttributeNode, pool: LanguagePool, repo: IAttributeRepository) =
     inherit LanguageElement(node, pool, repo)
     
-    
-    let coreMetamodel =
-        repo.Model CoreMetamodel.Consts.coreMetamodel
-
-    let attributeMetamodel = repo.Model Consts.attributeMetamodel
-    
-    let enumMetatype = attributeMetamodel.Node Consts.enumeration
         
-    let model () = node.Model
+    let model = node.Model
     
     let languageMetamodel =
-        repo.Model LanguageMetamodel.Consts.languageMetamodel
+        repo.Model Consts.languageMetamodel
+        
+    let enumMetatype = languageMetamodel.Node Consts.enumeration
 
     let enumElementsAssociation =
         (languageMetamodel.Node LanguageMetamodel.Consts.enumeration).OutgoingAssociation
@@ -45,8 +40,8 @@ type LanguageEnumeration(node: IAttributeNode, pool: LanguagePool, repo: IAttrib
             and set v = node.Name <- v
 
         member this.AddElement name =
-            let attributeNode = model().InstantiateNode name enumMetatype Map.empty     
-            let association = model().InstantiateAssociation node attributeNode enumElementsAssociation Map.empty
+            let attributeNode = model.InstantiateNode name enumMetatype Map.empty     
+            let association = model.InstantiateAssociation node attributeNode enumElementsAssociation Map.empty
             attributeNode |> pool.Wrap |> ignore
             association |> pool.Wrap |> ignore
             
