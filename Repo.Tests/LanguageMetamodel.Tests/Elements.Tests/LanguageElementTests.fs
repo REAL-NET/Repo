@@ -85,4 +85,8 @@ type LanguageElementTests() =
         let valuesInsideEnum = Seq.ofList[ "1"; "2" ]
         let enumeration = model.CreateEnumeration "1 and 2" valuesInsideEnum
         enumeration.Name |> shouldEqual "1 and 2"
+        let values = Seq.map (fun (x: ILanguageNode) -> x.Name) enumeration.Elements
+        values |> shouldContain "1"
+        values |> shouldContain "2"
+        values |> shouldHaveLength 2
    
