@@ -29,11 +29,11 @@ type LanguageEnumeration(node: IAttributeNode, pool: LanguagePool, repo: IAttrib
     let attributeMetamodel = repo.Model Consts.attributeMetamodel
     
     let enumMetatype = attributeMetamodel.Node Consts.enumeration
-
-    let languageMetamodel =
-        repo.Model LanguageMetamodel.Consts.languageMetamodel
         
     let model () = node.Model
+    
+    let languageMetamodel =
+        repo.Model LanguageMetamodel.Consts.languageMetamodel
 
     let enumElementsAssociation =
         (languageMetamodel.Node LanguageMetamodel.Consts.enumeration).OutgoingAssociation

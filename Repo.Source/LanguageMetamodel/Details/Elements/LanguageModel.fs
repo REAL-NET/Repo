@@ -62,7 +62,8 @@ type LanguageModel(model: IAttributeModel, pool: LanguagePool, repo: IAttributeR
             wrap <| model.CreateAssociation (unwrap source) (unwrap target) targetName :?> ILanguageAssociation
 
         member this.InstantiateNode name metatype attributeValues =
-            let node = model.InstantiateNode name (unwrap metatype :?> IAttributeNode) Map.empty
+            let map = Map.map (fun _ -> unwrap) attributeValues 
+            let node = model.InstantiateNode name (unwrap metatype :?> IAttributeNode) map
             pool.Wrap node :?> ILanguageNode
 
         member this.InstantiateAssociation source target metatype attributeValues =

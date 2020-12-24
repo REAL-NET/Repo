@@ -95,7 +95,8 @@ type AttributeModel(model: CoreMetamodel.ICoreModel, pool: AttributePool, repo: 
             model.DeleteElement (unwrap element)
 
         member this.Node name =
-            (this :> IAttributeModel).Nodes
+            let nodes = (this :> IAttributeModel).Nodes
+            nodes
             |> Seq.filter (fun n -> n.Name = name)
             |> Helpers.exactlyOneElement name
 

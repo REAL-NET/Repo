@@ -24,26 +24,26 @@ namespace Repo.CSharp.Tests
         [Ignore("Not implemented yet")]
         public void RepoShallAllowToCreateAMetamodelProgrammatically()
         {
-            var repo = RepoFactory.Create();
-            var model = repo.CreateModel("TestModel", "InfrastructureMetamodel");
-
-            var node1 = model.CreateElement("Node");
-            node1.Name = "TestNode1";
-            node1.AddAttribute("testAttribute", AttributeKind.Int, "10");
-
-            var node2 = model.CreateElement("Node");
-            node2.Name = "TestNode2";
-            node2.AddAttribute("otherAttribute", AttributeKind.String, "Ololo");
-
-            var generalization = model.CreateElement("Generalization") as IEdge;
-            generalization.From = node2;
-            generalization.To = node1;
-
-            Assert.AreEqual("testAttribute", node1.Attributes.First().Name);
-            Assert.AreEqual("10", node1.Attributes.First().StringValue);
-
-            Assert.AreEqual("otherAttribute", node2.Attributes.First().Name);
-            Assert.AreEqual("Ololo", node2.Attributes.First().StringValue);
+            // var repo = RepoFactory.Create();
+            // var model = repo.CreateModel("TestModel", "InfrastructureMetamodel");
+            //
+            // var node1 = model.CreateElement("Node");
+            // node1.Name = "TestNode1";
+            // node1.AddAttribute("testAttribute", AttributeKind.Int, "10");
+            //
+            // var node2 = model.CreateElement("Node");
+            // node2.Name = "TestNode2";
+            // node2.AddAttribute("otherAttribute", AttributeKind.String, "Ololo");
+            //
+            // var generalization = model.CreateElement("Generalization") as IEdge;
+            // generalization.From = node2;
+            // generalization.To = node1;
+            //
+            // Assert.AreEqual("testAttribute", node1.Attributes.First().Name);
+            // Assert.AreEqual("10", node1.Attributes.First().StringValue);
+            //
+            // Assert.AreEqual("otherAttribute", node2.Attributes.First().Name);
+            // Assert.AreEqual("Ololo", node2.Attributes.First().StringValue);
         }
     }
 }
