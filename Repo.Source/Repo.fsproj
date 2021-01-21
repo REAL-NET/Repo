@@ -95,7 +95,6 @@
     <Compile Include="Visual.fs" />
     <Compile Include="DeepMetamodel\DeepMetamodel.fs" />
     <Compile Include="DeepMetamodel\Consts.fs" />
-    <Compile Include="DeepMetamodel\Details\DeepMetamodelCreator.fs" />
     <Compile Include="DeepMetamodel\Details\Elements\DeepContext.fs" />
     <Compile Include="DeepMetamodel\Details\Elements\DeepPool.fs" />
     <Compile Include="DeepMetamodel\Details\Elements\DeepElement.fs" />
@@ -109,6 +108,7 @@
     <Compile Include="DeepMetamodel\Details\Elements\DeepModel.fs" />
     <Compile Include="DeepMetamodel\Details\Elements\DeepRepository.fs" />
     <Compile Include="DeepMetamodel\Details\Elements\DeepFactory.fs" />
+    <Compile Include="DeepMetamodel\Details\DeepMetamodelCreator.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

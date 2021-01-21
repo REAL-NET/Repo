@@ -4,9 +4,10 @@ module Repo.DeepMetamodel.Consts
 let deepMetametamodel = "DeepMetametamodel"
 let deepMetamodel = "DeepMetamodel"
 
+let deepContext = "DeepMetamodel::DeepContext"
 let node = "DeepMetamodel::Node"
 let element = "DeepMetamodel::Element"
-let relationaship = "DeepMetamodel::Relationship"
+let relationships = "DeepMetamodel::Relationship"
 let generalization = "DeepMetamodel::Generalization"
 let association = "DeepMetamodel::Association"
 let attribute = "DeepMetamodel::Attribute"
