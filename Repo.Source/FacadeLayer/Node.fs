@@ -25,16 +25,15 @@ type Node
         element: DataLayer.INode,
         elementRepository: IElementRepository,
         attributeRepository: AttributeRepository,
-        id: int,
         info: IVisualNodeInfo
     ) =
 
-    inherit Element(infrastructure, element, elementRepository, attributeRepository, id)
+    inherit Element(infrastructure, element, elementRepository, attributeRepository)
 
     let mutable visualInfo = info
 
-    new(infrastructure, element, elementRepository, attributeRepository, id) 
-        = Node(infrastructure, element, elementRepository, attributeRepository, id, VisualNodeInfo()) 
+    new(infrastructure, element, elementRepository, attributeRepository) 
+        = Node(infrastructure, element, elementRepository, attributeRepository, VisualNodeInfo()) 
 
     interface INode with
         

@@ -112,8 +112,9 @@ AppPackages/
 
 # VSCode
 .vscode/
+.ionide/
 
-# Jetbrains Rider
+# JetBrains IDE
 .idea/
 
 # Others

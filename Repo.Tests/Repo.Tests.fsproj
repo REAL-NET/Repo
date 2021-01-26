@@ -1,38 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-</PropertyGroup>
-<ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <None Include="paket.references" />
-    <Content Include="Data\test.rns">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Compile Include="DataModelTests.fs" />
-    <Compile Include="DataRepoTest.fs" />
-    <Compile Include="DataElementTests.fs" />
-    <Compile Include="CoreMetametamodelBuilderTests.fs" />
-    <Compile Include="CoreSemanticLayerTests.fs" />
-    <Compile Include="InfrastructureSemanticLayerTests.fs" />
-    <Compile Include="RobotsTestModelsTests.fs" />
-    <Compile Include="FacadeRepoTests.fs" />
-    <Compile Include="FacadeModelTests.fs" />
-    <Compile Include="FacadeAttributeTests.fs" />
-    <Compile Include="FacadeNodeTests.fs" />
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BasicMetamodel.Tests\Elements.Tests\BasicElementTests.fs" />
+    <Compile Include="BasicMetamodel.Tests\Elements.Tests\BasicNodeTests.fs" />
+    <Compile Include="BasicMetamodel.Tests\Elements.Tests\BasicEdgeTests.fs" />
+    <Compile Include="BasicMetamodel.Tests\Elements.Tests\BasicRepositoryTests.fs" />
+    <Compile Include="BasicMetamodel.Tests\BasicMetamodelRepoFactoryTests.fs" />
+    <Compile Include="CoreMetamodel.Tests\Semantics.Tests\ModelCreationTests.fs" />
+    <Compile Include="CoreMetamodel.Tests\Semantics.Tests\CoreMetamodelConstraintsTests.fs" />
+    <Compile Include="CoreMetamodel.Tests\CoreMetamodelRepoFactoryTests.fs" />
+    <Compile Include="CoreMetamodel.Tests\Elements.Tests\CorePoolTests.fs" />
+    <Compile Include="CoreMetamodel.Tests\Elements.Tests\CoreElementTests.fs" />
+    <Compile Include="AttributeMetamodel.Tests\Elements.Tests\AttributeElementTests.fs" />
+    <Compile Include="AttributeMetamodel.Tests\Semantics.Tests\ModelCreationTests.fs" />
+    <Compile Include="LanguageMetamodel.Tests\Elements.Tests\LanguageEnumerationTests.fs" />
   </ItemGroup>
-<ItemGroup>
-  <ProjectReference Include="..\Repo.Source\Repo.fsproj" />
-</ItemGroup>
-<ItemGroup>
-  <PackageReference Include="FsUnit" Version="3.8.0" />
-  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  <PackageReference Include="NUnit" Version="3.12.0" />
-  <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-  <PackageReference Include="xunit" Version="2.4.1" />
-</ItemGroup>
-<Import Project="..\..\..\.paket\Paket.Restore.targets" Condition="Exists('..\..\..\.paket\Paket.Restore.targets')"/>
+  <ItemGroup>
+    <ProjectReference Include="..\Repo.Source\Repo.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FsUnit" Version="4.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+  </ItemGroup>
 </Project>

@@ -29,7 +29,6 @@ and [<AbstractClass>] Element
         , element: DataLayer.IElement
         , repository: IElementRepository
         , attributeRepository: AttributeRepository
-        , id: int
     ) =
 
     let findMetatype (element : DataLayer.IElement) =
@@ -45,8 +44,6 @@ and [<AbstractClass>] Element
     member this.UnderlyingElement = element
 
     interface IElement with
-        member this.Id = id
-
         member this.Name
             with get (): string =
                 match element with
