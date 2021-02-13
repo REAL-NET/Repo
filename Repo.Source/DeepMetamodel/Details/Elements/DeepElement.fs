@@ -8,7 +8,7 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     inherit DeepContext(level, potency)
     
     let languageMetamodel =
-        repo.Model Consts.deepMetametamodel
+        repo.Model Consts.deepMetamodel
     
     let attributesAssociationMetatype =
         languageMetamodel.Association Consts.attributesRelationship

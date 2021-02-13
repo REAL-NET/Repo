@@ -1,7 +1,5 @@
 module Repo.DeepMetamodel.Consts
 
-
-let deepMetametamodel = "DeepMetametamodel"
 let deepMetamodel = "DeepMetamodel"
 
 let deepContext = "DeepMetamodel::DeepContext"
