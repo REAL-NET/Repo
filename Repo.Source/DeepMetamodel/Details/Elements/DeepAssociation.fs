@@ -8,7 +8,6 @@ type DeepAssociation(edge: ILanguageAssociation,
                      repo: ILanguageRepository,
                      level: int,
                      potency: int,
-                     sourceName: string,
                      minSource: int,
                      maxSource: int,
                      minTarget: int,
@@ -19,17 +18,8 @@ type DeepAssociation(edge: ILanguageAssociation,
    let mutable myMaxSource = maxSource
    let mutable myMinTarget = minTarget
    let mutable myMaxTarget = maxTarget
-   let mutable mySourceName = sourceName
    
-   interface IDeepAssociation with
-        member this.TargetName
-           with get () = edge.TargetName
-           and set v = edge.TargetName <- v
-           
-        member this.SourceName
-            with get() = mySourceName
-            and set v = mySourceName <- v
-            
+   interface IDeepAssociation with                       
         member this.MinSource
             with get() = myMinSource
             and set v = myMinSource <- v

@@ -35,12 +35,12 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
         
         member this.OutgoingAssociations =
             element.OutgoingAssociations
-            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 "" 0 0 0 0)    
+            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 0 0 0 0)    
             |> Seq.cast<IDeepAssociation>
 
         member this.IncomingAssociations =
             element.IncomingAssociations
-            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 "" 0 0 0 0)
+            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 0 0 0 0)
             |> Seq.cast<IDeepAssociation>
 
         member this.DirectSupertypes =

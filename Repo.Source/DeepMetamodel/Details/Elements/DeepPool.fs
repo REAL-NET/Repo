@@ -32,8 +32,8 @@ type DeepPool(factory: IDeepFactory) =
     member this.UnregisterElement (element: ILanguageElement): unit =
         unregister elementsPool element
         
-    member this.WrapAssociation (edge: ILanguageAssociation) (level: int) (potency: int) (sourceName: string) (minSource: int) (maxSource: int) (minTarget: int) (maxTarget: int): IDeepAssociation =
-        wrap associationsPool (fun e -> factory.CreateAssociation e level potency sourceName minSource maxSource minTarget maxTarget this) edge
+    member this.WrapAssociation (edge: ILanguageAssociation) (level: int) (potency: int) (minSource: int) (maxSource: int) (minTarget: int) (maxTarget: int): IDeepAssociation =
+        wrap associationsPool (fun e -> factory.CreateAssociation e level potency minSource maxSource minTarget maxTarget this) edge
         
     member this.UnregisterAssociation (edge: ILanguageAssociation): unit =
         unregister associationsPool edge
@@ -78,7 +78,6 @@ and IDeepFactory =
     abstract CreateAssociation: edge: ILanguageAssociation
          -> level: int
          -> potency: int
-         -> sourceName: string
          -> minSource: int
          -> maxSource: int
          -> minTarget: int

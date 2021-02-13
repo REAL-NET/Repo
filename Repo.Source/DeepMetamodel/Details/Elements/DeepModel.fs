@@ -39,10 +39,16 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                 potency
 
         member this.CreateGeneralization source target level potency =
-            wrap (model.CreateGeneralization (unwrap source) (unwrap target)) level potency :?> IDeepGeneralization
+            let generalization = model.CreateGeneralization (unwrap source) (unwrap target)
+            let wrappedGeneralization = wrap generalization level potency :?> IDeepGeneralization
+            wrappedGeneralization.Name <- "generalization"
+            wrappedGeneralization
 
-        member this.CreateAssociation source target targetName level potency minSource maxSource minTarget maxTarget =
-            pool.WrapAssociation (model.CreateAssociation (unwrap source) (unwrap target) targetName) level potency source.Name minSource maxSource minTarget maxTarget
+        member this.CreateAssociation source target name level potency minSource maxSource minTarget maxTarget =
+            let association = model.CreateAssociation (unwrap source) (unwrap target) name
+            let wrappedAssociation = pool.WrapAssociation association level potency minSource maxSource minTarget maxTarget
+            wrappedAssociation.Name <- association.TargetName
+            wrappedAssociation
 
         member this.InstantiateNode name metatype attributeValues level potency =
             let node = model.InstantiateNode name (unwrap metatype :?> ILanguageNode) Map.empty
@@ -51,13 +57,14 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedNode
 
         member this.InstantiateAssociation source target metatype attributeValues level potency minSource maxSource minTarget maxTarget =
-            let edge = 
-                model.InstantiateAssociation 
-                    (unwrap source) 
-                    (unwrap target) 
-                    (unwrap metatype :?> ILanguageAssociation)
-                    Map.empty
-            pool.WrapAssociation edge level potency source.Name minSource maxSource minTarget maxTarget
+            let edge = model.InstantiateAssociation 
+                        (unwrap source) 
+                        (unwrap target) 
+                        (unwrap metatype :?> ILanguageAssociation)
+                        Map.empty
+            let wrappedAssociation = pool.WrapAssociation edge level potency minSource maxSource minTarget maxTarget
+            wrappedAssociation.Name <- edge.TargetName
+            wrappedAssociation
 
         member this.Elements = model.Elements |> Seq.map (fun e -> wrap e 0 0) 
 
@@ -65,7 +72,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                             |> Seq.map (fun e -> wrap e 0 0)   
                             |> Seq.cast<IDeepNode>
 
-        member this.Edges = model.Edges |> Seq.map wrap |> Seq.cast<IDeepRelationship>
+        member this.Relationships = model.Edges
+                                    |> Seq.map (fun e ->
+                                        (if e :? ILanguageAssociation
+                                         then pool.WrapAssociation (e :?> ILanguageAssociation) 0 0 0 0 0 0 :> IDeepRelationship
+                                         else wrap e 0 0 :?> IDeepRelationship))
+                                    |> Seq.cast<IDeepRelationship>
 
         member this.DeleteElement element =
             model.DeleteElement (unwrap element)
@@ -82,15 +94,16 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             |> not
 
         member this.Association name =
-            (this :> IDeepModel).Edges
+            (this :> IDeepModel).Relationships
             |> Seq.choose (fun e -> if e :? IDeepAssociation then Some (e :?> IDeepAssociation) else None)
-            |> Seq.filter (fun e -> e.TargetName = name)
+            |> Seq.map (fun e -> printf "%s" e.Name; e)
+            |> Seq.filter (fun e -> e.Name = name)
             |> Helpers.exactlyOneElement name
 
         member this.HasAssociation name =
-            (this :> IDeepModel).Edges
+            (this :> IDeepModel).Relationships
             |> Seq.choose (fun e -> if e :? IDeepAssociation then Some (e :?> IDeepAssociation) else None)
-            |> Seq.filter (fun e -> e.TargetName = name)
+            |> Seq.filter (fun e -> e.Name = name)
             |> Seq.isEmpty
             |> not
 

@@ -99,12 +99,7 @@ and IDeepAssociation =
         abstract MaxSource: int with get, set
         abstract MinTarget: int with get, set
         abstract MaxTarget: int with get, set 
-        
-        abstract SourceName: string with get, set
-        
-        /// String describing a target of an association. For example, field name in UML can be written on association
-        /// next to target (type of the field).
-        abstract TargetName: string with get, set
+                
     end
 
 /// InstanceOf is a kind of edge which has special semantic in entire metamodel stack. Means that source is an instance
@@ -151,7 +146,7 @@ and IDeepModel =
         abstract CreateAssociation:
             source: IDeepElement
             -> target: IDeepElement
-            -> targetName: string
+            -> name: string
             -> level: int
             -> potency: int
             -> minSource: int
@@ -191,7 +186,7 @@ and IDeepModel =
         abstract Nodes: IDeepNode seq with get
 
         /// Returns all edges in a model.
-        abstract Edges: IDeepRelationship seq with get
+        abstract Relationships: IDeepRelationship seq with get
 
         /// Deletes element from a model and unconnects related elements if needed. Removes "hanging" edges.
         /// Nodes without connections are not removed automatically.

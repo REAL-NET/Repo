@@ -13,8 +13,8 @@ type DeepFactory(repo: ILanguageRepository) =
             | :? ILanguageInstanceOf as i -> DeepInstanceOf(i, pool, repo, level, potency) :> _
             | _ -> failwith "Unknown subtype"
             
-        member this.CreateAssociation element level potency sourceName minSource maxSource minTarget maxTarget pool =
-            DeepAssociation(element, pool, repo, level, potency, sourceName, minSource, maxSource, minTarget, maxTarget) :> IDeepAssociation
+        member this.CreateAssociation element level potency minSource maxSource minTarget maxTarget pool =
+            DeepAssociation(element, pool, repo, level, potency, minSource, maxSource, minTarget, maxTarget) :> IDeepAssociation
 
         member this.CreateModel model pool =
             DeepModel(model, pool, repo) :> _
