@@ -55,3 +55,16 @@ type DeepMetamodelTests() =
         let nodeB = model.CreateNode "b" 0 1
         let association = model.CreateAssociation nodeA nodeB "targetName" 0 0 0 9 0 9
         model.Association "targetName" |> shouldEqual association
+        
+    [<Test>]
+    member this.CreateMetamodelTest () =
+        let nodeMetatype = model.CreateNode "elem" 0 1
+        let linkMetatype = model.CreateAssociation nodeMetatype nodeMetatype "targetName" 0 0 0 9 0 9
+        let newModel = repo.InstantiateModel "newModel" model
+        let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype Map.empty 0 1
+        let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype Map.empty 0 1
+        newModel.InstantiateAssociation newNodeA newNodeB linkMetatype Map.empty 0 0 0 9 0 9 |> ignore
+        newModel.Node "elem1" |> shouldEqual newNodeA
+        (newModel.Node "elem1").Metatype |> shouldEqual (nodeMetatype :> IDeepElement)
+        newModel.Relationships |> shouldHaveLength 1
+        
