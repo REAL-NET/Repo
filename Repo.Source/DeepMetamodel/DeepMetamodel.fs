@@ -78,10 +78,10 @@ and IDeepRelationship =
     interface
         inherit IDeepElement
         /// Element at the beginning of an edge, may be None if edge is not connected.
-        abstract Source: IDeepElement with get, set
+        abstract Source: IDeepElement with get
 
         /// Element at the ending of an edge, may be None if edge is not connected.
-        abstract Target: IDeepElement with get, set
+        abstract Target: IDeepElement with get
     end
 
 /// Generalization is a kind of edge which has special semantic in metamodel (allows to inherit associations).
@@ -95,10 +95,10 @@ and IDeepAssociation =
     interface
         inherit IDeepRelationship
         
-        abstract MinSource: int with get, set
-        abstract MaxSource: int with get, set
-        abstract MinTarget: int with get, set
-        abstract MaxTarget: int with get, set 
+        abstract MinSource: int with get
+        abstract MaxSource: int with get
+        abstract MinTarget: int with get
+        abstract MaxTarget: int with get 
                 
     end
 

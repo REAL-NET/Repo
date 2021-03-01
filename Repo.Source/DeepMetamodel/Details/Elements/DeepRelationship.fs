@@ -7,16 +7,7 @@ type DeepRelationship(edge: ILanguageEdge, pool: DeepPool, repo: ILanguageReposi
     inherit DeepElement(edge, pool, repo, level, potency)
     
     interface IDeepRelationship with
-        member this.Source 
-            with get () =
-                pool.Wrap edge.Source (this :> IDeepElement).Level (this :> IDeepElement).Potency
-            and set v =
-                edge.Source <- (v :?> DeepElement).UnderlyingElement
+        member this.Source = pool.Wrap edge.Source (this :> IDeepElement).Level (this :> IDeepElement).Potency
 
-        member this.Target
-            with get () =
-                pool.Wrap edge.Target (this :> IDeepElement).Level (this :> IDeepElement).Potency
-            and set v =
-                edge.Target <- (v :?> DeepElement).UnderlyingElement
-    
+        member this.Target = pool.Wrap edge.Target (this :> IDeepElement).Level (this :> IDeepElement).Potency    
 

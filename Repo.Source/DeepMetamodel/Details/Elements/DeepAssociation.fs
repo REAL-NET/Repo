@@ -14,24 +14,11 @@ type DeepAssociation(edge: ILanguageAssociation,
                      maxTarget: int) =
    inherit DeepRelationship(edge, pool, repo, level, potency)
    
-   let mutable myMinSource = minSource
-   let mutable myMaxSource = maxSource
-   let mutable myMinTarget = minTarget
-   let mutable myMaxTarget = maxTarget
-   
    interface IDeepAssociation with                       
-        member this.MinSource
-            with get() = myMinSource
-            and set v = myMinSource <- v
+        member this.MinSource = minSource
             
-        member this.MaxSource
-            with get() = myMaxSource
-            and set v = myMaxSource <- v
+        member this.MaxSource = maxSource
             
-        member this.MinTarget
-            with get() = myMinTarget
-            and set v = myMinTarget <- v
+        member this.MinTarget = minTarget
             
-        member this.MaxTarget
-            with get() = myMaxTarget
-            and set v = myMaxTarget <- v
+        member this.MaxTarget = maxTarget
