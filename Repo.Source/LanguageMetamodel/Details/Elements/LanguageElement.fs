@@ -31,7 +31,6 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
         languageMetamodel.Node Repo.LanguageMetamodel.Consts.association
 
     let attributeMetamodel = repo.Model Consts.attributeMetamodel
-
     let attributeMetatype = attributeMetamodel.Node Consts.attribute
 
     let attributesAssociationMetatype =
@@ -46,19 +45,13 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
     let slotsAssociationMetatype =
         attributeMetamodel.Association Consts.slotsEdge
 
-
     let wrap = pool.Wrap
-
-    let model () = element.Model
-
-    let mutable AttributeMap: Map<string, IAttributeElement> = Map.empty
 
     let unwrap (element: ILanguageElement) =
         (element :?> LanguageElement).UnderlyingElement
 
-    /// Instantiation of association with given metatype.
     let (--->) source (target, metatype) =
-        (model ()).InstantiateAssociation source target metatype
+        element.Model.InstantiateAssociation source target metatype Map.empty
         |> ignore
 
 
@@ -77,7 +70,8 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             element.OutgoingEdges
             |> Seq.map pool.Wrap
             |> Seq.cast<ILanguageEdge>
-
+        
+        
         member this.OutgoingAssociations =
             element.OutgoingAssociations
             |> Seq.map pool.Wrap
@@ -98,19 +92,39 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.map wrap
 
         member this.Attributes =
-            element.Attributes |> Seq.map (pool.WrapAttribute)
+            let a = element.OutgoingAssociations
+            let c = Seq.toList (this :> ILanguageElement).OutgoingAssociations
+            let aa = Seq.toList a
+            let b = a |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
+            let bb = Seq.toList b
+            let selfAttributes =
+                element.OutgoingAssociations
+                |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
+                |> Seq.map (fun a -> a.Target)
+                |> Seq.map pool.WrapAttribute
+
+            (this :> ILanguageElement).DirectSupertypes
+            |> Seq.map (fun e -> e.Attributes)
+            |> Seq.concat
+            |> Seq.append selfAttributes
 
         member this.AddAttribute name ``type`` =
-            element.AddAttribute name (unwrap ``type``)
+            if (this :> ILanguageElement).Attributes
+               |> Seq.filter (fun a -> a.Name = name)
+               |> Seq.length = 1 then
+                raise <| AmbiguousAttributesException(name)
+            let attributeNode = element.Model.InstantiateNode name attributeMetatype Map.empty
+            attributeNode ---> (unwrap ``type``, typeAssociationMetatype)
+            element ---> (attributeNode, attributesAssociationMetatype)
 
-        member this.Slots = element.Slots |> Seq.map pool.WrapSlot
-
-        member this.Slot name =
-            let slots = (this :> ILanguageElement).Slots
-            slots
-            |> Seq.filter (fun s -> s.Attribute.Name = name)
-            |> Helpers.exactlyOneElement name
+        member this.Slots =
+            element.OutgoingAssociations
+            |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> IAttributeElement))
+            |> Seq.map (fun a -> a.Target)
+            |> Seq.map pool.WrapSlot
 
         member this.Model: ILanguageModel = pool.WrapModel element.Model
+
+        member this.HasMetatype = failwith "Not implemented"
 
         member this.Metatype = pool.Wrap element.Metatype
