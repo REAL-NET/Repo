@@ -24,8 +24,8 @@ open System.Collections.Generic
 type LanguagePool(factory: ILanguageFactory) =
     let elementsPool = Dictionary<IAttributeElement, ILanguageElement>() :> IDictionary<_, _>
     let modelsPool = Dictionary<IAttributeModel, ILanguageModel>() :> IDictionary<_, _>
-    let attributesPool = Dictionary<IAttributeAttribute, ILanguageAttribute>() :> IDictionary<_, _>
-    let slotsPool = Dictionary<IAttributeSlot, ILanguageSlot>() :> IDictionary<_, _>
+    let attributesPool = Dictionary<IAttributeElement, ILanguageAttribute>() :> IDictionary<_, _>
+    let slotsPool = Dictionary<IAttributeElement, ILanguageSlot>() :> IDictionary<_, _>
     let enumsPool = Dictionary<IAttributeElement, ILanguageEnumeration>() :> IDictionary<_, _>
 
     let wrap (pool: IDictionary<'a, 'b>) (factory: 'a -> 'b) (element: 'a): 'b =
@@ -49,19 +49,19 @@ type LanguagePool(factory: ILanguageFactory) =
         unregister elementsPool element
 
     /// Wraps given CoreElement to AttributeAttribute. Creates new wrapper if needed, otherwise returns cached copy.
-    member this.WrapAttribute (attribute: IAttributeAttribute): ILanguageAttribute =
+    member this.WrapAttribute (attribute: IAttributeElement): ILanguageAttribute =
         wrap attributesPool (fun e -> factory.CreateAttribute e this) attribute
 
     /// Removes attribute from cache.
-    member this.UnregisterAttribute (element: IAttributeAttribute): unit =
+    member this.UnregisterAttribute (element: IAttributeElement): unit =
         unregister attributesPool element
 
     /// Wraps given AttributeElement to LanguageSlot. Creates new wrapper if needed, otherwise returns cached copy.
-    member this.WrapSlot (slot: IAttributeSlot): ILanguageSlot =
+    member this.WrapSlot (slot: IAttributeElement): ILanguageSlot =
         wrap slotsPool (fun e -> factory.CreateSlot e this) slot
 
     /// Removes slot from cache.
-    member this.UnregisterSlot (element: IAttributeSlot): unit =
+    member this.UnregisterSlot (element: IAttributeElement): unit =
         unregister slotsPool element
 
     /// Wraps given node to LanguageModel. Creates new wrapper if needed, otherwise returns cached copy.
@@ -97,10 +97,10 @@ and ILanguageFactory =
     abstract CreateModel: model: IAttributeModel -> pool: LanguagePool -> ILanguageModel
 
     /// Creates AttributeAttribute wrapper by given CoreElement.
-    abstract CreateAttribute: attribute: IAttributeAttribute -> pool: LanguagePool -> ILanguageAttribute
+    abstract CreateAttribute: attribute: IAttributeElement -> pool: LanguagePool -> ILanguageAttribute
 
     /// Creates AttributeSlot wrapper by given CoreElement.
-    abstract CreateSlot: slot: IAttributeSlot -> pool: LanguagePool -> ILanguageSlot
+    abstract CreateSlot: slot: IAttributeElement -> pool: LanguagePool -> ILanguageSlot
 
     /// Creates LanguageEnumeration wrapper by given AttributeElement.
     abstract CreateEnumeration: element: IAttributeElement -> pool: LanguagePool -> ILanguageEnumeration

@@ -63,23 +63,6 @@ type LanguageElementTests() =
 
         child.Attributes |> Seq.filter (fun a -> a.Name = "attribute") |> shouldHaveLength 1
         
-    [<Test>]
-    member this.SlotsTest () =
-        let node = +"Node"
-        let ``type`` = +"Type"
-        
-        node.AddAttribute "attribute" ``type``
-
-        let instanceModel = repo.InstantiateModel "InstanceModel" model
-
-        let value = instanceModel.InstantiateNode "Value" ``type`` Map.empty :> ElementType
-        let instance = instanceModel.InstantiateNode "Instance" node (Map.empty.Add("attribute", value))
-        
-        instance.Slots |> shouldHaveLength 1
-
-        (instance.Slot "attribute").Value |> shouldEqual value
-        (instance.Slot "attribute").Attribute |> shouldEqual (Seq.head node.Attributes)
-        
     [<Test>]    
     member this.EnumerationTest () =
         let valuesInsideEnum = Seq.ofList[ "1"; "2" ]
