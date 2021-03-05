@@ -118,8 +118,12 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.map (fun a -> a.Target)
             |> Seq.map pool.WrapSlot
 
-        member this.Model: ILanguageModel = pool.WrapModel element.Model
+        member this.Slot name =
+            let slots = (this :> ILanguageElement).Slots
+            slots
+            |> Seq.filter (fun s -> s.Attribute.Name = name)
+            |> Helpers.exactlyOneElement name
 
-        member this.HasMetatype = failwith "Not implemented"
+        member this.Model: ILanguageModel = pool.WrapModel element.Model
 
         member this.Metatype = pool.Wrap element.Metatype
