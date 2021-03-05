@@ -9,8 +9,8 @@ type DeepPool(factory: IDeepFactory) =
     let elementsPool = Dictionary<ILanguageElement, IDeepElement>() :> IDictionary<_, _>
     let associationsPool = Dictionary<ILanguageAssociation, IDeepAssociation>() :> IDictionary<_, _>
     let modelsPool = Dictionary<ILanguageModel, IDeepModel>() :> IDictionary<_, _>
-    let attributesPool = Dictionary<ILanguageAttribute, IDeepAttribute>() :> IDictionary<_, _>
-    let slotsPool = Dictionary<ILanguageSlot, IDeepSlot>() :> IDictionary<_, _>
+    let attributesPool = Dictionary<ILanguageElement, IDeepAttribute>() :> IDictionary<_, _>
+    let slotsPool = Dictionary<ILanguageElement, IDeepSlot>() :> IDictionary<_, _>
 
     let wrap (pool: IDictionary<'a, 'b>) (factory: 'a -> 'b) (element: 'a): 'b =
         if pool.ContainsKey element then
@@ -39,19 +39,19 @@ type DeepPool(factory: IDeepFactory) =
         unregister associationsPool edge
 
     /// Wraps given LanguageElement to DeepAttribute. Creates new wrapper if needed, otherwise returns cached copy.
-    member this.WrapAttribute (attribute: ILanguageAttribute) (level: int) (potency: int): IDeepAttribute =
+    member this.WrapAttribute (attribute: ILanguageElement) (level: int) (potency: int): IDeepAttribute =
         wrap attributesPool (fun e -> factory.CreateAttribute e level potency this) attribute
 
     /// Removes attribute from cache.
-    member this.UnregisterAttribute (element: ILanguageAttribute): unit =
+    member this.UnregisterAttribute (element: ILanguageElement): unit =
         unregister attributesPool element
 
     /// Wraps given AttributeElement to LanguageSlot. Creates new wrapper if needed, otherwise returns cached copy.
-    member this.WrapSlot (slot: ILanguageSlot) (level: int) (potency: int): IDeepSlot =
+    member this.WrapSlot (slot: ILanguageElement) (level: int) (potency: int): IDeepSlot =
         wrap slotsPool (fun e -> factory.CreateSlot e level potency this) slot
 
     /// Removes slot from cache.
-    member this.UnregisterSlot (element: ILanguageSlot): unit =
+    member this.UnregisterSlot (element: ILanguageElement): unit =
         unregister slotsPool element
 
     /// Wraps given node to LanguageModel. Creates new wrapper if needed, otherwise returns cached copy.
@@ -89,7 +89,7 @@ and IDeepFactory =
     abstract CreateModel: model: ILanguageModel -> pool: DeepPool -> IDeepModel
 
     /// Creates AttributeAttribute wrapper by given LanguageElement.
-    abstract CreateAttribute: attribute: ILanguageAttribute -> level: int -> potency: int -> pool: DeepPool -> IDeepAttribute
+    abstract CreateAttribute: attribute: ILanguageElement -> level: int -> potency: int -> pool: DeepPool -> IDeepAttribute
 
     /// Creates AttributeSlot wrapper by given LanguageElement.
-    abstract CreateSlot: slot: ILanguageSlot -> level: int -> potency: int -> pool: DeepPool -> IDeepSlot
+    abstract CreateSlot: slot: ILanguageElement -> level: int -> potency: int -> pool: DeepPool -> IDeepSlot

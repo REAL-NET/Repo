@@ -61,10 +61,37 @@ type DeepMetamodelTests() =
         let nodeMetatype = model.CreateNode "elem" 0 1
         let linkMetatype = model.CreateAssociation nodeMetatype nodeMetatype "targetName" 0 0 0 9 0 9
         let newModel = repo.InstantiateModel "newModel" model
-        let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype Map.empty 0 1
-        let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype Map.empty 0 1
-        newModel.InstantiateAssociation newNodeA newNodeB linkMetatype Map.empty 0 0 0 9 0 9 |> ignore
+        let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype 0 1
+        let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype 0 1
+        newModel.InstantiateAssociation newNodeA newNodeB linkMetatype 0 0 0 9 0 9 |> ignore
         newModel.Node "elem1" |> shouldEqual newNodeA
         (newModel.Node "elem1").Metatype |> shouldEqual (nodeMetatype :> IDeepElement)
         newModel.Relationships |> shouldHaveLength 1
+        
+    [<Test>]
+    member this.AttributesTest () =
+        let node = model.CreateNode "Node" 0 1
+        let ``type`` = model.CreateNode "Type" 0 1
+        let attribute = node.AddAttribute "attribute" ``type`` 0 1
+        
+        node.Attributes |> shouldHaveLength 1
+        node.Attributes |> shouldContain attribute
+        attribute.Type |> shouldEqual (``type`` :> IDeepElement)
+        attribute.Name |> shouldEqual "attribute"
+        
+    [<Test>]
+    member this.SlotsTest () =
+        let node = model.CreateNode "Node" 0 1
+        let value = model.CreateNode "Value" 0 1
+        let ``type`` = model.CreateNode "Type" 0 1
+        let attribute = node.AddAttribute "attribute" ``type`` 0 1
+        let slot = node.AddSlot attribute value 0 1
+        
+        node.Attributes |> shouldHaveLength 1
+        node.Attributes |> shouldContain attribute
+        node.Slots |> shouldHaveLength 1
+        node.Slots |> shouldContain slot
+        slot.Attribute |> shouldEqual attribute
+        slot.Value |> shouldEqual (value :> IDeepElement)
+            
         

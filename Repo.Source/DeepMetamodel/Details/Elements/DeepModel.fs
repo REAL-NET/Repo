@@ -34,7 +34,6 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             (this :> IDeepModel).InstantiateNode 
                 name 
                 ((pool.Wrap languageMetamodelNode level potency) :?> IDeepNode) 
-                Map.empty
                 level
                 potency
 
@@ -50,13 +49,13 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedAssociation.Name <- association.TargetName
             wrappedAssociation
 
-        member this.InstantiateNode name metatype attributeValues level potency =
+        member this.InstantiateNode name metatype level potency =
             let node = model.InstantiateNode name (unwrap metatype :?> ILanguageNode) Map.empty
             let wrappedNode = pool.Wrap node level potency :?> IDeepNode
             wrappedNode.Name <- node.Name
             wrappedNode
 
-        member this.InstantiateAssociation source target metatype attributeValues level potency minSource maxSource minTarget maxTarget =
+        member this.InstantiateAssociation source target metatype level potency minSource maxSource minTarget maxTarget =
             let edge = model.InstantiateAssociation 
                         (unwrap source) 
                         (unwrap target) 

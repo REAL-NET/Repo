@@ -1,5 +1,8 @@
 namespace Repo.DeepMetamodel.Details.Elements
 
+open System
+open Repo
+open Repo.AttributeMetamodel
 open Repo.LanguageMetamodel
 open Repo.DeepMetamodel
 
@@ -9,13 +12,31 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     
     let languageMetamodel =
         repo.Model Consts.deepMetamodel
+        
+    let attributeMetatype =
+        languageMetamodel.Node Consts.attribute
+        
+    let slotMetatype =
+        languageMetamodel.Node Consts.slot
+        
+    let typeAssociationMetatype =
+        languageMetamodel.Association Consts.typeRelationship
     
     let attributesAssociationMetatype =
         languageMetamodel.Association Consts.attributesRelationship
         
     let slotsAssociationMetatype =
-        languageMetamodel.Association Consts.slotsEdge
-
+        languageMetamodel.Association Consts.slotsRelationship
+        
+    let attributeAssociationMetatype =
+        languageMetamodel.Association Consts.attributeRelationship
+        
+    let valueAssociationMetatype =
+        languageMetamodel.Association Consts.valueRelationship
+             
+    let (--->) source (target, metatype) =
+        element.Model.InstantiateAssociation source target metatype Map.empty
+        |> ignore
     
     let wrap = pool.Wrap
     
@@ -54,20 +75,37 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
                 element.OutgoingAssociations
                 |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> ILanguageElement))
                 |> Seq.map (fun a -> a.Target)
-                |> Seq.map wrap
+                |> Seq.map (fun e -> pool.WrapAttribute e 0 0) 
                 |> Seq.cast<IDeepAttribute>
                 
              (this :> IDeepElement).DirectSupertypes
             |> Seq.map (fun e -> e.Attributes)
             |> Seq.concat
-            |> Seq.append selfAttributes    
-
+            |> Seq.append selfAttributes
+            
+        member this.AddAttribute name ``type`` level potency =
+            if (this :> IDeepElement).Attributes
+               |> Seq.filter (fun a -> a.Name = name)
+               |> Seq.length = 1 then
+                raise <| AmbiguousAttributesException(name)
+            let attributeNode = element.Model.InstantiateNode name attributeMetatype Map.empty
+            attributeNode ---> ((``type`` :?> DeepElement).UnderlyingElement, typeAssociationMetatype)
+            element ---> (attributeNode, attributesAssociationMetatype)
+            pool.WrapAttribute attributeNode level potency
+ 
         member this.Slots =
             element.OutgoingAssociations
             |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> ILanguageElement))
             |> Seq.map (fun a -> a.Target)
-            |> Seq.cast<ILanguageSlot>
             |> Seq.map (fun e -> pool.WrapSlot e 0 0 )
+            
+        member this.AddSlot attribute value level potency =
+            let name = "Slot." + attribute.Name + Guid.NewGuid().ToString()
+            let slotNode = element.Model.InstantiateNode name slotMetatype Map.empty
+            slotNode ---> ((attribute :?> DeepAttribute).UnderlyingAttribute, attributeAssociationMetatype)
+            slotNode ---> ((value :?> DeepElement).UnderlyingElement, valueAssociationMetatype)
+            element ---> (slotNode, slotsAssociationMetatype)
+            pool.WrapSlot slotNode level potency
 
         member this.Model: IDeepModel =
             pool.WrapModel element.Model

@@ -29,8 +29,14 @@ and IDeepElement =
         /// A list of all attributes available for an element.
         abstract Attributes: IDeepAttribute seq with get
         
+        /// Adds an attribute to element
+        abstract AddAttribute: name: string -> ``type``: IDeepElement -> level: int -> potency: int -> IDeepAttribute
+        
         /// A list of all slots for an element.
         abstract Slots: IDeepSlot seq with get
+        
+        /// Adds a slot to element
+        abstract AddSlot: attribute: IDeepAttribute -> value: IDeepElement -> level: int -> potency: int -> IDeepSlot
 
         /// Returns a model to which this element belongs.
         abstract Model: IDeepModel with get
@@ -160,7 +166,6 @@ and IDeepModel =
         abstract InstantiateNode:
             name: string
             -> metatype: IDeepNode
-            -> attributeValues: Map<string, IDeepElement>
             -> level: int
             -> potency: int
             -> IDeepNode
@@ -170,7 +175,6 @@ and IDeepModel =
             source: IDeepElement 
             -> target: IDeepElement 
             -> metatype: IDeepAssociation 
-            -> attributeValues: Map<string, IDeepElement>
             -> level: int
             -> potency: int
             -> minSource: int
