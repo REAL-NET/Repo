@@ -92,11 +92,6 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
             |> Seq.map wrap
 
         member this.Attributes =
-            let a = element.OutgoingAssociations
-            let c = Seq.toList (this :> ILanguageElement).OutgoingAssociations
-            let aa = Seq.toList a
-            let b = a |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
-            let bb = Seq.toList b
             let selfAttributes =
                 element.OutgoingAssociations
                 |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> IAttributeElement))
