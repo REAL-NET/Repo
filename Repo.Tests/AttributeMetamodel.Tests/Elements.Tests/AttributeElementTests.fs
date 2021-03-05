@@ -48,6 +48,17 @@ type AttributeElementTests() =
         node1.OutgoingAssociations |> shouldContain edge
         node1.OutgoingAssociations |> shouldHaveLength 1
         ()
+        
+    [<Test>]
+    member this.OutgoingInstantiatedAssociationsTest () =
+        let node1 = +"Node1"
+        let node2 = +"Node2"
+        let edge = node1 ---> node2
+        let instantiatedEdge = model.InstantiateAssociation node1 node2 edge Map.empty
+        node1.OutgoingAssociations |> shouldContain edge
+        node1.OutgoingAssociations |> shouldContain instantiatedEdge
+        node1.OutgoingAssociations |> shouldHaveLength 2
+        ()
 
     [<Test>]
     member this.AttributesTest () =
