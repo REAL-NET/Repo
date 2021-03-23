@@ -11,6 +11,7 @@ type DeepFactory(repo: ILanguageRepository) =
             | :? ILanguageNode as n -> DeepNode(n, pool, repo, level, potency) :> _
             | :? ILanguageGeneralization as g -> DeepGeneralization(g, pool, repo, level, potency) :> _
             | :? ILanguageInstanceOf as i -> DeepInstanceOf(i, pool, repo, level, potency) :> _
+            | :? ILanguageAssociation as e -> DeepAssociation(e, pool, repo, level, potency, 0, 0, 0, 0) :> _
             | _ -> failwith "Unknown subtype"
             
         member this.CreateAssociation element level potency minSource maxSource minTarget maxTarget pool =

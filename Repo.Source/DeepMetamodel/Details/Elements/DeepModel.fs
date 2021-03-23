@@ -25,7 +25,7 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             and set v = model.Name <- v
 
         member this.HasMetamodel =
-            failwith "Not implemented"
+            true
 
         member this.Metamodel =
             pool.WrapModel model.Metamodel

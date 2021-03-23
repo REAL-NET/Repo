@@ -17,10 +17,12 @@ type DeepMetamodelTests() =
 
     [<Test>]
     member this.CreateNodeTest () =
-        model.CreateNode "a" 0 1 |> ignore
-        model.CreateNode "b" 0 1 |> ignore
+        let a = model.CreateNode "a" 0 1
+        let b = model.CreateNode "b" 0 1 
         model.Nodes |> shouldHaveLength 2
         model.Elements |> shouldHaveLength 2
+        model.Elements |> shouldContain (a :> IDeepElement)
+        model.Elements |> shouldContain (b :> IDeepElement)
         
     [<Test>]
     member this.CreateAssociationTest () =
@@ -93,5 +95,10 @@ type DeepMetamodelTests() =
         node.Slots |> shouldContain slot
         slot.Attribute |> shouldEqual attribute
         slot.Value |> shouldEqual (value :> IDeepElement)
+        
+    [<Test>]
+    member this.InstantiateModelTest () =
+        let testModel = repo.InstantiateModel "TestModel" model
+        repo.Models |> shouldContain testModel
             
         
