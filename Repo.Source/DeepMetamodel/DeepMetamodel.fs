@@ -1,5 +1,7 @@
 namespace Repo.DeepMetamodel
 
+open System
+
 
 type IDeepContext =
     interface
@@ -54,6 +56,10 @@ and IDeepElement =
 and IDeepAttribute =
     interface
         inherit IDeepContext
+        
+        /// Is attribute single or dual
+        abstract IsSingle: bool with get, set
+        
         /// A type of an attribute. Restricts a set of possible values for corresponding slot.
         abstract Type: IDeepElement with get
 
