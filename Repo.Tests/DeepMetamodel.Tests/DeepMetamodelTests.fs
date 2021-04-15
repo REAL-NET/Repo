@@ -57,6 +57,7 @@ type DeepMetamodelTests() =
         let nodeB = model.CreateNode "b" 0 1
         let association = model.CreateAssociation nodeA nodeB "targetName" 0 0 0 9 0 9
         model.Association "targetName" |> shouldEqual association
+        model.Elements |> shouldContain (association :> IDeepElement)
         
     [<Test>]
     member this.CreateMetamodelTest () =

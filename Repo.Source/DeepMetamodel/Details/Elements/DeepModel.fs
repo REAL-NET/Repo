@@ -65,8 +65,6 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedAssociation.Name <- name
             wrappedAssociation
 
-        member this.Elements = model.Elements |> Seq.map (fun e -> wrap e 0 0) 
-
         member this.Nodes = model.Nodes
                             |> Seq.map (fun e -> wrap e 0 0)   
                             |> Seq.cast<IDeepNode>
@@ -77,6 +75,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                                          then pool.WrapAssociation (e :?> ILanguageAssociation) 0 0 0 0 0 0 :> IDeepRelationship
                                          else wrap e 0 0 :?> IDeepRelationship))
                                     |> Seq.cast<IDeepRelationship>
+                                    
+        member this.Elements =
+            let castedModel = this :> IDeepModel
+            let a = (Seq.map (fun e -> e :> IDeepElement) castedModel.Nodes)
+            let b = (Seq.map (fun e -> e :> IDeepElement) castedModel.Relationships)
+            Seq.append a b
 
         member this.DeleteElement element =
             model.DeleteElement (unwrap element)
