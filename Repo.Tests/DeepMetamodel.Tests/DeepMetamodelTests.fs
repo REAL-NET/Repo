@@ -65,7 +65,7 @@ type DeepMetamodelTests() =
         let newModel = repo.InstantiateModel "newModel" model
         let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype 0 1
         let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype 0 1
-        newModel.InstantiateAssociation newNodeA newNodeB linkMetatype 0 0 0 9 0 9 |> ignore
+        newModel.InstantiateAssociation newNodeA newNodeB "assoc1" linkMetatype 0 0 0 9 0 9 |> ignore
         newModel.Node "elem1" |> shouldEqual newNodeA
         (newModel.Node "elem1").Metatype |> shouldEqual (nodeMetatype :> IDeepElement)
         newModel.Relationships |> shouldHaveLength 1

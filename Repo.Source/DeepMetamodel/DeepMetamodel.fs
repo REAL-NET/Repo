@@ -179,7 +179,8 @@ and IDeepModel =
         /// Creates a new association in a model by instantiating given association from metamodel.
         abstract InstantiateAssociation: 
             source: IDeepElement 
-            -> target: IDeepElement 
+            -> target: IDeepElement
+            -> name: string
             -> metatype: IDeepAssociation 
             -> level: int
             -> potency: int

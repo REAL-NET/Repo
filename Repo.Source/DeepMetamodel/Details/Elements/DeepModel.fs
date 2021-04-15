@@ -44,9 +44,9 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedGeneralization
 
         member this.CreateAssociation source target name level potency minSource maxSource minTarget maxTarget =
-            let association = model.CreateAssociation (unwrap source) (unwrap target) name
+            let association = model.CreateAssociation (unwrap source) (unwrap target) target.Name
             let wrappedAssociation = pool.WrapAssociation association level potency minSource maxSource minTarget maxTarget
-            wrappedAssociation.Name <- association.TargetName
+            wrappedAssociation.Name <- name
             wrappedAssociation
 
         member this.InstantiateNode name metatype level potency =
@@ -55,14 +55,14 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedNode.Name <- node.Name
             wrappedNode
 
-        member this.InstantiateAssociation source target metatype level potency minSource maxSource minTarget maxTarget =
+        member this.InstantiateAssociation source target name metatype level potency minSource maxSource minTarget maxTarget =
             let edge = model.InstantiateAssociation 
                         (unwrap source) 
                         (unwrap target) 
                         (unwrap metatype :?> ILanguageAssociation)
                         Map.empty
             let wrappedAssociation = pool.WrapAssociation edge level potency minSource maxSource minTarget maxTarget
-            wrappedAssociation.Name <- edge.TargetName
+            wrappedAssociation.Name <- name
             wrappedAssociation
 
         member this.Elements = model.Elements |> Seq.map (fun e -> wrap e 0 0) 
