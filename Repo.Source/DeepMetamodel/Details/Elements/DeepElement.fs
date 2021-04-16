@@ -40,7 +40,7 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     
     let wrap = pool.Wrap
     
-    let mutable myName: string = "name"
+    let mutable myName: string = element.ToString()
     
     member this.UnderlyingElement = element
         
