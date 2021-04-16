@@ -59,7 +59,7 @@ type LanguageElement(element: IAttributeElement, pool: LanguagePool, repo: IAttr
     member this.UnderlyingElement = element
 
     override this.ToString() =
-        match element with
+        match (this :> ILanguageElement) with
         | :? ILanguageNode as n -> n.Name
         | :? ILanguageAssociation as a -> a.TargetName
         | :? ILanguageGeneralization -> "generalization"
