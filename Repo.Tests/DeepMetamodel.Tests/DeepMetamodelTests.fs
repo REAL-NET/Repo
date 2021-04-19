@@ -101,5 +101,12 @@ type DeepMetamodelTests() =
     member this.InstantiateModelTest () =
         let testModel = repo.InstantiateModel "TestModel" model
         repo.Models |> shouldContain testModel
-            
         
+    [<Test>]
+    member this.InstantiateThroughTwoModelsTest () =
+        let metaNode = model.CreateNode "metaNode" 0 0
+        let testModel1 = repo.InstantiateModel "Model1" model
+        let testModel2 = repo.InstantiateModel "Model2" testModel1
+        let node = testModel2.InstantiateNode "node" metaNode 0 0
+        testModel1.Nodes |> shouldBeEmpty
+        testModel2.Nodes |> shouldContain node
