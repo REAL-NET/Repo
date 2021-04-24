@@ -37,10 +37,10 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                 level
                 potency
 
-        member this.CreateGeneralization source target level potency =
+        member this.CreateGeneralization source target name level potency =
             let generalization = model.CreateGeneralization (unwrap source) (unwrap target)
             let wrappedGeneralization = wrap generalization level potency :?> IDeepGeneralization
-            wrappedGeneralization.Name <- "generalization"
+            wrappedGeneralization.Name <- name
             wrappedGeneralization
 
         member this.CreateAssociation source target name level potency minSource maxSource minTarget maxTarget =

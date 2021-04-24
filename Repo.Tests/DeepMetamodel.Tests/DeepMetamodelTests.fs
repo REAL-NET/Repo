@@ -110,3 +110,13 @@ type DeepMetamodelTests() =
         let node = testModel2.InstantiateNode "node" metaNode 0 0
         testModel1.Nodes |> shouldBeEmpty
         testModel2.Nodes |> shouldContain node
+        
+    [<Test>]
+    member this.InstantiateAssociationTest () =
+        let metaNode = model.CreateNode "metaNode" 0 0
+        let metaAssociation = model.CreateAssociation metaNode metaNode "metaLink" 0 0 0 0 0 0
+        let testModel = repo.InstantiateModel "Model1" model
+        let testNode1 = testModel.InstantiateNode "node1" metaNode 0 0
+        let testNode2 = testModel.InstantiateNode "node2" metaNode 0 0
+        let testAssociation = testModel.InstantiateAssociation testNode1 testNode2 "link" metaAssociation 0 0 0 0 0 0
+        testModel.Relationships |> shouldContain (testAssociation :> IDeepRelationship)        

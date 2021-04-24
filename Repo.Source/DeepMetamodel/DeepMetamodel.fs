@@ -149,6 +149,7 @@ and IDeepModel =
         abstract CreateGeneralization: 
             source: IDeepElement 
             -> target: IDeepElement
+            -> name: string
             -> level: int
             -> potency: int
             -> IDeepGeneralization
