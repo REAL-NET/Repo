@@ -13,6 +13,22 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
     let deepModel = repo.Model DeepMetamodel.Consts.deepMetamodel
     
     let languageMetamodelNode = languageMetamodel.Node LanguageMetamodel.Consts.node
+    
+    let getPotency (metatype: IDeepElement) =
+        let metaPotency = metatype.Potency
+        if (metaPotency.Equals(0)) then raise (InstantiationNotAllowedByPotencyException metatype.Name)
+        if (metaPotency.Equals(-1)) then -1 else metaPotency - 1
+        
+    let getLevel (metatype: IDeepElement) (model: IDeepModel) =
+        if (metatype.Level.Equals(-1))
+        then -1
+            else 
+                let mutable levelDifference = 1
+                let mutable current = model
+                while ((Seq.contains metatype (current.Metamodel.Elements)) |> not) do
+                    current <- model.Metamodel
+                    levelDifference <- levelDifference + 1
+                metatype.Level + levelDifference
 
 
    /// Returns underlying BasicNode that is a root node for model.
@@ -31,11 +47,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             pool.WrapModel model.Metamodel
 
         member this.CreateNode name level potency =
-            (this :> IDeepModel).InstantiateNode 
-                name 
-                ((pool.Wrap languageMetamodelNode level potency) :?> IDeepNode) 
-                level
-                potency
+            let newNode = (this :> IDeepModel).InstantiateNode 
+                            name 
+                            ((pool.Wrap languageMetamodelNode (-1) (-1)) :?> IDeepNode)
+            newNode.Level <- level
+            newNode.Potency <- potency
+            newNode
 
         member this.CreateGeneralization source target name level potency =
             let generalization = model.CreateGeneralization (unwrap source) (unwrap target)
@@ -49,19 +66,23 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedAssociation.Name <- name
             wrappedAssociation
 
-        member this.InstantiateNode name metatype level potency =
+        member this.InstantiateNode name metatype =
+            let potency = getPotency metatype
+            let level = getLevel metatype this     
             let node = model.InstantiateNode name (unwrap metatype :?> ILanguageNode) Map.empty
             let wrappedNode = pool.Wrap node level potency :?> IDeepNode
             wrappedNode.Name <- node.Name
             wrappedNode
 
-        member this.InstantiateAssociation source target name metatype level potency minSource maxSource minTarget maxTarget =
+        member this.InstantiateAssociation source target name metatype =
             let edge = model.InstantiateAssociation 
                         (unwrap source) 
                         (unwrap target) 
                         (unwrap metatype :?> ILanguageAssociation)
                         Map.empty
-            let wrappedAssociation = pool.WrapAssociation edge level potency minSource maxSource minTarget maxTarget
+            let potency = getPotency metatype
+            let level = getLevel metatype this
+            let wrappedAssociation = pool.WrapAssociation edge level potency metatype.MinSource metatype.MaxSource metatype.MinTarget metatype.MaxTarget
             wrappedAssociation.Name <- name
             wrappedAssociation
 

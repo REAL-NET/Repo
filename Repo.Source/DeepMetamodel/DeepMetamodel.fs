@@ -173,8 +173,6 @@ and IDeepModel =
         abstract InstantiateNode:
             name: string
             -> metatype: IDeepNode
-            -> level: int
-            -> potency: int
             -> IDeepNode
 
         /// Creates a new association in a model by instantiating given association from metamodel.
@@ -183,12 +181,6 @@ and IDeepModel =
             -> target: IDeepElement
             -> name: string
             -> metatype: IDeepAssociation 
-            -> level: int
-            -> potency: int
-            -> minSource: int
-            -> maxSource: int
-            -> minTarget: int
-            -> maxTarget: int
             -> IDeepAssociation
 
         /// Returns all elements in a model.

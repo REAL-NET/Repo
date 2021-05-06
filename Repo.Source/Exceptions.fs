@@ -44,3 +44,6 @@ exception AmbiguousAttributesException of attributeName: string
 /// Thrown if we are trying to do something wrong with a model. Most probably means incorrect model or
 /// internal error in repository.
 exception InvalidSemanticOperationException of errorMessage: string
+
+/// Throws if instantiation is not allowed as potency is equal to 0
+exception InstantiationNotAllowedByPotencyException of metaElement: string

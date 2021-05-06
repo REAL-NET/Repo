@@ -2,6 +2,7 @@ namespace Repo.Tests.DeepMetamodel.Tests
 
 open NUnit.Framework
 open FsUnitTyped
+open Repo
 open Repo.DeepMetamodel
 
 [<TestFixture>]
@@ -62,11 +63,11 @@ type DeepMetamodelTests() =
     [<Test>]
     member this.CreateMetamodelTest () =
         let nodeMetatype = model.CreateNode "elem" 0 1
-        let linkMetatype = model.CreateAssociation nodeMetatype nodeMetatype "targetName" 0 0 0 9 0 9
+        let linkMetatype = model.CreateAssociation nodeMetatype nodeMetatype "targetName" 0 1 0 9 0 9
         let newModel = repo.InstantiateModel "newModel" model
-        let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype 0 1
-        let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype 0 1
-        newModel.InstantiateAssociation newNodeA newNodeB "assoc1" linkMetatype 0 0 0 9 0 9 |> ignore
+        let newNodeA = newModel.InstantiateNode "elem1" nodeMetatype
+        let newNodeB = newModel.InstantiateNode "elem2" nodeMetatype
+        newModel.InstantiateAssociation newNodeA newNodeB "assoc1" linkMetatype |> ignore
         newModel.Node "elem1" |> shouldEqual newNodeA
         (newModel.Node "elem1").Metatype |> shouldEqual (nodeMetatype :> IDeepElement)
         newModel.Relationships |> shouldHaveLength 1
@@ -104,19 +105,62 @@ type DeepMetamodelTests() =
         
     [<Test>]
     member this.InstantiateThroughTwoModelsTest () =
-        let metaNode = model.CreateNode "metaNode" 0 0
+        let metaNode = model.CreateNode "metaNode" 0 1
         let testModel1 = repo.InstantiateModel "Model1" model
         let testModel2 = repo.InstantiateModel "Model2" testModel1
-        let node = testModel2.InstantiateNode "node" metaNode 0 0
+        let node = testModel2.InstantiateNode "node" metaNode 
         testModel1.Nodes |> shouldBeEmpty
         testModel2.Nodes |> shouldContain node
         
     [<Test>]
     member this.InstantiateAssociationTest () =
-        let metaNode = model.CreateNode "metaNode" 0 0
-        let metaAssociation = model.CreateAssociation metaNode metaNode "metaLink" 0 0 0 0 0 0
+        let metaNode = model.CreateNode "metaNode" 0 1
+        let metaAssociation = model.CreateAssociation metaNode metaNode "metaLink" 0 1 0 0 0 0
         let testModel = repo.InstantiateModel "Model1" model
-        let testNode1 = testModel.InstantiateNode "node1" metaNode 0 0
-        let testNode2 = testModel.InstantiateNode "node2" metaNode 0 0
-        let testAssociation = testModel.InstantiateAssociation testNode1 testNode2 "link" metaAssociation 0 0 0 0 0 0
-        testModel.Relationships |> shouldContain (testAssociation :> IDeepRelationship)        
+        let testNode1 = testModel.InstantiateNode "node1" metaNode 
+        let testNode2 = testModel.InstantiateNode "node2" metaNode 
+        let testAssociation = testModel.InstantiateAssociation testNode1 testNode2 "link" metaAssociation 
+        testModel.Relationships |> shouldContain (testAssociation :> IDeepRelationship)
+        
+    [<Test>]
+    member this.CheckLevelPotencySimpleInstantiation () =
+        let metaNode = model.CreateNode "metaNode" 2 3
+        let testModel = repo.InstantiateModel "Model1" model
+        let testNode = testModel.InstantiateNode "node1" metaNode
+        testNode.Level |> shouldEqual 3
+        testNode.Potency |> shouldEqual 2
+        
+    [<Test>]
+    member this.CheckLevelPotencyTwoModelsInstantiation () =
+        let metaNode = model.CreateNode "metaNode" 2 3
+        let testModel1 = repo.InstantiateModel "Model1" model
+        let testModel2 = repo.InstantiateModel "Model2" testModel1
+        let testNode = testModel2.InstantiateNode "node1" metaNode
+        testNode.Level |> shouldEqual 4
+        testNode.Potency |> shouldEqual 2
+        
+    [<Test>]
+    member this.PotencyExceptionIsThrown () =
+        let metaNode = model.CreateNode "metaNode" 2 0
+        let testModel = repo.InstantiateModel "Model1" model
+        Assert.Throws<InstantiationNotAllowedByPotencyException>(fun () -> testModel.InstantiateNode "node1" metaNode |> ignore)
+            |> ignore
+            
+    [<Test>]
+    member this.InfiniteLevelPotency () =
+        let metaNode = model.CreateNode "metaNode" (-1) (-1)
+        let testModel = repo.InstantiateModel "Model1" model
+        let testNode = testModel.InstantiateNode "node1" metaNode
+        testNode.Level |> shouldEqual (-1)
+        testNode.Potency |> shouldEqual (-1)
+        
+    [<Test>]
+    member this.AssociationLevelPotency () =
+        let metaNode = model.CreateNode "metaNode" 0 1
+        let metaAssociation = model.CreateAssociation metaNode metaNode "metaLink" 0 1 (-1) (-1) (-1) (-1)
+        let testModel = repo.InstantiateModel "Model1" model
+        let testNode1 = testModel.InstantiateNode "node1" metaNode 
+        let testNode2 = testModel.InstantiateNode "node2" metaNode 
+        let testAssociation = testModel.InstantiateAssociation testNode1 testNode2 "link" metaAssociation
+        testAssociation.Level |> shouldEqual 1
+        testAssociation.Potency |> shouldEqual 0
