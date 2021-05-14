@@ -40,6 +40,13 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     
     let wrap = pool.Wrap
     
+    let rec isDeepMeta (element : IDeepElement) (meta : IDeepElement) : bool =
+        if element.Equals(meta) then true
+        else
+            if element.Metatype.Name.Equals(LanguageMetamodel.Consts.node) then false
+            else
+                isDeepMeta element.Metatype meta
+    
     let mutable myName: string = element.ToString()
     
     member this.UnderlyingElement = element
@@ -100,6 +107,8 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             |> Seq.map (fun e -> pool.WrapSlot e 0 0 )
             
         member this.AddSlot attribute value level potency =
+            if not (isDeepMeta value attribute.Type) then
+                raise (IncorrectValueTypeForAttribute attribute.Name)
             let name = "Slot." + attribute.Name + Guid.NewGuid().ToString()
             let slotNode = element.Model.InstantiateNode name slotMetatype Map.empty
             slotNode ---> ((attribute :?> DeepAttribute).UnderlyingAttribute, attributeAssociationMetatype)

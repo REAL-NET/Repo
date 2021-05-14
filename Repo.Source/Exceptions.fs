@@ -47,3 +47,6 @@ exception InvalidSemanticOperationException of errorMessage: string
 
 /// Throws if instantiation is not allowed as potency is equal to 0
 exception InstantiationNotAllowedByPotencyException of metaElement: string
+
+/// Throws if slot is created with value of wrong type for an attribute
+exception IncorrectValueTypeForAttribute of attributeName: string

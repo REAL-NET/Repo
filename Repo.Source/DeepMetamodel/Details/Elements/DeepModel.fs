@@ -23,6 +23,7 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
         getPotencyForContext metatype
         
     let getLevel (metatype: IDeepElement) (model: IDeepModel) =
+        if (metatype.Model.Equals(model)) then metatype.Level else 
         if (metatype.Level.Equals(-1))
         then -1
             else 
