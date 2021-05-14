@@ -164,3 +164,14 @@ type DeepMetamodelTests() =
         let testAssociation = testModel.InstantiateAssociation testNode1 testNode2 "link" metaAssociation
         testAssociation.Level |> shouldEqual 1
         testAssociation.Potency |> shouldEqual 0
+        
+    [<Test>]
+    member this.AttributesInstantiation () =
+        let node = model.CreateNode "Node" 0 1
+        let ``type`` = model.CreateNode "Type" 0 1
+        node.AddAttribute "attribute" ``type`` 0 1 |> ignore
+        
+        let newModel = repo.InstantiateModel "newModel" model
+        let newNode = newModel.InstantiateNode "newNode" node
+        newNode.Attributes |> shouldHaveLength 1
+        

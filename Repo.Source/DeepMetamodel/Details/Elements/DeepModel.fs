@@ -72,6 +72,13 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             let node = model.InstantiateNode name (unwrap metatype :?> ILanguageNode) Map.empty
             let wrappedNode = pool.Wrap node level potency :?> IDeepNode
             wrappedNode.Name <- node.Name
+            for attr in metatype.Attributes do
+                if attr.Potency > 0 then
+                    wrappedNode.AddAttribute attr.Name attr.Type level (attr.Potency - 1) |> ignore
+            for slot in metatype.Slots do
+                if slot.Potency > 0 then
+                    let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedNode.Attributes
+                    wrappedNode.AddSlot attr slot.Value level (slot.Potency - 1) |> ignore
             wrappedNode
 
         member this.InstantiateAssociation source target name metatype =
@@ -84,6 +91,13 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             let level = getLevel metatype this
             let wrappedAssociation = pool.WrapAssociation edge level potency metatype.MinSource metatype.MaxSource metatype.MinTarget metatype.MaxTarget
             wrappedAssociation.Name <- name
+            for attr in metatype.Attributes do
+                if attr.Potency > 0 then
+                    wrappedAssociation.AddAttribute attr.Name attr.Type level (attr.Potency - 1) |> ignore
+            for slot in metatype.Slots do
+                if slot.Potency > 0 then
+                    let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedAssociation.Attributes
+                    wrappedAssociation.AddSlot attr slot.Value level (slot.Potency - 1) |> ignore
             wrappedAssociation
 
         member this.Nodes = model.Nodes
