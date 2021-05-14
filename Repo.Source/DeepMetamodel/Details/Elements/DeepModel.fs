@@ -14,10 +14,13 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
     
     let languageMetamodelNode = languageMetamodel.Node LanguageMetamodel.Consts.node
     
+    let getPotencyForContext (metatype: IDeepContext) =
+        if (metatype.Potency.Equals(-1)) then -1 else metatype.Potency - 1
+    
     let getPotency (metatype: IDeepElement) =
         let metaPotency = metatype.Potency
         if (metaPotency.Equals(0)) then raise (InstantiationNotAllowedByPotencyException metatype.Name)
-        if (metaPotency.Equals(-1)) then -1 else metaPotency - 1
+        getPotencyForContext metatype
         
     let getLevel (metatype: IDeepElement) (model: IDeepModel) =
         if (metatype.Level.Equals(-1))
@@ -73,12 +76,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             let wrappedNode = pool.Wrap node level potency :?> IDeepNode
             wrappedNode.Name <- node.Name
             for attr in metatype.Attributes do
-                if attr.Potency > 0 then
-                    wrappedNode.AddAttribute attr.Name attr.Type level (attr.Potency - 1) |> ignore
+                if attr.Potency <> 0 then
+                    wrappedNode.AddAttribute attr.Name attr.Type level (getPotencyForContext attr) |> ignore
             for slot in metatype.Slots do
-                if slot.Potency > 0 then
+                if slot.Potency <> 0 then
                     let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedNode.Attributes
-                    wrappedNode.AddSlot attr slot.Value level (slot.Potency - 1) |> ignore
+                    wrappedNode.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
             wrappedNode
 
         member this.InstantiateAssociation source target name metatype =
@@ -92,12 +95,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             let wrappedAssociation = pool.WrapAssociation edge level potency metatype.MinSource metatype.MaxSource metatype.MinTarget metatype.MaxTarget
             wrappedAssociation.Name <- name
             for attr in metatype.Attributes do
-                if attr.Potency > 0 then
-                    wrappedAssociation.AddAttribute attr.Name attr.Type level (attr.Potency - 1) |> ignore
+                if attr.Potency <> 0 then
+                    wrappedAssociation.AddAttribute attr.Name attr.Type level (getPotencyForContext attr) |> ignore
             for slot in metatype.Slots do
-                if slot.Potency > 0 then
+                if slot.Potency <> 0 then
                     let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedAssociation.Attributes
-                    wrappedAssociation.AddSlot attr slot.Value level (slot.Potency - 1) |> ignore
+                    wrappedAssociation.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
             wrappedAssociation
 
         member this.Nodes = model.Nodes
