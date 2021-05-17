@@ -183,4 +183,14 @@ type DeepMetamodelTests() =
         let attribute = node.AddAttribute "attribute" ``type`` 0 1
         Assert.Throws<IncorrectValueTypeForAttribute>(fun () -> node.AddSlot attribute value 0 1 |> ignore)
             |> ignore
+            
+    [<Test>]
+    member this.AttributesSlotsNotElements () =
+        let node = model.CreateNode "Node" 0 1
+        let ``type`` = model.CreateNode "Type" 0 1
+        let value = model.InstantiateNode "Value" ``type``
+        let attribute = node.AddAttribute "attribute" ``type`` 0 1
+        let slot = node.AddSlot attribute value 0 1
+        model.Elements |> shouldHaveLength 3
+        
         

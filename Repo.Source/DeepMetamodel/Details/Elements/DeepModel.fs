@@ -107,6 +107,10 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
         member this.Nodes = model.Nodes
                             |> Seq.map (fun e -> wrap e -1 -1)   
                             |> Seq.cast<IDeepNode>
+                            // Do not return attributes
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attribute)))
+                            // Do not return slots
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slot)))
 
         member this.Relationships = model.Edges
                                     |> Seq.map (fun e ->
@@ -114,17 +118,19 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                                          then pool.WrapAssociation (e :?> ILanguageAssociation) -1 -1 -1 -1 -1 -1 :> IDeepRelationship
                                          else wrap e -1 -1 :?> IDeepRelationship))
                                     |> Seq.cast<IDeepRelationship>
+                                    // Do not return attribute relationships
+                                    |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributesRelationship))) &&
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.typeRelationship))))
+                                    // Do not return slot relationships
+                                    |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slotsRelationship))) &&
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeRelationship))) &&
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.valueRelationship)))) 
                                     
         member this.Elements =
             let castedModel = this :> IDeepModel
             let nodes = (Seq.map (fun e -> e :> IDeepElement) castedModel.Nodes)
             let relationships = (Seq.map (fun e -> e :> IDeepElement) castedModel.Relationships)
             Seq.append nodes relationships
-            // Do not return attributes
-            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(Consts.attribute)))
-            // Do not return attribute relationships
-            |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(Consts.attributesRelationship))) &&
-                                    (not (e.Metatype.Name.Equals(Consts.typeRelationship))))
 
 
         member this.DeleteElement element =
