@@ -117,9 +117,15 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                                     
         member this.Elements =
             let castedModel = this :> IDeepModel
-            let a = (Seq.map (fun e -> e :> IDeepElement) castedModel.Nodes)
-            let b = (Seq.map (fun e -> e :> IDeepElement) castedModel.Relationships)
-            Seq.append a b
+            let nodes = (Seq.map (fun e -> e :> IDeepElement) castedModel.Nodes)
+            let relationships = (Seq.map (fun e -> e :> IDeepElement) castedModel.Relationships)
+            Seq.append nodes relationships
+            // Do not return attributes
+            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(Consts.attribute)))
+            // Do not return attribute relationships
+            |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(Consts.attributesRelationship))) &&
+                                    (not (e.Metatype.Name.Equals(Consts.typeRelationship))))
+
 
         member this.DeleteElement element =
             model.DeleteElement (unwrap element)
