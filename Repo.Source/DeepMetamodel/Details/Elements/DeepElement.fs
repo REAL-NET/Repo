@@ -63,26 +63,26 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
         
         member this.OutgoingAssociations =
             element.OutgoingAssociations
-            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 0 0 0 0)    
+            |> Seq.map (fun e -> pool.WrapAssociation e -1 -1 -1 -1 -1 -1)    
             |> Seq.cast<IDeepAssociation>
 
         member this.IncomingAssociations =
             element.IncomingAssociations
-            |> Seq.map (fun e -> pool.WrapAssociation e 0 0 0 0 0 0)
+            |> Seq.map (fun e -> pool.WrapAssociation e -1 -1 -1 -1 -1 -1)
             |> Seq.cast<IDeepAssociation>
 
         member this.DirectSupertypes =
             element.OutgoingEdges
             |> Seq.filter (fun e -> e :? IDeepGeneralization)
             |> Seq.map (fun e -> e.Target)
-            |> Seq.map (fun e -> wrap e 0 0)
+            |> Seq.map (fun e -> wrap e -1 -1)
 
         member this.Attributes =
              let selfAttributes =
                 element.OutgoingAssociations
                 |> Seq.filter (fun a -> a.Metatype = (attributesAssociationMetatype :> ILanguageElement))
                 |> Seq.map (fun a -> a.Target)
-                |> Seq.map (fun e -> pool.WrapAttribute e 0 0) 
+                |> Seq.map (fun e -> pool.WrapAttribute e -1 -1) 
                 |> Seq.cast<IDeepAttribute>
                 
              (this :> IDeepElement).DirectSupertypes
@@ -104,7 +104,7 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             element.OutgoingAssociations
             |> Seq.filter (fun a -> a.Metatype = (slotsAssociationMetatype :> ILanguageElement))
             |> Seq.map (fun a -> a.Target)
-            |> Seq.map (fun e -> pool.WrapSlot e 0 0 )
+            |> Seq.map (fun e -> pool.WrapSlot e -1 -1 )
             
         member this.AddSlot attribute value level potency =
             if not (isDeepMeta value attribute.Type) then
@@ -123,5 +123,5 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             failwith "Not implemented"
 
         member this.Metatype =
-            pool.Wrap element.Metatype 0 0 
+            pool.Wrap element.Metatype -1 -1 
     

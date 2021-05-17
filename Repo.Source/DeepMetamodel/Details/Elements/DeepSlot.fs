@@ -14,13 +14,13 @@ type DeepSlot(node: ILanguageElement, pool: DeepPool, repo: ILanguageRepository,
     interface IDeepSlot with
         member this.Attribute =
             (node.OutgoingAssociation Consts.attributeEdge).Target
-            |> (fun e -> pool.WrapAttribute e 0 0)
+            |> (fun e -> pool.WrapAttribute e -1 -1)
 
         /// Returns a node that represents type of an attribute.
         member this.Value
             with get () =
                 (node.OutgoingAssociation Consts.valueRelationship).Target
-                |> (fun e -> pool.Wrap e 0 0)
+                |> (fun e -> pool.Wrap e -1 -1)
             and set v =
                 let oldValue = (node.OutgoingAssociation Consts.valueRelationship).Target
                 oldValue.Model.DeleteElement oldValue

@@ -20,7 +20,7 @@ type DeepAttribute(attribute: ILanguageElement, pool: DeepPool, repo: ILanguageR
             and set value = isSingle <- value
         
         member this.Type = (attribute.OutgoingAssociation Consts.typeRelationship).Target
-                           |> (fun e -> pool.Wrap e 0 0)
+                           |> (fun e -> pool.Wrap e -1 -1)
                            
         member this.Name = (attribute :?> ILanguageNode).Name
 

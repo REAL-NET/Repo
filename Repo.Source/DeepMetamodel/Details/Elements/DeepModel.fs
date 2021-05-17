@@ -105,14 +105,14 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             wrappedAssociation
 
         member this.Nodes = model.Nodes
-                            |> Seq.map (fun e -> wrap e 0 0)   
+                            |> Seq.map (fun e -> wrap e -1 -1)   
                             |> Seq.cast<IDeepNode>
 
         member this.Relationships = model.Edges
                                     |> Seq.map (fun e ->
                                         (if e :? ILanguageAssociation
-                                         then pool.WrapAssociation (e :?> ILanguageAssociation) 0 0 0 0 0 0 :> IDeepRelationship
-                                         else wrap e 0 0 :?> IDeepRelationship))
+                                         then pool.WrapAssociation (e :?> ILanguageAssociation) -1 -1 -1 -1 -1 -1 :> IDeepRelationship
+                                         else wrap e -1 -1 :?> IDeepRelationship))
                                     |> Seq.cast<IDeepRelationship>
                                     
         member this.Elements =
