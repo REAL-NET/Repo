@@ -106,6 +106,10 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             |> Seq.map (fun a -> a.Target)
             |> Seq.map (fun e -> pool.WrapSlot e -1 -1 )
             
+        member this.GetValuesForAttribute (attribute: IDeepAttribute) =
+            (this :> IDeepElement).Model.Elements
+            |> Seq.filter (fun e -> isDeepMeta e attribute.Type)
+            
         member this.AddSlot attribute value level potency =
             if not (isDeepMeta value attribute.Type) then
                 raise (IncorrectValueTypeForAttribute attribute.Name)

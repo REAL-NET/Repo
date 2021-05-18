@@ -193,4 +193,20 @@ type DeepMetamodelTests() =
         let slot = node.AddSlot attribute value 0 1
         model.Elements |> shouldHaveLength 3
         
+    [<Test>]
+    member this.AvailableValues () =
+        let node = model.CreateNode "Node" 0 1
+        let type1 = model.CreateNode "Type" 0 1
+        let type2 = model.CreateNode "Type2" 0 1
+        let attribute = node.AddAttribute "attr" type1 0 1
         
+        let newModel = repo.InstantiateModel "newModel" model
+        let newNode = newModel.InstantiateNode "newNode" node
+        let value1 = newModel.InstantiateNode "value1" type1
+        let value2 = newModel.InstantiateNode "value1" type2
+        
+        let newAttribute = Seq.find (fun e -> (e :> IDeepAttribute).Name = attribute.Name) newNode.Attributes
+        let availableAttributes = newNode.GetValuesForAttribute newAttribute
+        availableAttributes |> shouldContain (value1 :> IDeepElement)
+        availableAttributes |> shouldNotContain (value2 :> IDeepElement)
+ 

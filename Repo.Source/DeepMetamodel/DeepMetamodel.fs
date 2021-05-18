@@ -39,6 +39,9 @@ and IDeepElement =
         
         /// Adds a slot to element
         abstract AddSlot: attribute: IDeepAttribute -> value: IDeepElement -> level: int -> potency: int -> IDeepSlot
+        
+        /// Returns all element that could be possible the values for given attribute
+        abstract GetValuesForAttribute: attribute: IDeepAttribute -> seq<IDeepElement>
 
         /// Returns a model to which this element belongs.
         abstract Model: IDeepModel with get
