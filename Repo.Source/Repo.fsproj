@@ -113,6 +113,7 @@
     <Compile Include="DeepMetamodels\IDeepModelBuilder.fs" />
     <Compile Include="DeepMetamodels\AirSimMetamodel.fs" />
     <Compile Include="DeepMetamodels\AtkinsonModel.fs" />
+    <Compile Include="DeepMetamodels\RobotsModel.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

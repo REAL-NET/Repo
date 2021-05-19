@@ -227,4 +227,10 @@ type DeepMetamodelTests() =
         atkinsonModelBuilder.Build repo
         ()
         
+    [<Test>]
+    member this.BuildRobots () =
+        let robotsModelBuilder = RobotsSubroutineModelsBuilder () :> IDeepModelBuilder
+        robotsModelBuilder.Build repo
+        ()
+        
  
