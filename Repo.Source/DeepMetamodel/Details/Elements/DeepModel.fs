@@ -82,7 +82,8 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             for slot in metatype.Slots do
                 if slot.Potency <> 0 then
                     let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedNode.Attributes
-                    wrappedNode.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
+                    if (not attr.IsSingle) then
+                        wrappedNode.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
             wrappedNode
 
         member this.InstantiateAssociation source target name metatype =
@@ -101,7 +102,8 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
             for slot in metatype.Slots do
                 if slot.Potency <> 0 then
                     let attr = Seq.find (fun e -> (e :> IDeepAttribute).Name.Equals(slot.Attribute.Name)) wrappedAssociation.Attributes
-                    wrappedAssociation.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
+                    if (not attr.IsSingle) then
+                        wrappedAssociation.AddSlot attr slot.Value level (getPotencyForContext slot) |> ignore
             wrappedAssociation
 
         member this.Nodes = model.Nodes
