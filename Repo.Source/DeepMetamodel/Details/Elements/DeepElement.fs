@@ -43,7 +43,7 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     let rec isDeepMeta (element : IDeepElement) (meta : IDeepElement) : bool =
         if element.Equals(meta) then true
         else
-            if element.Metatype.Name.Equals(LanguageMetamodel.Consts.node) then false
+            if element.Metatype = element then false
             else
                 isDeepMeta element.Metatype meta
     
