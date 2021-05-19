@@ -1,13 +1,14 @@
 namespace Repo.DeepMetamodels
 
 open Repo.DeepMetamodel
-open Repo.Facade
 
 type RobotsSubroutineModelsBuilder() =
     interface IDeepModelBuilder with
         member this.Build(repo: IDeepRepository): unit =
             let metamodel = repo.InstantiateDeepMetamodel "RobotsMetamodel"
             
+            let stringType = metamodel.CreateNode "String" (-1) (-1)
+
             let element = metamodel.CreateNode "Element" 0 0
             let move = metamodel.CreateNode "Move" 0 1
             let sing = metamodel.CreateNode "Sing" 0 1
@@ -24,6 +25,7 @@ type RobotsSubroutineModelsBuilder() =
             let overture = subroutinesModel.InstantiateNode "Overture" sing
             subroutinesModel.InstantiateAssociation phantomOfOpera danceMove "to dance" flow |> ignore
             subroutinesModel.InstantiateAssociation danceMove overture "to sing overture" flow |> ignore
+            phantomOfOpera.AddAttribute "Performer" stringType 1 1 |> ignore
 
             let notreDame = subroutinesModel.InstantiateNode "Notre-Dame" subroutine
             let runMove = subroutinesModel.InstantiateNode "Run" move
