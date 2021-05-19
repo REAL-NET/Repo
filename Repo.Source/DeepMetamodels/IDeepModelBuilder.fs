@@ -2,7 +2,7 @@ namespace Repo.DeepMetamodels
 
 open Repo.DeepMetamodel
 
-type IModelBuilder =
+type IDeepModelBuilder =
     interface
         /// Builds a model inside given repository.
         abstract Build: repo: IDeepRepository -> unit

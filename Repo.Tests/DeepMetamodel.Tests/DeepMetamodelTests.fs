@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnitTyped
 open Repo
 open Repo.DeepMetamodel
+open Repo.DeepMetamodels
 
 [<TestFixture>]
 type DeepMetamodelTests() =
@@ -209,4 +210,21 @@ type DeepMetamodelTests() =
         let availableAttributes = newNode.GetValuesForAttribute newAttribute
         availableAttributes |> shouldContain (value1 :> IDeepElement)
         availableAttributes |> shouldNotContain (value2 :> IDeepElement)
+        
+    [<Test>]
+    member this.SingleAttributeException () =
+        let node = model.CreateNode "Node" 0 1
+        let ``type`` = model.CreateNode "Type" 0 1
+        let value = model.InstantiateNode "Value" ``type``
+        let attribute = node.AddAttribute "attribute" ``type`` 0 1
+        attribute.IsSingle <- true
+        Assert.Throws<SingleAttributeSlotCreatingException>(fun () -> node.AddSlot attribute value 0 1 |> ignore)
+            |> ignore
+        
+    [<Test>]
+    member this.BuildAtkinson () =
+        let atkinsonModelBuilder = AtkinsonModelBuilder () :> IDeepModelBuilder
+        atkinsonModelBuilder.Build repo
+        ()
+        
  

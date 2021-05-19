@@ -50,3 +50,6 @@ exception InstantiationNotAllowedByPotencyException of metaElement: string
 
 /// Throws if slot is created with value of wrong type for an attribute
 exception IncorrectValueTypeForAttribute of attributeName: string
+
+/// Throws if value is assigned to single field with non-zero potency
+exception SingleAttributeSlotCreatingException of attributeName: string

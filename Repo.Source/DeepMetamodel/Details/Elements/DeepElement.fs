@@ -111,6 +111,8 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             |> Seq.filter (fun e -> isDeepMeta e attribute.Type)
             
         member this.AddSlot attribute value level potency =
+            if (attribute.Potency <> 0 && attribute.IsSingle) then
+                raise (SingleAttributeSlotCreatingException attribute.Name)
             if not (isDeepMeta value attribute.Type) then
                 raise (IncorrectValueTypeForAttribute attribute.Name)
             let name = "Slot." + attribute.Name + Guid.NewGuid().ToString()

@@ -3,7 +3,7 @@ namespace Repo.DeepMetamodels
 open Repo.DeepMetamodel
 
 type AirSimMetamodelBuilder() =
-    interface IModelBuilder with
+    interface IDeepModelBuilder with
         member this.Build(repo: IDeepRepository): unit =
             let metamodel = repo.InstantiateDeepMetamodel("AirSimMetamodel")
 
