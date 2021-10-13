@@ -1,5 +1,6 @@
 module Repo.DeepMetamodel.Details.DeepMetamodelCreator
 
+open Repo.BasicMetamodel
 open Repo.DeepMetamodel
 open Repo.DeepMetamodel.Details.Elements
 
@@ -48,5 +49,8 @@ let createIn(repo: IDeepRepository): unit =
     slot ---> (node, Consts.valueRelationship)
     attribute ---> (stringNode, Consts.nameRelationship)
     attribute ---> (node, Consts.typeRelationship)
+    
+    let attributeSingleValue = +Consts.attributeSingleValue
+    attribute ---> (attributeSingleValue, Consts.attributeSingleRelationship)
     
     

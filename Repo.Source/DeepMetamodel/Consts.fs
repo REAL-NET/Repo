@@ -42,3 +42,6 @@ let slotsRelationship = "slots"
 let attributeRelationship = "attribute"
 let valueRelationship = "value"
 let typeRelationship = "type"
+
+let attributeSingleValue = "DeepMetamodel::AttributeSingleValue"
+let attributeSingleRelationship = "attributeSingleRelationship"

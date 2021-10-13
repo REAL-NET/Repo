@@ -187,12 +187,13 @@ type DeepMetamodelTests() =
             
     [<Test>]
     member this.AttributesSlotsNotElements () =
-        let node = model.CreateNode "Node" 0 1
+        let mewModel = repo.InstantiateModel "newModel" model
+        let node = mewModel.CreateNode "Node" 0 1
         let ``type`` = model.CreateNode "Type" 0 1
-        let value = model.InstantiateNode "Value" ``type``
+        let value = mewModel.InstantiateNode "Value" ``type``
         let attribute = node.AddAttribute "attribute" ``type`` 0 1
         let slot = node.AddSlot attribute value 0 1
-        model.Elements |> shouldHaveLength 3
+        mewModel.Elements |> shouldHaveLength 2
         
     [<Test>]
     member this.AvailableValues () =

@@ -3,6 +3,7 @@ namespace Repo.DeepMetamodel.Details.Elements
 open System
 open Repo
 open Repo.AttributeMetamodel
+open Repo.InfrastructureMetamodel
 open Repo.LanguageMetamodel
 open Repo.DeepMetamodel
 
@@ -21,7 +22,7 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
         
     let typeAssociationMetatype =
         languageMetamodel.Association Consts.typeRelationship
-    
+            
     let attributesAssociationMetatype =
         languageMetamodel.Association Consts.attributesRelationship
         

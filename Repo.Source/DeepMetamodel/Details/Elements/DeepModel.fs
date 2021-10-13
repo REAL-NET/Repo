@@ -113,6 +113,8 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                             |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attribute)))
                             // Do not return slots
                             |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slot)))
+                            // Do not return "is single" attribute values
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeSingleValue)))                        
 
         member this.Relationships = model.Edges
                                     |> Seq.map (fun e ->
@@ -122,7 +124,8 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                                     |> Seq.cast<IDeepRelationship>
                                     // Do not return attribute relationships
                                     |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributesRelationship))) &&
-                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.typeRelationship))))
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.typeRelationship))) &&
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeSingleRelationship))))
                                     // Do not return slot relationships
                                     |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slotsRelationship))) &&
                                                             (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeRelationship))) &&
