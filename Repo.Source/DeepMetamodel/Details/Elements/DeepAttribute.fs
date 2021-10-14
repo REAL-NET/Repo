@@ -12,12 +12,17 @@ type DeepAttribute(attribute: ILanguageElement, pool: DeepPool, repo: ILanguageR
         (deepMetamodel.Node Repo.DeepMetamodel.Consts.attribute).OutgoingAssociation Repo.DeepMetamodel.Consts.attributeSingleRelationship
         
     do
-        let isSingleDef = attribute.Model.InstantiateNode
-                              (Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + false.ToString())
-                              singleValueMetatype
-                              Map.empty
-        attribute.Model.InstantiateAssociation attribute isSingleDef singleAssociation Map.empty |> ignore
-        attribute.OutgoingAssociations |> ignore
+        let oldRelationships = Seq.filter
+                                (fun e -> (e :> ILanguageAssociation).TargetName = Repo.DeepMetamodel.Consts.attributeSingleRelationship)
+                                attribute.OutgoingAssociations
+        if (Seq.length oldRelationships = 0)
+        then 
+            let isSingleDef = attribute.Model.InstantiateNode
+                                  (Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + false.ToString())
+                                  singleValueMetatype
+                                  Map.empty
+            attribute.Model.InstantiateAssociation attribute isSingleDef singleAssociation Map.empty |> ignore
+            attribute.OutgoingAssociations |> ignore
         
     member this.UnderlyingAttribute = attribute
         
@@ -31,8 +36,13 @@ type DeepAttribute(attribute: ILanguageElement, pool: DeepPool, repo: ILanguageR
                 (attribute.OutgoingAssociation Repo.DeepMetamodel.Consts.attributeSingleRelationship).Target
                 |> (fun e -> (e :?> ILanguageNode).Name.Equals(Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + true.ToString()))
             and set v =
-                let oldRelationship = attribute.OutgoingAssociation Repo.DeepMetamodel.Consts.attributeSingleRelationship
-                oldRelationship.Model.DeleteElement oldRelationship.Target
+                let oldRelationships = Seq.filter
+                                            (fun e -> (e :> ILanguageAssociation).TargetName = Repo.DeepMetamodel.Consts.attributeSingleRelationship)
+                                            attribute.OutgoingAssociations
+                if (Seq.length oldRelationships > 0)
+                then
+                    let oldRelationship = attribute.OutgoingAssociation Repo.DeepMetamodel.Consts.attributeSingleRelationship
+                    oldRelationship.Model.DeleteElement oldRelationship.Target
                 let newNode = attribute.Model.CreateNode (Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + v.ToString())
                 attribute.Model.InstantiateAssociation attribute newNode singleAssociation Map.empty |> ignore
 
