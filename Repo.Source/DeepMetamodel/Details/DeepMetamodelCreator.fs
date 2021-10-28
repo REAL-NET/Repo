@@ -52,5 +52,10 @@ let createIn(repo: IDeepRepository): unit =
     
     let attributeSingleValue = +Consts.attributeSingleValue
     attribute ---> (attributeSingleValue, Consts.attributeSingleRelationship)
+    let contextLevelValue = +Consts.contextLevelValue
+    deepContext ---> (contextLevelValue, Consts.contextLevelRelationship)
+    let contextPotencyValue = +Consts.contextPotencyValue
+    deepContext ---> (contextPotencyValue, Consts.contextPotencyRelationship)
+
     
     

@@ -20,7 +20,7 @@ type DeepMetamodelTests() =
     [<Test>]
     member this.CreateNodeTest () =
         let a = model.CreateNode "a" 0 1
-        let b = model.CreateNode "b" 0 1 
+        let b = model.CreateNode "b" 0 1
         model.Nodes |> shouldHaveLength 2
         model.Elements |> shouldHaveLength 2
         model.Elements |> shouldContain (a :> IDeepElement)

@@ -4,7 +4,7 @@ open Repo.DeepMetamodel
 open Repo.LanguageMetamodel
 
 type DeepAttribute(attribute: ILanguageElement, pool: DeepPool, repo: ILanguageRepository, level: int, potency: int) =
-    inherit DeepContext(level, potency)
+    inherit DeepContext(attribute, repo, level, potency)
     
     let deepMetamodel = repo.Model Repo.DeepMetamodel.Consts.deepMetamodel
     let singleValueMetatype = deepMetamodel.Node Repo.DeepMetamodel.Consts.attributeSingleValue
@@ -43,7 +43,10 @@ type DeepAttribute(attribute: ILanguageElement, pool: DeepPool, repo: ILanguageR
                 then
                     let oldRelationship = attribute.OutgoingAssociation Repo.DeepMetamodel.Consts.attributeSingleRelationship
                     oldRelationship.Model.DeleteElement oldRelationship.Target
-                let newNode = attribute.Model.CreateNode (Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + v.ToString())
+                let newNode = attribute.Model.InstantiateNode
+                                  (Repo.DeepMetamodel.Consts.attributeSingleRelationship + "::" + v.ToString())
+                                  singleValueMetatype
+                                  Map.empty
                 attribute.Model.InstantiateAssociation attribute newNode singleAssociation Map.empty |> ignore
 
         member this.Type = (attribute.OutgoingAssociation Repo.DeepMetamodel.Consts.typeRelationship).Target

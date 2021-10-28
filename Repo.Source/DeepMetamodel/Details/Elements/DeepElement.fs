@@ -9,7 +9,7 @@ open Repo.DeepMetamodel
 
 [<AbstractClass>]
 type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepository, level: int, potency: int) =
-    inherit DeepContext(level, potency)
+    inherit DeepContext(element, repo, level, potency)
     
     let languageMetamodel =
         repo.Model Consts.deepMetamodel
@@ -42,9 +42,9 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
     let wrap = pool.Wrap
     
     let rec isDeepMeta (element : IDeepElement) (meta : IDeepElement) : bool =
-        if element.Equals(meta) then true
+        if element = meta then true
         else
-            if element.Metatype = element then false
+            if element.Metatype.Name.Equals(Repo.LanguageMetamodel.Consts.node) then false
             else
                 isDeepMeta element.Metatype meta
     

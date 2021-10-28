@@ -45,3 +45,7 @@ let typeRelationship = "type"
 
 let attributeSingleValue = "DeepMetamodel::AttributeSingleValue"
 let attributeSingleRelationship = "attributeSingleRelationship"
+let contextPotencyValue = "DeepMetamodel::ContextPotency"
+let contextPotencyRelationship = "contextPotencyRelationship"
+let contextLevelValue = "DeepMetamodel::ContextLevel"
+let contextLevelRelationship = "contextLevelRelationship"

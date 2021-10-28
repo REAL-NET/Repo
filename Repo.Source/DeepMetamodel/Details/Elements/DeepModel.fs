@@ -2,6 +2,7 @@ namespace Repo.DeepMetamodel.Details.Elements
 
 open Repo
 open Repo.DeepMetamodel
+open Repo.Facade
 open Repo.LanguageMetamodel
 
 type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository) =
@@ -27,10 +28,10 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
         if (metatype.Level.Equals(-1))
         then -1
             else 
-                let mutable levelDifference = 1
+                let mutable levelDifference = 0
                 let mutable current = model
-                while ((Seq.contains metatype (current.Metamodel.Elements)) |> not) do
-                    current <- model.Metamodel
+                while (metatype.Model <> current) do
+                    current <- current.Metamodel
                     levelDifference <- levelDifference + 1
                 metatype.Level + levelDifference
 
@@ -114,7 +115,12 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                             // Do not return slots
                             |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slot)))
                             // Do not return "is single" attribute values
-                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeSingleValue)))                        
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeSingleValue)))
+                            // Do not return "potency" values
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextPotencyValue)))
+                            // Do not return "level" values
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextLevelValue)))
+
 
         member this.Relationships = model.Edges
                                     |> Seq.map (fun e ->
@@ -129,7 +135,10 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                                     // Do not return slot relationships
                                     |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.slotsRelationship))) &&
                                                             (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.attributeRelationship))) &&
-                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.valueRelationship)))) 
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.valueRelationship))))
+                                    // Do not return element relationships
+                                    |> Seq.filter (fun e -> (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextPotencyRelationship))) &&
+                                                            (not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextLevelRelationship))))
                                     
         member this.Elements =
             let castedModel = this :> IDeepModel

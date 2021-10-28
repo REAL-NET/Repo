@@ -4,7 +4,7 @@ open Repo.DeepMetamodel
 open Repo.LanguageMetamodel
 
 type DeepSlot(node: ILanguageElement, pool: DeepPool, repo: ILanguageRepository, level: int, potency: int) =
-    inherit DeepContext(level, potency)
+    inherit DeepContext(node, repo, level, potency)
     
     let deepMetamodel = repo.Model Repo.DeepMetamodel.Consts.deepMetamodel
     let valueAssociation = (deepMetamodel.Node Repo.DeepMetamodel.Consts.slot).OutgoingAssociation Repo.DeepMetamodel.Consts.valueRelationship
