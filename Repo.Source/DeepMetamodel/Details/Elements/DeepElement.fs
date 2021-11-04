@@ -34,7 +34,10 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
         
     let valueAssociationMetatype =
         languageMetamodel.Association Consts.valueRelationship
-             
+        
+    let simpleAttributeType =
+        languageMetamodel.Node DeepMetamodel.Consts.simpleAttributeType
+               
     let (--->) source (target, metatype) =
         element.Model.InstantiateAssociation source target metatype Map.empty
         |> ignore
@@ -100,6 +103,9 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             attributeNode ---> ((``type`` :?> DeepElement).UnderlyingElement, typeAssociationMetatype)
             element ---> (attributeNode, attributesAssociationMetatype)
             pool.WrapAttribute attributeNode level potency
+            
+        member this.AddSimpleAttribute name level potency =
+            (this :> IDeepElement).AddAttribute name (wrap simpleAttributeType -1 -1) level potency 
  
         member this.Slots =
             element.OutgoingAssociations
@@ -122,6 +128,11 @@ type DeepElement(element: ILanguageElement, pool: DeepPool, repo: ILanguageRepos
             slotNode ---> ((value :?> DeepElement).UnderlyingElement, valueAssociationMetatype)
             element ---> (slotNode, slotsAssociationMetatype)
             pool.WrapSlot slotNode level potency
+            
+        member this.AddSimpleSlot attribute value level potency =
+            let name = "SimpleValue." + Guid.NewGuid().ToString() + ":->:" + value
+            let slotValue = (this :> IDeepElement).Model.InstantiateNode name ((wrap simpleAttributeType -1 -1) :?> IDeepNode)
+            (this :> IDeepElement).AddSlot attribute slotValue level potency
 
         member this.Model: IDeepModel =
             pool.WrapModel element.Model

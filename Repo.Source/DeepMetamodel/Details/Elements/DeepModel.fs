@@ -120,6 +120,8 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
                             |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextPotencyValue)))
                             // Do not return "level" values
                             |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.contextLevelValue)))
+                            // Dot not return simple slot values
+                            |> Seq.filter (fun e -> not (e.Metatype.Name.Equals(DeepMetamodel.Consts.simpleAttributeType)))
 
 
         member this.Relationships = model.Edges

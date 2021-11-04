@@ -49,3 +49,5 @@ let contextPotencyValue = "DeepMetamodel::ContextPotency"
 let contextPotencyRelationship = "contextPotencyRelationship"
 let contextLevelValue = "DeepMetamodel::ContextLevel"
 let contextLevelRelationship = "contextLevelRelationship"
+
+let simpleAttributeType = "DeepMetamodel::SimpleAttributeType"

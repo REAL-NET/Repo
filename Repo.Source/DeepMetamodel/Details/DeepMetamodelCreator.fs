@@ -56,6 +56,9 @@ let createIn(repo: IDeepRepository): unit =
     deepContext ---> (contextLevelValue, Consts.contextLevelRelationship)
     let contextPotencyValue = +Consts.contextPotencyValue
     deepContext ---> (contextPotencyValue, Consts.contextPotencyRelationship)
+    
+    let simpleAttributeType = +Consts.simpleAttributeType
+    simpleAttributeType --|> element
 
     
     

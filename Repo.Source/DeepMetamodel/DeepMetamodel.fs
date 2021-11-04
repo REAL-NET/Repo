@@ -34,11 +34,17 @@ and IDeepElement =
         /// Adds an attribute to element
         abstract AddAttribute: name: string -> ``type``: IDeepElement -> level: int -> potency: int -> IDeepAttribute
         
+        /// Adds an attrubute with simple string value type
+        abstract AddSimpleAttribute: name: string -> level: int -> potency: int -> IDeepAttribute
+        
         /// A list of all slots for an element.
         abstract Slots: IDeepSlot seq with get
         
         /// Adds a slot to element
         abstract AddSlot: attribute: IDeepAttribute -> value: IDeepElement -> level: int -> potency: int -> IDeepSlot
+        
+        /// Adds a stol with simple value for simple string attribute
+        abstract AddSimpleSlot: attribute: IDeepAttribute -> value: string -> level: int -> potency: int -> IDeepSlot
         
         /// Returns all element that could be possible the values for given attribute
         abstract GetValuesForAttribute: attribute: IDeepAttribute -> seq<IDeepElement>
@@ -80,6 +86,10 @@ and IDeepSlot =
 
         /// Value of a slot.
         abstract Value: IDeepElement with get, set
+        
+        abstract IsSimple: bool with get
+        
+        abstract SimpleValue: string with get, set
     end
 
 /// Node is a kind of element which can connect only to edge, corresponds to node of the model graph.

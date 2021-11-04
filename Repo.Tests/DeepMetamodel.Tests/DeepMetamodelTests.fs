@@ -234,4 +234,48 @@ type DeepMetamodelTests() =
         robotsModelBuilder.Build repo
         ()
         
+    [<Test>]
+    member this.IsSimpleSlot () =
+        let node = model.CreateNode "Node" -1 -1
+        let sattr = node.AddSimpleAttribute "displayName" -1 -1
+        let sslot = node.AddSimpleSlot sattr "some name" -1 -1
+        let aattr = node.AddAttribute "attribute" node -1 -1
+        let value = model.InstantiateNode "value" node 
+        let aslot = node.AddSlot aattr value -1 -1
+        sslot.IsSimple |> shouldEqual true
+        aslot.IsSimple |> shouldEqual false
+      
+    [<Test>]
+    member this.GetSimpleSlotValue () =
+        let node = model.CreateNode "Node" -1 -1
+        let sattr = node.AddSimpleAttribute "displayName" -1 -1
+        let sslot = node.AddSimpleSlot sattr "some name" -1 -1
+        let aattr = node.AddAttribute "attribute" node -1 -1
+        let value = model.InstantiateNode "value" node 
+        let aslot = node.AddSlot aattr value -1 -1
+        sslot.SimpleValue |> shouldEqual "some name"
+        aslot.SimpleValue |> shouldEqual "value"
+        
+    [<Test>]
+    member this.SetSimpleSlotValue () =
+        let node = model.CreateNode "Node" -1 -1
+        let sattr = node.AddSimpleAttribute "displayName" -1 -1
+        let sslot = node.AddSimpleSlot sattr "some name" -1 -1
+        sslot.SimpleValue |> shouldEqual "some name"
+        sslot.SimpleValue <- "new name"
+        sslot.IsSimple |> shouldEqual true
+        sslot.SimpleValue |> shouldEqual "new name"
+        
+    [<Test>]
+    member this.NoSimpleSlotValuesInElements () =
+        let node = model.CreateNode "Node" -1 -1
+        let sattr = node.AddSimpleAttribute "displayName" -1 -1
+        node.AddSimpleSlot sattr "some name" -1 -1 |> ignore
+        let aattr = node.AddAttribute "attribute" node -1 -1
+        let value = model.InstantiateNode "value" node 
+        node.AddSlot aattr value -1 -1 |> ignore
+        model.Elements |> shouldHaveLength 2
+        model.Elements |> shouldContain (value :> IDeepElement)
+        model.Elements |> shouldContain (node :> IDeepElement)
+        
  
