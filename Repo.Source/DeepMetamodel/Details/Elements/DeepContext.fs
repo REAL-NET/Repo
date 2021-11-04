@@ -21,10 +21,14 @@ type DeepContext(node: ILanguageElement, repo: ILanguageRepository, level: int, 
     let mutable _cache_potency: Nullable<int> = System.Nullable()
     
     do
+        if node.Metatype.Equals(potencyValueMetatype) ||
+           node.Metatype.Equals(potencyAssociation) ||
+           node.Metatype.Equals(levelValueMetatype) ||
+           node.Metatype.Equals(levelAssociation) then () else  
         let oldLevelRelationships = Seq.filter
                                      (fun e -> (e :> ILanguageAssociation).TargetName = Repo.DeepMetamodel.Consts.contextLevelRelationship)
                                      node.OutgoingAssociations
-        if (Seq.length oldLevelRelationships = 0)
+        if ((Seq.length oldLevelRelationships) = 0)
         then
             let levelDef = node.Model.InstantiateNode
                                   (Repo.DeepMetamodel.Consts.contextLevelRelationship + "::" + level.ToString())
