@@ -20,11 +20,14 @@ type DeepContext(node: ILanguageElement, repo: ILanguageRepository, level: int, 
     let mutable _cache_level: Nullable<int> = System.Nullable()
     let mutable _cache_potency: Nullable<int> = System.Nullable()
     
+    let hasNoLevelPotency =
+        node.Metatype.Equals(potencyValueMetatype) ||
+        node.Metatype.Equals(potencyAssociation) ||
+        node.Metatype.Equals(levelValueMetatype) ||
+        node.Metatype.Equals(levelAssociation)
+    
     do
-        if node.Metatype.Equals(potencyValueMetatype) ||
-           node.Metatype.Equals(potencyAssociation) ||
-           node.Metatype.Equals(levelValueMetatype) ||
-           node.Metatype.Equals(levelAssociation) then () else  
+        if hasNoLevelPotency then () else  
         let oldLevelRelationships = Seq.filter
                                      (fun e -> (e :> ILanguageAssociation).TargetName = Repo.DeepMetamodel.Consts.contextLevelRelationship)
                                      node.OutgoingAssociations
@@ -55,6 +58,7 @@ type DeepContext(node: ILanguageElement, repo: ILanguageRepository, level: int, 
         
         member this.Level
             with get() =
+                if hasNoLevelPotency then -1 else
                 if (_cache_level.HasValue) then _cache_level.Value else 
                 (node.OutgoingAssociation Repo.DeepMetamodel.Consts.contextLevelRelationship).Target
                 |> (fun e -> (e :?> ILanguageNode).Name.Substring(Repo.DeepMetamodel.Consts.contextLevelRelationship.Length + 2))
@@ -77,6 +81,7 @@ type DeepContext(node: ILanguageElement, repo: ILanguageRepository, level: int, 
             
         member this.Potency
             with get() =
+                if hasNoLevelPotency then -1 else
                 if (_cache_potency.HasValue) then _cache_potency.Value else 
                 (node.OutgoingAssociation Repo.DeepMetamodel.Consts.contextPotencyRelationship).Target
                 |> (fun e -> (e :?> ILanguageNode).Name.Substring(Repo.DeepMetamodel.Consts.contextPotencyRelationship.Length + 2))
