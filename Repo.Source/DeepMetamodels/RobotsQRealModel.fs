@@ -12,13 +12,13 @@ type RobotsQRealModelsBuilder() =
             let link = metamodel.CreateAssociation abstractNode abstractNode "link" 0 1 (-1) (-1) (-1) (-1)
 
             let initialNode = metamodel.CreateNode "Initial node" 0 1
-            let initialNodePicture = initialNode.AddSimpleAttribute "Picture" (-1) (-1)
-            initialNode.AddSimpleSlot initialNodePicture "src/images/initialBlock.svg" (-1) (-1) |> ignore
+            let initialNodePicture = initialNode.AddSimpleAttribute "Image" (-1) (-1)
+            initialNode.AddSimpleSlot initialNodePicture "images/initialBlock.svg" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractNode initialNode "Initial node gen" (-1) (-1) |> ignore
 
             let finalNode = metamodel.CreateNode "Final node" 0 1
-            let finalNodePicture = finalNode.AddSimpleAttribute "Picture" (-1) (-1)
-            finalNode.AddSimpleSlot finalNodePicture "src/images/finalBlock.svg" (-1) (-1) |> ignore
+            let finalNodePicture = finalNode.AddSimpleAttribute "Image" (-1) (-1)
+            finalNode.AddSimpleSlot finalNodePicture "images/finalBlock.svg" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractNode finalNode "Final node gen" (-1) (-1) |> ignore
 
             let abstractMotorsBlock = metamodel.CreateNode "Abstract motors block" 0 0
@@ -32,23 +32,23 @@ type RobotsQRealModelsBuilder() =
             metamodel.CreateGeneralization abstractMotorsBlock abstractMotorsPowerBlock "Abstract motors power block gen" (-1) (-1) |> ignore
 
             let motorsForward = metamodel.CreateNode "Motors forward" 0 1
-            let motorsForwardPicture = motorsForward.AddSimpleAttribute "Picture" (-1) (-1)
-            motorsForward.AddSimpleSlot motorsForwardPicture "src/images/enginesForwardBlock.svg" (-1) (-1) |> ignore
+            let motorsForwardPicture = motorsForward.AddSimpleAttribute "Image" (-1) (-1)
+            motorsForward.AddSimpleSlot motorsForwardPicture "images/enginesForwardBlock.svg" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractMotorsPowerBlock motorsForward "Motors forward gen" (-1) (-1) |> ignore
 
             let motorsBackward = metamodel.CreateNode "Motors backward" 0 1
-            let motorsBackwardPicture = motorsBackward.AddSimpleAttribute "Picture" (-1) (-1)
-            motorsBackward.AddSimpleSlot motorsBackwardPicture "src/images/enginesBackwardBlock.svg" (-1) (-1) |> ignore
+            let motorsBackwardPicture = motorsBackward.AddSimpleAttribute "Image" (-1) (-1)
+            motorsBackward.AddSimpleSlot motorsBackwardPicture "images/enginesBackwardBlock.svg" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractMotorsPowerBlock motorsBackward "Motors backward gen" (-1) (-1) |> ignore
 
             let motorsStop = metamodel.CreateNode "Motors stop" 0 1
-            let motorsStopPicture = motorsStop.AddSimpleAttribute "Picture" (-1) (-1)
-            motorsStop.AddSimpleSlot motorsStopPicture "src/images/enginesStopBlock.svg" (-1) (-1) |> ignore
+            let motorsStopPicture = motorsStop.AddSimpleAttribute "Image" (-1) (-1)
+            motorsStop.AddSimpleSlot motorsStopPicture "images/enginesStopBlock.svg" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractMotorsPowerBlock motorsStop "Motors stop gen" (-1) (-1) |> ignore
 
             let timer = metamodel.CreateNode "Timer" 0 1
-            let timerPicture = timer.AddSimpleAttribute "Picture" (-1) (-1)
-            timer.AddSimpleSlot timerPicture "src/images/timerBlock.svg" (-1) (-1) |> ignore
+            let timerPicture = timer.AddSimpleAttribute "Image" (-1) (-1)
+            timer.AddSimpleSlot timerPicture "images/timerBlock.svg" (-1) (-1) |> ignore
             let timerDelay = timer.AddSimpleAttribute "Delay" (-1) (-1)
             timer.AddSimpleSlot timerDelay "1000" (-1) (-1) |> ignore
             metamodel.CreateGeneralization abstractNode timer "Motors stop gen" (-1) (-1) |> ignore
