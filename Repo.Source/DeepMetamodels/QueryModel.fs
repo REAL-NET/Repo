@@ -7,7 +7,7 @@ type QueryModelBuilder() =
         member this.Build(repo: IDeepRepository): unit =
             let metamodel = repo.InstantiateDeepMetamodel "QueryMetamodel"
 
-            let abstractQueryBlock = metamodel.CreateNode "Abstract node" 0 0
+            let abstractQueryBlock = metamodel.CreateNode "Abstract node" (-1) (-1)
             let abstractQueryBlockXCoordinate = abstractQueryBlock.AddSimpleAttribute "xCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockXCoordinate "" (-1) (-1) |> ignore
             let abstractQueryBlockYCoordinate = abstractQueryBlock.AddSimpleAttribute "yCoordinate" (-1) (-1)
