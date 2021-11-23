@@ -115,6 +115,7 @@
     <Compile Include="DeepMetamodels\AtkinsonModel.fs" />
     <Compile Include="DeepMetamodels\RobotsModel.fs" />
     <Compile Include="DeepMetamodels\RobotsQRealModel.fs" />
+    <Compile Include="DeepMetamodels\QueryModel.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
