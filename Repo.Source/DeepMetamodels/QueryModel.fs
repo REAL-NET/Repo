@@ -17,53 +17,53 @@ type QueryModelBuilder() =
             let linkConnectionType = link.AddSimpleAttribute "connection type" (-1) (-1)
             link.AddSimpleSlot linkConnectionType "local" (-1) (-1) |> ignore
 
-            let abstractRedBlock = metamodel.CreateNode "Red block" 0 0
+            let abstractRedBlock = metamodel.InstantiateNode "Red block" abstractQueryBlock
             let abstractRedBlockParent = abstractRedBlock.AddSimpleAttribute "parent" (-1) (-1)
             abstractRedBlock.AddSimpleSlot abstractRedBlockParent "" (-1) (-1) |> ignore
             let abstractRedBlockChildren = abstractRedBlock.AddSimpleAttribute "children" (-1) (-1)
             abstractRedBlock.AddSimpleSlot abstractRedBlockChildren "" (-1) (-1) |> ignore
             //let abstractRedBlockConnectionType = abstractRedBlock.AddSimpleAttribute "connection type" (-1) (-1)
             //abstractRedBlock.AddSimpleSlot abstractRedBlockConnectionType "local" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractQueryBlock abstractRedBlock "Abstract red block gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractQueryBlock abstractRedBlock "Abstract red block gen" (-1) (-1) |> ignore
 
-            let abstractYellowBlock = metamodel.CreateNode "Yellow block" 0 0
+            let abstractYellowBlock = metamodel.InstantiateNode "Yellow block" abstractQueryBlock
             let abstractYellowBlockParent = abstractYellowBlock.AddSimpleAttribute "parent" (-1) (-1)
             abstractYellowBlock.AddSimpleSlot abstractYellowBlockParent "" (-1) (-1) |> ignore
             //let abstractYellowBlockConnectionType = abstractYellowBlock.AddSimpleAttribute "connection type" (-1) (-1)
             //abstractYellowBlock.AddSimpleSlot abstractYellowBlockConnectionType "local" (-1) (-1) |> ignore
             let abstractYellowBlockArgument = abstractYellowBlock.AddSimpleAttribute "argument" (-1) (-1)
             abstractYellowBlock.AddSimpleSlot abstractYellowBlockArgument "" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractQueryBlock abstractYellowBlock "Abstract yellow block gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractQueryBlock abstractYellowBlock "Abstract yellow block gen" (-1) (-1) |> ignore
 
-            let abstractBlueBlock = metamodel.CreateNode "Blue block" 0 0
+            let abstractBlueBlock = metamodel.InstantiateNode "Blue block" abstractQueryBlock
             let abstractBlueBlockContents = abstractBlueBlock.AddSimpleAttribute "contents" (-1) (-1)
             abstractBlueBlock.AddSimpleSlot abstractBlueBlockContents "" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractQueryBlock abstractBlueBlock "Abstract blue block gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractQueryBlock abstractBlueBlock "Abstract blue block gen" (-1) (-1) |> ignore
 
-            let aggregate = metamodel.CreateNode "Aggregate" 0 1
+            let aggregate = metamodel.InstantiateNode "Aggregate" abstractRedBlock
             let aggregateImage = aggregate.AddSimpleAttribute "image" (-1) (-1)
             aggregate.AddSimpleSlot aggregateImage "images/aggregate.png" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractRedBlock aggregate "Aggregate gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractRedBlock aggregate "Aggregate gen" (-1) (-1) |> ignore
 
-            let ds = metamodel.CreateNode "DS" 0 1
+            let ds = metamodel.InstantiateNode "DS" abstractRedBlock
             let dsImage = ds.AddSimpleAttribute "image" (-1) (-1)
             ds.AddSimpleSlot dsImage "images/ds.png" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractRedBlock ds "DS gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractRedBlock ds "DS gen" (-1) (-1) |> ignore
 
-            let holds = metamodel.CreateNode "HOLDS" 0 1
+            let holds = metamodel.InstantiateNode "HOLDS" abstractRedBlock
             let holdsImage = holds.AddSimpleAttribute "image" (-1) (-1)
             holds.AddSimpleSlot holdsImage "images/holds.png" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractRedBlock holds "Holds gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractRedBlock holds "Holds gen" (-1) (-1) |> ignore
 
-            let materialize = metamodel.CreateNode "Materialize" 0 1
+            let materialize = metamodel.InstantiateNode "Materialize" abstractRedBlock
             let materializeImage = materialize.AddSimpleAttribute "image" (-1) (-1)
             materialize.AddSimpleSlot materializeImage "images/materialize.png" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractRedBlock materialize "Materialize gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractRedBlock materialize "Materialize gen" (-1) (-1) |> ignore
 
-            let read = metamodel.CreateNode "Read" 0 1
+            let read = metamodel.InstantiateNode "Read" abstractRedBlock
             let readImage = read.AddSimpleAttribute "image" (-1) (-1)
             read.AddSimpleSlot readImage "images/read.png" (-1) (-1) |> ignore
-            metamodel.CreateGeneralization abstractRedBlock read "Read gen" (-1) (-1) |> ignore
+            //metamodel.CreateGeneralization abstractRedBlock read "Read gen" (-1) (-1) |> ignore
 
             let queryModel = repo.InstantiateModel "QueryModel" metamodel
 
@@ -99,4 +99,3 @@ type QueryModelBuilder() =
             ()
             
             
-
