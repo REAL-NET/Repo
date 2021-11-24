@@ -13,7 +13,7 @@ type QueryModelBuilder() =
             let abstractQueryBlockYCoordinate = abstractQueryBlock.AddSimpleAttribute "yCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockYCoordinate "" (-1) (-1) |> ignore
 
-            let link = metamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" 0 1 (-1) (-1) (-1) (-1)
+            let link = metamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) (-1) (-1) (-1) (-1) (-1)
             let linkConnectionType = link.AddSimpleAttribute "connection type" (-1) (-1)
             link.AddSimpleSlot linkConnectionType "local" (-1) (-1) |> ignore
 
