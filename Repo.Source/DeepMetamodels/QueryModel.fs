@@ -5,20 +5,21 @@ open Repo.DeepMetamodel
 type QueryModelBuilder() =
     interface IDeepModelBuilder with
         member this.Build(repo: IDeepRepository): unit =
-            let metametamodel = repo.InstantiateDeepMetamodel "QueryMetametamodel"
-            let metamodel = repo.InstantiateDeepMetamodel "QueryMetamodel"
+            let metametametamodel = repo.InstantiateDeepMetamodel "QueryMetametametamodel"
 
-            let abstractQueryBlock = metametamodel.CreateNode "Abstract node" (-1) 2
+            let abstractQueryBlock = metametametamodel.CreateNode "Abstract node" (-1) 3
             let abstractQueryBlockXCoordinate = abstractQueryBlock.AddSimpleAttribute "xCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockXCoordinate "" (-1) (-1) |> ignore
             let abstractQueryBlockYCoordinate = abstractQueryBlock.AddSimpleAttribute "yCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockYCoordinate "" (-1) (-1) |> ignore
 
-            let link = metametamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) (-1) (-1) (-1) (-1) (-1)
+            let link = metametametamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) (-1) (-1) (-1) (-1) (-1)
             let linkConnectionType = link.AddSimpleAttribute "connection type" (-1) (-1)
             link.AddSimpleSlot linkConnectionType "local" (-1) (-1) |> ignore
 
-            let operatorBlock = metamodel.InstantiateNode "Red block" abstractQueryBlock
+            let metametamodel = repo.InstantiateModel "QueryMetametamodel" metametametamodel
+
+            let operatorBlock = metametamodel.InstantiateNode "Operator block" abstractQueryBlock
             let abstractRedBlockParent = operatorBlock.AddSimpleAttribute "parent" (-1) (-1)
             operatorBlock.AddSimpleSlot abstractRedBlockParent "" (-1) (-1) |> ignore
             let abstractRedBlockChildren = operatorBlock.AddSimpleAttribute "children" (-1) (-1)
@@ -27,7 +28,7 @@ type QueryModelBuilder() =
             //abstractRedBlock.AddSimpleSlot abstractRedBlockConnectionType "local" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractRedBlock "Abstract red block gen" (-1) (-1) |> ignore
 
-            let readerBlock = metamodel.InstantiateNode "Yellow block" abstractQueryBlock
+            let readerBlock = metametamodel.InstantiateNode "Reader block" abstractQueryBlock
             let abstractYellowBlockParent = readerBlock.AddSimpleAttribute "parent" (-1) (-1)
             readerBlock.AddSimpleSlot abstractYellowBlockParent "" (-1) (-1) |> ignore
             //let abstractYellowBlockConnectionType = abstractYellowBlock.AddSimpleAttribute "connection type" (-1) (-1)
@@ -36,10 +37,12 @@ type QueryModelBuilder() =
             readerBlock.AddSimpleSlot abstractYellowBlockArgument "" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractYellowBlock "Abstract yellow block gen" (-1) (-1) |> ignore
 
-            let operatorInternalsBlock = metamodel.InstantiateNode "Blue block" abstractQueryBlock
+            let operatorInternalsBlock = metametamodel.InstantiateNode "Operator internals block" abstractQueryBlock
             let abstractBlueBlockContents = operatorInternalsBlock.AddSimpleAttribute "contents" (-1) (-1)
             operatorInternalsBlock.AddSimpleSlot abstractBlueBlockContents "" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractBlueBlock "Abstract blue block gen" (-1) (-1) |> ignore
+
+            let metamodel = repo.InstantiateModel "QueryMetamodel" metametamodel
 
             let aggregate = metamodel.InstantiateNode "Aggregate" operatorBlock
             let aggregateImage = aggregate.AddSimpleAttribute "image" (-1) (-1)
@@ -98,5 +101,3 @@ type QueryModelBuilder() =
             queryModel.InstantiateAssociation materializeInstance dsInstance "Materialize_DS_1" link |> ignore
 
             ()
-            
-            
