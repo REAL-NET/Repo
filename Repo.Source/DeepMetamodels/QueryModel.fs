@@ -5,62 +5,63 @@ open Repo.DeepMetamodel
 type QueryModelBuilder() =
     interface IDeepModelBuilder with
         member this.Build(repo: IDeepRepository): unit =
+            let metametamodel = repo.InstantiateDeepMetamodel "QueryMetametamodel"
             let metamodel = repo.InstantiateDeepMetamodel "QueryMetamodel"
 
-            let abstractQueryBlock = metamodel.CreateNode "Abstract node" (-1) (-1)
+            let abstractQueryBlock = metametamodel.CreateNode "Abstract node" (-1) 2
             let abstractQueryBlockXCoordinate = abstractQueryBlock.AddSimpleAttribute "xCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockXCoordinate "" (-1) (-1) |> ignore
             let abstractQueryBlockYCoordinate = abstractQueryBlock.AddSimpleAttribute "yCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockYCoordinate "" (-1) (-1) |> ignore
 
-            let link = metamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) (-1) (-1) (-1) (-1) (-1)
+            let link = metametamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) (-1) (-1) (-1) (-1) (-1)
             let linkConnectionType = link.AddSimpleAttribute "connection type" (-1) (-1)
             link.AddSimpleSlot linkConnectionType "local" (-1) (-1) |> ignore
 
-            let abstractRedBlock = metamodel.InstantiateNode "Red block" abstractQueryBlock
-            let abstractRedBlockParent = abstractRedBlock.AddSimpleAttribute "parent" (-1) (-1)
-            abstractRedBlock.AddSimpleSlot abstractRedBlockParent "" (-1) (-1) |> ignore
-            let abstractRedBlockChildren = abstractRedBlock.AddSimpleAttribute "children" (-1) (-1)
-            abstractRedBlock.AddSimpleSlot abstractRedBlockChildren "" (-1) (-1) |> ignore
+            let operatorBlock = metamodel.InstantiateNode "Red block" abstractQueryBlock
+            let abstractRedBlockParent = operatorBlock.AddSimpleAttribute "parent" (-1) (-1)
+            operatorBlock.AddSimpleSlot abstractRedBlockParent "" (-1) (-1) |> ignore
+            let abstractRedBlockChildren = operatorBlock.AddSimpleAttribute "children" (-1) (-1)
+            operatorBlock.AddSimpleSlot abstractRedBlockChildren "" (-1) (-1) |> ignore
             //let abstractRedBlockConnectionType = abstractRedBlock.AddSimpleAttribute "connection type" (-1) (-1)
             //abstractRedBlock.AddSimpleSlot abstractRedBlockConnectionType "local" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractRedBlock "Abstract red block gen" (-1) (-1) |> ignore
 
-            let abstractYellowBlock = metamodel.InstantiateNode "Yellow block" abstractQueryBlock
-            let abstractYellowBlockParent = abstractYellowBlock.AddSimpleAttribute "parent" (-1) (-1)
-            abstractYellowBlock.AddSimpleSlot abstractYellowBlockParent "" (-1) (-1) |> ignore
+            let readerBlock = metamodel.InstantiateNode "Yellow block" abstractQueryBlock
+            let abstractYellowBlockParent = readerBlock.AddSimpleAttribute "parent" (-1) (-1)
+            readerBlock.AddSimpleSlot abstractYellowBlockParent "" (-1) (-1) |> ignore
             //let abstractYellowBlockConnectionType = abstractYellowBlock.AddSimpleAttribute "connection type" (-1) (-1)
             //abstractYellowBlock.AddSimpleSlot abstractYellowBlockConnectionType "local" (-1) (-1) |> ignore
-            let abstractYellowBlockArgument = abstractYellowBlock.AddSimpleAttribute "argument" (-1) (-1)
-            abstractYellowBlock.AddSimpleSlot abstractYellowBlockArgument "" (-1) (-1) |> ignore
+            let abstractYellowBlockArgument = readerBlock.AddSimpleAttribute "argument" (-1) (-1)
+            readerBlock.AddSimpleSlot abstractYellowBlockArgument "" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractYellowBlock "Abstract yellow block gen" (-1) (-1) |> ignore
 
-            let abstractBlueBlock = metamodel.InstantiateNode "Blue block" abstractQueryBlock
-            let abstractBlueBlockContents = abstractBlueBlock.AddSimpleAttribute "contents" (-1) (-1)
-            abstractBlueBlock.AddSimpleSlot abstractBlueBlockContents "" (-1) (-1) |> ignore
+            let operatorInternalsBlock = metamodel.InstantiateNode "Blue block" abstractQueryBlock
+            let abstractBlueBlockContents = operatorInternalsBlock.AddSimpleAttribute "contents" (-1) (-1)
+            operatorInternalsBlock.AddSimpleSlot abstractBlueBlockContents "" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractQueryBlock abstractBlueBlock "Abstract blue block gen" (-1) (-1) |> ignore
 
-            let aggregate = metamodel.InstantiateNode "Aggregate" abstractRedBlock
+            let aggregate = metamodel.InstantiateNode "Aggregate" operatorBlock
             let aggregateImage = aggregate.AddSimpleAttribute "image" (-1) (-1)
             aggregate.AddSimpleSlot aggregateImage "images/aggregate.png" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractRedBlock aggregate "Aggregate gen" (-1) (-1) |> ignore
 
-            let ds = metamodel.InstantiateNode "DS" abstractRedBlock
+            let ds = metamodel.InstantiateNode "DS" operatorBlock
             let dsImage = ds.AddSimpleAttribute "image" (-1) (-1)
             ds.AddSimpleSlot dsImage "images/ds.png" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractRedBlock ds "DS gen" (-1) (-1) |> ignore
 
-            let holds = metamodel.InstantiateNode "HOLDS" abstractRedBlock
+            let holds = metamodel.InstantiateNode "HOLDS" operatorBlock
             let holdsImage = holds.AddSimpleAttribute "image" (-1) (-1)
             holds.AddSimpleSlot holdsImage "images/holds.png" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractRedBlock holds "Holds gen" (-1) (-1) |> ignore
 
-            let materialize = metamodel.InstantiateNode "Materialize" abstractRedBlock
+            let materialize = metamodel.InstantiateNode "Materialize" operatorBlock
             let materializeImage = materialize.AddSimpleAttribute "image" (-1) (-1)
             materialize.AddSimpleSlot materializeImage "images/materialize.png" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractRedBlock materialize "Materialize gen" (-1) (-1) |> ignore
 
-            let read = metamodel.InstantiateNode "Read" abstractRedBlock
+            let read = metamodel.InstantiateNode "Read" operatorBlock
             let readImage = read.AddSimpleAttribute "image" (-1) (-1)
             read.AddSimpleSlot readImage "images/read.png" (-1) (-1) |> ignore
             //metamodel.CreateGeneralization abstractRedBlock read "Read gen" (-1) (-1) |> ignore
