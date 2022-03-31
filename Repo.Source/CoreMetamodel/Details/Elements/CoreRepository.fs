@@ -16,6 +16,7 @@ namespace Repo.CoreMetamodel.Details.Elements
 
 open Repo
 open Repo.CoreMetamodel
+open System.IO
 
 /// Implementation of core repository as a wrapper around basic repository.
 type CoreRepository(pool: CorePool, repo: BasicMetamodel.IBasicRepository) =
@@ -80,3 +81,15 @@ type CoreRepository(pool: CorePool, repo: BasicMetamodel.IBasicRepository) =
             pool.Clear ()
             repo.Clear ()
             ()
+
+        member this.DebugSerialize () =
+            use dumpFile = new StreamWriter("CoreRepositoryDump.dot")
+            dumpFile.WriteLine "digraph {"
+            for model in (this :> ICoreRepository).Models do
+                let subgraphName = model.Name.Replace("::", "")
+                dumpFile.WriteLine $"  subgraph cluster{subgraphName} {{"
+                dumpFile.WriteLine $"    label = {model.Name}" 
+                dumpFile.WriteLine $"    color = blue" 
+                model.DebugSerialize dumpFile
+                dumpFile.WriteLine "  }"
+            dumpFile.WriteLine "}"

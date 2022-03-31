@@ -5,21 +5,57 @@ open Repo.DeepMetamodel
 type QueryModelBuilder() =
     interface IDeepModelBuilder with
         member this.Build(repo: IDeepRepository): unit =
+            let dump num =
+                System.IO.File.Delete "BasicRepositoryDump.dot"
+
+                ((((repo :?> Repo.DeepMetamodel.Details.Elements.DeepRepository).UnderlyingRepo 
+                :?> Repo.LanguageMetamodel.Details.Elements.LanguageRepository).UnderlyingRepo 
+                :?> Repo.AttributeMetamodel.Details.Elements.AttributeRepository).UnderlyingRepo
+                :?> Repo.CoreMetamodel.Details.Elements.CoreRepository).UnderlyingRepo.DebugSerialize ()
+
+                System.IO.File.Delete $"BasicRepositoryDump{num}.dot"
+                System.IO.File.Move("BasicRepositoryDump.dot", $"BasicRepositoryDump{num}.dot")
+
+                System.IO.File.Delete "CoreRepositoryDump.dot"
+
+                (((repo :?> Repo.DeepMetamodel.Details.Elements.DeepRepository).UnderlyingRepo 
+                :?> Repo.LanguageMetamodel.Details.Elements.LanguageRepository).UnderlyingRepo 
+                :?> Repo.AttributeMetamodel.Details.Elements.AttributeRepository).UnderlyingRepo.DebugSerialize ()
+
+                System.IO.File.Delete $"CoreRepositoryDump{num}.dot"
+                System.IO.File.Move("CoreRepositoryDump.dot", $"CoreRepositoryDump{num}.dot")
+
+            dump 0
+
             let metametametamodel = repo.InstantiateDeepMetamodel "QueryMetametametamodel"
 
+            dump 1
+
             let abstractQueryBlock = metametametamodel.CreateNode "Abstract node" 0 3
+
+            dump 2
+
             let abstractQueryBlockXCoordinate = abstractQueryBlock.AddSimpleAttribute "xCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockXCoordinate "" (-1) (-1) |> ignore
             let abstractQueryBlockYCoordinate = abstractQueryBlock.AddSimpleAttribute "yCoordinate" (-1) (-1)
             abstractQueryBlock.AddSimpleSlot abstractQueryBlockYCoordinate "" (-1) (-1) |> ignore
 
+            dump 3
+
             let link = metametametamodel.CreateAssociation abstractQueryBlock abstractQueryBlock "link" (-1) 1 (-1) (-1) (-1) (-1)
             let linkConnectionType = link.AddSimpleAttribute "connection type" (-1) (-1)
             link.AddSimpleSlot linkConnectionType "local" (-1) (-1) |> ignore
 
+            dump 4
+
             let metametamodel = repo.InstantiateModel "QueryMetametamodel" metametametamodel
 
+            dump 5
+
             let operatorBlock = metametamodel.InstantiateNode "Operator block" abstractQueryBlock
+
+            dump 6
+
             let abstractRedBlockParent = operatorBlock.AddSimpleAttribute "parent" (-1) (-1)
             operatorBlock.AddSimpleSlot abstractRedBlockParent "" (-1) (-1)|> ignore
             let abstractRedBlockChildren = operatorBlock.AddSimpleAttribute "children" (-1) (-1)
@@ -79,6 +115,8 @@ type QueryModelBuilder() =
             let holdsInstanceChildren = Seq.find (fun (e: IDeepSlot) -> e.Attribute.Name = "children") holdsInstance.Slots
             holdsInstanceChildren.SimpleValue <- "Materialize_1"
 
+            dump 7
+
             let materializeInstance = queryModel.InstantiateNode "Materialize_1" materialize
             let materializeInstanceXCoordinate = Seq.find (fun (e: IDeepSlot) -> e.Attribute.Name = "xCoordinate") materializeInstance.Slots
             materializeInstanceXCoordinate.SimpleValue <- "100"
@@ -99,5 +137,7 @@ type QueryModelBuilder() =
 
             queryModel.InstantiateAssociation holdsInstance materializeInstance "HOLDS_Materialize_1" link |> ignore
             queryModel.InstantiateAssociation materializeInstance dsInstance "Materialize_DS_1" link |> ignore
+
+            
 
             ()

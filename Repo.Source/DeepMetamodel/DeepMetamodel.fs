@@ -1,8 +1,6 @@
 namespace Repo.DeepMetamodel
 
-open System
-
-
+/// Base interface for every element in deep metamodels.
 type IDeepContext =
     interface
         abstract Level: int with get, set

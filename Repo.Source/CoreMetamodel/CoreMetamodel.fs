@@ -176,6 +176,9 @@ and ICoreModel =
 
         /// Prints model contents on a console.
         abstract PrintContents: unit -> unit
+
+        /// Dumps model contents as a graph in Dot format.
+        abstract DebugSerialize: System.IO.StreamWriter -> unit
     end
 
 /// Repository is a collection of models.
@@ -202,4 +205,7 @@ type ICoreRepository =
 
         /// Clears repository contents.
         abstract Clear : unit -> unit
+
+        /// Dumps repo contents in Dot format.
+        abstract DebugSerialize: unit -> unit
     end

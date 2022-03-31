@@ -73,7 +73,7 @@ type DeepModel(model: ILanguageModel, pool: DeepPool, repo: ILanguageRepository)
 
         member this.InstantiateNode name metatype =
             let potency = getPotency metatype
-            let level = getLevel metatype this     
+            let level = getLevel metatype this
             let node = model.InstantiateNode name (unwrap metatype :?> ILanguageNode) Map.empty
             let wrappedNode = pool.Wrap node level potency :?> IDeepNode
             wrappedNode.Name <- node.Name

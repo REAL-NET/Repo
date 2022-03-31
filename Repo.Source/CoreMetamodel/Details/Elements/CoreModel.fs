@@ -141,3 +141,19 @@ type CoreModel(modelNode: BasicMetamodel.IBasicNode, pool: CorePool, repo: Basic
         member this.PrintContents () =
             printfn "Model: %s" modelNode.Name
             ()
+
+        member this.DebugSerialize dumpFile =
+            for edge in (this :> ICoreModel).Edges do
+                match edge.Source with
+                | :? ICoreNode as s -> 
+                    match edge.Target with
+                    | :? ICoreNode as t ->
+                        dumpFile.Write $"    \"{s.Name}\" -> \"{t.Name}\""
+                        if (edge :?> CoreEdge).UnderlyingElement.Metatype = coreMetamodelGeneralization then
+                            dumpFile.WriteLine " [arrowhead=onormal]"
+                        elif ((edge :?> CoreEdge).UnderlyingElement.Metatype = coreMetamodelAssociation) then
+                            dumpFile.WriteLine $" [label=\"{(edge :?> ICoreAssociation).TargetName}\"]"
+                        else
+                            dumpFile.WriteLine ""
+                    | _ -> ()
+                | _ -> ()

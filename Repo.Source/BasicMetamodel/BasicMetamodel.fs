@@ -102,4 +102,7 @@ type IBasicRepository =
 
         /// Clears repository contents.
         abstract Clear: unit -> unit
+
+        /// Dumps repo contents in Dot format.
+        abstract DebugSerialize: unit -> unit
     end

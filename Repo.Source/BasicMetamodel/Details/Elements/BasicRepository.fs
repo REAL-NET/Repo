@@ -15,6 +15,7 @@
 namespace Repo.BasicMetamodel.Details.Elements
 
 open Repo.BasicMetamodel
+open System.IO
 
 /// Implementation of basic repository (who doesn't even know about models).
 type BasicRepository() =
@@ -81,3 +82,20 @@ type BasicRepository() =
         member this.Clear () =
             nodes <- []
             edges <- []
+
+        member this.DebugSerialize () =
+            use dumpFile = new StreamWriter("BasicRepositoryDump.dot")
+            dumpFile.WriteLine "digraph {"
+            for edge in edges do
+                match edge.Source with
+                | :? IBasicNode as s -> 
+                    match edge.Target with
+                    | :? IBasicNode as t ->
+                        dumpFile.Write $"  \"{s.Name}\" -> \"{t.Name}\""
+                        if edge.TargetName <> "" then
+                            dumpFile.WriteLine $" [label=\"{edge.TargetName}\"]"
+                        else 
+                            dumpFile.WriteLine ""
+                    | _ -> ()
+                | _ -> ()
+            dumpFile.WriteLine "}"
