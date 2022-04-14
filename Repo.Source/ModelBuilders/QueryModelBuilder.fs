@@ -26,14 +26,14 @@ type QueryModelBuilder() =
             let metamodel = Repo.findModel repo "QueryMetamodel"
             let infrastructureMetamodel = infrastructure.Metamodel.Model
 
-            let metamodelAbstractQueryNode = Model.findNode metamodel "AbstractQueryNode"
+            let metamodelAbstractQueryBlock = Model.findNode metamodel "AbstractQueryBlock"
             let metamodelSort = Model.findNode metamodel "Sort"
             let metamodelAggregate = Model.findNode metamodel "Aggregate"
             let metamodelJoin = Model.findNode metamodel "Join"
             let metamodelRead = Model.findNode metamodel "Read"
             let metamodelOperatorInternals = Model.findNode metamodel "OperatorInternals"
 
-            let link = Model.findAssociationWithSource metamodelAbstractQueryNode "target"
+            let link = Model.findAssociationWithSource metamodelAbstractQueryBlock "target"
 
             let model = repo.CreateModel("QueryModel", metamodel)
 
