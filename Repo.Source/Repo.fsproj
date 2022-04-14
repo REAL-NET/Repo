@@ -31,6 +31,8 @@
     <Compile Include="ModelBuilders\AirSimMetamodelBuilder.fs" />
     <Compile Include="ModelBuilders\AirSimModelBuilder.fs" />
     <Compile Include="ModelBuilders\CoreMetametamodelBuilder.fs" />
+    <Compile Include="ModelBuilders\QueryMetamodelBuilder.fs" />
+    <Compile Include="ModelBuilders\QueryModelBuilder.fs" />
     <Compile Include="FacadeLayer.fs" />
     <Compile Include="FacadeLayer\Visual\VisualInfo.fs" />
     <Compile Include="FacadeLayer\Visual\VisualNodeInfo.fs" />
@@ -47,5 +49,5 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
-  <Import Project="..\..\..\.paket\Paket.Restore.targets" Condition="Exists('..\..\..\.paket\Paket.Restore.targets')"/>
+  <Import Project="..\..\..\.paket\Paket.Restore.targets" Condition="Exists('..\..\..\.paket\Paket.Restore.targets')" />
 </Project>
