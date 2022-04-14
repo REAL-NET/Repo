@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -31,6 +31,10 @@
     <Compile Include="ModelBuilders\AirSimMetamodelBuilder.fs" />
     <Compile Include="ModelBuilders\AirSimModelBuilder.fs" />
     <Compile Include="ModelBuilders\CoreMetametamodelBuilder.fs" />
+    <Compile Include="ModelBuilders\ConstraintsMetamodelBuilder.fs" />
+    <Compile Include="ModelBuilders\ConstraintsTestModelBuilder.fs" />
+    <Compile Include="ModelBuilders\SimpleConstraintsModelBuilder.fs" />
+    <Compile Include="ModelBuilders\SecondConstraintsModelBuilder.fs" />
     <Compile Include="ModelBuilders\QueryMetamodelBuilder.fs" />
     <Compile Include="ModelBuilders\QueryModelBuilder.fs" />
     <Compile Include="FacadeLayer.fs" />

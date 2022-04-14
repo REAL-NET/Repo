@@ -30,6 +30,10 @@ type RepoFactory =
         Metametamodels.RobotsTestModelBuilder() |> build
         Metametamodels.AirSimMetamodelBuilder() |> build
         Metametamodels.AirSimModelBuilder() |> build
+        Metametamodels.ConstraintsMetamodelBuilder() |> build
+        Metametamodels.ConstraintsTestModelBuilder() |> build
+        Metametamodels.SimpleConstraintsModelBuilder() |> build
+        Metametamodels.SecondConstraintsModelBuilder() |> build
         Metametamodels.QueryMetamodelBuilder() |> build
         Metametamodels.QueryModelBuilder() |> build
 
