@@ -75,10 +75,8 @@ type QueryMetamodelBuilder() =
             let ds = +("DS")
             infrastructure.Element.AddAttribute ds "argument" "AttributeKind.String" ""
             let sort = +("Sort")
-            infrastructure.Element.SetAttributeValue sort "type" "tuple"
             let join = +("Join")
             let aggregate = +("Aggregate")
-            infrastructure.Element.SetAttributeValue aggregate "type" "tuple"
             let filter = +("Filter")
             let materialize = +("Materialize")
             let read = +("Read")
@@ -95,5 +93,8 @@ type QueryMetamodelBuilder() =
             read --|> reader
             reader --|> abstractQueryBlock
             operatorInternals --|> abstractQueryBlock
+
+            infrastructure.Element.SetAttributeValue sort "type" "tuple"
+            infrastructure.Element.SetAttributeValue aggregate "type" "tuple"
 
             ()
