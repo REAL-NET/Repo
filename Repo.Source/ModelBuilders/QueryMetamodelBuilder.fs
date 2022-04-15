@@ -18,7 +18,7 @@ open Repo
 open Repo.DataLayer
 open Repo.InfrastructureSemanticLayer
 
-/// Initializes repository with AirSim Metamodel
+/// Initializes repository with Query Metamodel
 type QueryMetamodelBuilder() =
     interface IModelBuilder with
         member this.Build(repo: IRepo): unit =
@@ -33,9 +33,10 @@ type QueryMetamodelBuilder() =
 
             let model = repo.CreateModel("QueryMetamodel", metamodel)
 
-            let (~+) (name) =
+            let (~+) (name, isAbstract) =
                 let node = infrastructure.Instantiate model metamodelNode :?> INode
                 node.Name <- name
+                infrastructure.Element.SetAttributeValue node "isAbstract" (if isAbstract then "true" else "false")
                 infrastructure.Element.AddAttribute node "xCoordinate" "AttributeKind.Int" "0"
                 infrastructure.Element.AddAttribute node "yCoordinate" "AttributeKind.Int" "0"
 
@@ -56,30 +57,36 @@ type QueryMetamodelBuilder() =
 
                 edge
 
-            let abstractQueryBlock  = +("AbstractQueryBlock")
+            let abstractQueryBlock  = +("AbstractQueryBlock", true)
 
-            let operator = +("Operator")
+            let operator = +("Operator", true)
             infrastructure.Element.AddAttribute operator "children" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "parent" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "connectionType" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" "positional"
+            infrastructure.Element.AddAttribute operator "kind" "AttributeKind.String" "operator"
 
-            let operatorInternals = +("OperatorInternals")
+            let operatorInternals = +("OperatorInternals", false)
             infrastructure.Element.AddAttribute operatorInternals "contents" "AttributeKind.String" ""
+            infrastructure.Element.AddAttribute operatorInternals "kind" "AttributeKind.String" "operatorInternals"
 
-            let reader = +("Reader")
+            let reader = +("Reader", true)
             infrastructure.Element.AddAttribute reader "parent" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "connectionType" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "argument" "AttributeKind.String" ""
-            
-            let ds = +("DS")
+            infrastructure.Element.AddAttribute reader "kind" "AttributeKind.String" "reader"
+
+            let materializationPlank = +("MaterializationPlank", false)
+            infrastructure.Element.AddAttribute materializationPlank "kind" "AttributeKind.String" "materializationPlank"
+
+            let ds = +("DS", false)
             infrastructure.Element.AddAttribute ds "argument" "AttributeKind.String" ""
-            let sort = +("Sort")
-            let join = +("Join")
-            let aggregate = +("Aggregate")
-            let filter = +("Filter")
-            let materialize = +("Materialize")
-            let read = +("Read")
+            let sort = +("Sort", false)
+            let join = +("Join", false)
+            let aggregate = +("Aggregate", false)
+            let filter = +("Filter", false)
+            //let materialize = +("Materialize", false)
+            let read = +("Read", false)
 
             let link = abstractQueryBlock ---> (abstractQueryBlock, "target", "Link")
 
@@ -88,10 +95,11 @@ type QueryMetamodelBuilder() =
             join --|> operator
             aggregate --|> operator
             filter --|> operator
-            materialize --|> operator
+            //materialize --|> operator
             operator --|> abstractQueryBlock
             read --|> reader
             reader --|> abstractQueryBlock
+            materializationPlank --|> abstractQueryBlock
             operatorInternals --|> abstractQueryBlock
 
             infrastructure.Element.SetAttributeValue sort "type" "tuple"
