@@ -19,7 +19,6 @@
     <Compile Include="InfrastructureSemanticLayerTests.fs" />
     <Compile Include="RobotsTestModelsTests.fs" />
     <Compile Include="QueryModelTests.fs" />
-    <Compile Include="QueryConstraintsCheckTests.fs" />
     <Compile Include="FacadeRepoTests.fs" />
     <Compile Include="FacadeModelTests.fs" />
     <Compile Include="FacadeAttributeTests.fs" />
