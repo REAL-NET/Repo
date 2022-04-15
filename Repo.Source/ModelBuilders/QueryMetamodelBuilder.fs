@@ -62,6 +62,7 @@ type QueryMetamodelBuilder() =
             infrastructure.Element.AddAttribute operator "children" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "parent" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "connectionType" "AttributeKind.String" ""
+            infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" "positional"
 
             let operatorInternals = +("OperatorInternals")
             infrastructure.Element.AddAttribute operatorInternals "contents" "AttributeKind.String" ""
@@ -74,8 +75,10 @@ type QueryMetamodelBuilder() =
             let ds = +("DS")
             infrastructure.Element.AddAttribute ds "argument" "AttributeKind.String" ""
             let sort = +("Sort")
+            infrastructure.Element.SetAttributeValue sort "type" "tuple"
             let join = +("Join")
             let aggregate = +("Aggregate")
+            infrastructure.Element.SetAttributeValue aggregate "type" "tuple"
             let filter = +("Filter")
             let materialize = +("Materialize")
             let read = +("Read")
