@@ -37,6 +37,7 @@
     <Compile Include="ModelBuilders\SecondConstraintsModelBuilder.fs" />
     <Compile Include="ModelBuilders\QueryMetamodelBuilder.fs" />
     <Compile Include="ModelBuilders\QueryModelBuilder.fs" />
+    <Compile Include="ModelBuilders\QueryTestModelBuilder.fs" />
     <Compile Include="FacadeLayer.fs" />
     <Compile Include="FacadeLayer\Visual\VisualInfo.fs" />
     <Compile Include="FacadeLayer\Visual\VisualNodeInfo.fs" />

@@ -36,6 +36,7 @@ type RepoFactory =
         Metametamodels.SecondConstraintsModelBuilder() |> build
         Metametamodels.QueryMetamodelBuilder() |> build
         Metametamodels.QueryModelBuilder() |> build
+        Metametamodels.QueryTestModelBuilder() |> build
 
         new FacadeLayer.Repo(data) :> IRepo
 
