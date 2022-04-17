@@ -42,6 +42,8 @@ type QueryModelBuilder() =
             infrastructure.Element.SetAttributeValue materializationPlank "yCoordinate" "125"
 
             let sort = infrastructure.Instantiate model metamodelSort
+            let sortNode = Model.findNode model "aSort"
+            sortNode.Name <- "sort"
             infrastructure.Element.SetAttributeValue sort "xCoordinate" "200"
             infrastructure.Element.SetAttributeValue sort "yCoordinate" "50"
             infrastructure.Element.SetAttributeValue sort "children" "aggregate"
@@ -53,8 +55,10 @@ type QueryModelBuilder() =
             infrastructure.Element.SetAttributeValue operatorInternals1 "contents" "aggregate"
 
             let aggregate = infrastructure.Instantiate model metamodelAggregate
-            infrastructure.Element.SetAttributeValue aggregate "xCoordinate" "200"
-            infrastructure.Element.SetAttributeValue aggregate "yCoordinate" "100"
+            let aggregateNode = Model.findNode model "aAggregate"
+            aggregateNode.Name <- "aggregate"
+            infrastructure.Element.SetAttributeValue aggregate "xCoordinate" "135"
+            infrastructure.Element.SetAttributeValue aggregate "yCoordinate" "25"
             infrastructure.Element.SetAttributeValue aggregate "children" "join"
             infrastructure.Element.SetAttributeValue aggregate "parent" "sort"
             infrastructure.Element.SetAttributeValue aggregate "connectionType" "local"
@@ -65,22 +69,28 @@ type QueryModelBuilder() =
             infrastructure.Element.SetAttributeValue operatorInternals2 "contents" "join, read1, read2"
 
             let join = infrastructure.Instantiate model metamodelJoin
-            infrastructure.Element.SetAttributeValue join "xCoordinate" "200"
-            infrastructure.Element.SetAttributeValue join "yCoordinate" "150"
+            let joinNode = Model.findNode model "aJoin"
+            joinNode.Name <- "join"
+            infrastructure.Element.SetAttributeValue join "xCoordinate" "135"
+            infrastructure.Element.SetAttributeValue join "yCoordinate" "25"
             infrastructure.Element.SetAttributeValue join "children" "read1, read2"
             infrastructure.Element.SetAttributeValue join "parent" "aggregate"
             infrastructure.Element.SetAttributeValue join "connectionType" "local"
 
             let read1 = infrastructure.Instantiate model metamodelRead
-            infrastructure.Element.SetAttributeValue read1 "xCoordinate" "100"
-            infrastructure.Element.SetAttributeValue read1 "yCoordinate" "150"
+            let readNode1 = Model.findNode model "aRead"
+            readNode1.Name <- "read1"
+            infrastructure.Element.SetAttributeValue read1 "xCoordinate" "30"
+            infrastructure.Element.SetAttributeValue read1 "yCoordinate" "25"
             infrastructure.Element.SetAttributeValue read1 "parent" "join"
             infrastructure.Element.SetAttributeValue read1 "connectionType" "local"
             infrastructure.Element.SetAttributeValue read1 "argument" "d_datekey"
 
             let read2 = infrastructure.Instantiate model metamodelRead
-            infrastructure.Element.SetAttributeValue read2 "xCoordinate" "300"
-            infrastructure.Element.SetAttributeValue read2 "yCoordinate" "150"
+            let readNode2 = Model.findNode model "aRead"
+            readNode2.Name <- "read2"
+            infrastructure.Element.SetAttributeValue read2 "xCoordinate" "240"
+            infrastructure.Element.SetAttributeValue read2 "yCoordinate" "25"
             infrastructure.Element.SetAttributeValue read2 "parent" "join"
             infrastructure.Element.SetAttributeValue read2 "connectionType" "remote"
             infrastructure.Element.SetAttributeValue read2 "argument" "lo_orderdate"
