@@ -39,23 +39,23 @@ type QueryModelBuilder() =
 
             let materializationPlank = infrastructure.Instantiate model metamodelMaterializationPlank
             infrastructure.Element.SetAttributeValue materializationPlank "xCoordinate" "100"
-            infrastructure.Element.SetAttributeValue materializationPlank "yCoordinate" "125"
+            infrastructure.Element.SetAttributeValue materializationPlank "yCoordinate" "220"
 
             let sort = infrastructure.Instantiate model metamodelSort
-            infrastructure.Element.SetAttributeValue sort "xCoordinate" "200"
-            infrastructure.Element.SetAttributeValue sort "yCoordinate" "50"
+            infrastructure.Element.SetAttributeValue sort "xCoordinate" "235"
+            infrastructure.Element.SetAttributeValue sort "yCoordinate" "70"
 
             let operatorInternals1 = infrastructure.Instantiate model metamodelOperatorInternals
-            infrastructure.Element.SetAttributeValue operatorInternals1 "xCoordinate" "200"
-            infrastructure.Element.SetAttributeValue operatorInternals1 "yCoordinate" "100"
+            infrastructure.Element.SetAttributeValue operatorInternals1 "xCoordinate" "100"
+            infrastructure.Element.SetAttributeValue operatorInternals1 "yCoordinate" "120"
 
             let aggregate = infrastructure.Instantiate model metamodelAggregate
             infrastructure.Element.SetAttributeValue aggregate "xCoordinate" "135"
             infrastructure.Element.SetAttributeValue aggregate "yCoordinate" "25"
 
             let operatorInternals2 = infrastructure.Instantiate model metamodelOperatorInternals
-            infrastructure.Element.SetAttributeValue operatorInternals2 "xCoordinate" "200"
-            infrastructure.Element.SetAttributeValue operatorInternals2 "yCoordinate" "150"
+            infrastructure.Element.SetAttributeValue operatorInternals2 "xCoordinate" "100"
+            infrastructure.Element.SetAttributeValue operatorInternals2 "yCoordinate" "240"
 
             let join = infrastructure.Instantiate model metamodelJoin
             infrastructure.Element.SetAttributeValue join "xCoordinate" "135"
@@ -92,8 +92,8 @@ type QueryModelBuilder() =
             let joinToRead1 = join --> read1
             infrastructure.Element.SetAttributeValue joinToRead1 "type" "remote"
 
-            sort --> aggregate --> join |> ignore
-
+            sort --> aggregate |> ignore
+            aggregate --> join |> ignore
             join --> read2 |> ignore
 
             ()

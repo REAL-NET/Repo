@@ -81,11 +81,10 @@ type QueryTestModelBuilder() =
 
             let joinToRead1 = join --> read1
             infrastructure.Element.SetAttributeValue joinToRead1 "type" "remote"
-
-            sort --> aggregate --> join |> ignore
-
+            
+            sort --> aggregate |> ignore
+            aggregate --> join |> ignore
             join --> read2 |> ignore
-
             filter --> read3 |> ignore
 
             ()
