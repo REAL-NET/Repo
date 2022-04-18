@@ -20,6 +20,6 @@ let ``Model should have 7 nodes`` () =
     model.Metamodel.Nodes |> Seq.length |> should equal 7
 
 [<Test>]
-let ``Model should have 4 edges`` () =
+let ``Model should have 8 edges`` () =
     let model = repo.Model "QueryModel"
-    model.Metamodel.Edges |> Seq.length |> should equal 4
+    model.Metamodel.Edges |> Seq.length |> should equal 8

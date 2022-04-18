@@ -51,8 +51,8 @@ type QueryMetamodelBuilder() =
                 edge.Target <- Some target
                 edge.TargetName <- targetName
 
-                infrastructure.Element.AddAttribute edge "connectionType" "AttributeKind.String" ""
-                infrastructure.Element.SetAttributeValue edge "connectionType" "local"
+                infrastructure.Element.AddAttribute edge "type" "AttributeKind.String" ""
+                infrastructure.Element.SetAttributeValue edge "type" "local"
                 infrastructure.Element.SetAttributeValue edge "name" linkName
 
                 edge
@@ -60,19 +60,13 @@ type QueryMetamodelBuilder() =
             let abstractQueryBlock  = +("AbstractQueryBlock", true)
 
             let operator = +("Operator", true)
-            infrastructure.Element.AddAttribute operator "children" "AttributeKind.String" ""
-            infrastructure.Element.AddAttribute operator "parent" "AttributeKind.String" ""
-            infrastructure.Element.AddAttribute operator "connectionType" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" "positional"
             infrastructure.Element.AddAttribute operator "kind" "AttributeKind.String" "operator"
 
             let operatorInternals = +("OperatorInternals", false)
-            infrastructure.Element.AddAttribute operatorInternals "contents" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operatorInternals "kind" "AttributeKind.String" "operatorInternals"
 
             let reader = +("Reader", true)
-            infrastructure.Element.AddAttribute reader "parent" "AttributeKind.String" ""
-            infrastructure.Element.AddAttribute reader "connectionType" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "argument" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "kind" "AttributeKind.String" "reader"
 
@@ -88,7 +82,7 @@ type QueryMetamodelBuilder() =
             //let materialize = +("Materialize", false)
             let read = +("Read", false)
 
-            let link = abstractQueryBlock ---> (abstractQueryBlock, "target", "Link")
+            let link = abstractQueryBlock ---> (abstractQueryBlock, "target", "link")
 
             ds --|> operator
             sort --|> operator

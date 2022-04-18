@@ -42,67 +42,58 @@ type QueryModelBuilder() =
             infrastructure.Element.SetAttributeValue materializationPlank "yCoordinate" "125"
 
             let sort = infrastructure.Instantiate model metamodelSort
-            let sortNode = Model.findNode model "aSort"
-            sortNode.Name <- "sort"
             infrastructure.Element.SetAttributeValue sort "xCoordinate" "200"
             infrastructure.Element.SetAttributeValue sort "yCoordinate" "50"
-            infrastructure.Element.SetAttributeValue sort "children" "aggregate"
-            infrastructure.Element.SetAttributeValue sort "connectionType" "local"
 
             let operatorInternals1 = infrastructure.Instantiate model metamodelOperatorInternals
             infrastructure.Element.SetAttributeValue operatorInternals1 "xCoordinate" "200"
             infrastructure.Element.SetAttributeValue operatorInternals1 "yCoordinate" "100"
-            infrastructure.Element.SetAttributeValue operatorInternals1 "contents" "aggregate"
 
             let aggregate = infrastructure.Instantiate model metamodelAggregate
-            let aggregateNode = Model.findNode model "aAggregate"
-            aggregateNode.Name <- "aggregate"
             infrastructure.Element.SetAttributeValue aggregate "xCoordinate" "135"
             infrastructure.Element.SetAttributeValue aggregate "yCoordinate" "25"
-            infrastructure.Element.SetAttributeValue aggregate "children" "join"
-            infrastructure.Element.SetAttributeValue aggregate "parent" "sort"
-            infrastructure.Element.SetAttributeValue aggregate "connectionType" "local"
 
             let operatorInternals2 = infrastructure.Instantiate model metamodelOperatorInternals
             infrastructure.Element.SetAttributeValue operatorInternals2 "xCoordinate" "200"
             infrastructure.Element.SetAttributeValue operatorInternals2 "yCoordinate" "150"
-            infrastructure.Element.SetAttributeValue operatorInternals2 "contents" "join, read1, read2"
 
             let join = infrastructure.Instantiate model metamodelJoin
-            let joinNode = Model.findNode model "aJoin"
-            joinNode.Name <- "join"
             infrastructure.Element.SetAttributeValue join "xCoordinate" "135"
             infrastructure.Element.SetAttributeValue join "yCoordinate" "25"
-            infrastructure.Element.SetAttributeValue join "children" "read1, read2"
-            infrastructure.Element.SetAttributeValue join "parent" "aggregate"
-            infrastructure.Element.SetAttributeValue join "connectionType" "local"
 
             let read1 = infrastructure.Instantiate model metamodelRead
-            let readNode1 = Model.findNode model "aRead"
-            readNode1.Name <- "read1"
             infrastructure.Element.SetAttributeValue read1 "xCoordinate" "30"
             infrastructure.Element.SetAttributeValue read1 "yCoordinate" "25"
-            infrastructure.Element.SetAttributeValue read1 "parent" "join"
-            infrastructure.Element.SetAttributeValue read1 "connectionType" "local"
             infrastructure.Element.SetAttributeValue read1 "argument" "d_datekey"
 
             let read2 = infrastructure.Instantiate model metamodelRead
-            let readNode2 = Model.findNode model "aRead"
-            readNode2.Name <- "read2"
             infrastructure.Element.SetAttributeValue read2 "xCoordinate" "240"
             infrastructure.Element.SetAttributeValue read2 "yCoordinate" "25"
-            infrastructure.Element.SetAttributeValue read2 "parent" "join"
-            infrastructure.Element.SetAttributeValue read2 "connectionType" "remote"
             infrastructure.Element.SetAttributeValue read2 "argument" "lo_orderdate"
 
             let (-->) (src: IElement) dst =
                 let aLink = infrastructure.Instantiate model link :?> IAssociation
                 aLink.Source <- Some src
                 aLink.Target <- Some dst
-                dst
+                aLink
+
+            let edgeToAggregate = operatorInternals1 --> aggregate 
+            infrastructure.Element.SetAttributeValue edgeToAggregate "type" "internals"
+
+            let edgeToJoin = operatorInternals2 --> join
+            infrastructure.Element.SetAttributeValue edgeToJoin "type" "internals"
+
+            let edgeToRead1 = operatorInternals2 --> read1
+            infrastructure.Element.SetAttributeValue edgeToRead1 "type" "internals"
+
+            let edgeToRead2 = operatorInternals2 --> read2
+            infrastructure.Element.SetAttributeValue edgeToRead2 "type" "internals"
+
+            let joinToRead1 = join --> read1
+            infrastructure.Element.SetAttributeValue joinToRead1 "type" "remote"
 
             sort --> aggregate --> join |> ignore
-            join --> read1 |> ignore
+
             join --> read2 |> ignore
 
             ()
