@@ -60,7 +60,7 @@ type QueryMetamodelBuilder() =
             let abstractQueryBlock  = +("AbstractQueryBlock", true)
 
             let operator = +("Operator", true)
-            infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" "positional"
+            infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "kind" "AttributeKind.String" "operator"
 
             let operatorInternals = +("OperatorInternals", false)
@@ -70,33 +70,61 @@ type QueryMetamodelBuilder() =
             infrastructure.Element.AddAttribute reader "argument" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "kind" "AttributeKind.String" "reader"
 
-            let materializationPlank = +("MaterializationPlank", false)
-            infrastructure.Element.AddAttribute materializationPlank "kind" "AttributeKind.String" "materializationPlank"
+            let materializationLine = +("MaterializationLine", false)
+            infrastructure.Element.AddAttribute materializationLine "kind" "AttributeKind.String" "materializationLine"
 
-            let ds = +("DS", false)
-            infrastructure.Element.AddAttribute ds "argument" "AttributeKind.String" ""
-            let sort = +("Sort", false)
-            let join = +("Join", false)
-            let aggregate = +("Aggregate", false)
-            let filter = +("Filter", false)
+            let dsPositional = +("DS", false)
+            let dsTuple = +("DS", false)
+            infrastructure.Element.AddAttribute dsPositional "argument" "AttributeKind.String" ""
+            infrastructure.Element.AddAttribute dsTuple "argument" "AttributeKind.String" ""
+            let sortPositional = +("Sort", false)
+            let sortTuple = +("Sort", false)
+            let joinPositional = +("Join", false)
+            let joinTuple = +("Join", false)
+            let aggregatePositional = +("Aggregate", false)
+            let aggregateTuple = +("Aggregate", false)
+            let filterPositional = +("Filter", false)
+            let filterTuple = +("Filter", false)
             //let materialize = +("Materialize", false)
+            let posAND = +("PosAND", false)
+            let posOR = +("PosOR", false)
+            let posNOT = +("PosNOT", false)
             let read = +("Read", false)
 
             let link = abstractQueryBlock ---> (abstractQueryBlock, "target", "link")
 
-            ds --|> operator
-            sort --|> operator
-            join --|> operator
-            aggregate --|> operator
-            filter --|> operator
+            dsPositional --|> operator
+            dsTuple --|> operator
+            sortPositional --|> operator
+            sortTuple --|> operator
+            joinPositional --|> operator
+            joinTuple --|> operator
+            aggregatePositional --|> operator
+            aggregateTuple --|> operator
+            filterPositional --|> operator
+            filterTuple --|> operator
             //materialize --|> operator
+            posAND --|> operator
+            posOR --|> operator
+            posNOT --|> operator
             operator --|> abstractQueryBlock
             read --|> reader
             reader --|> abstractQueryBlock
-            materializationPlank --|> abstractQueryBlock
+            materializationLine --|> abstractQueryBlock
             operatorInternals --|> abstractQueryBlock
 
-            infrastructure.Element.SetAttributeValue sort "type" "tuple"
-            infrastructure.Element.SetAttributeValue aggregate "type" "tuple"
+            infrastructure.Element.SetAttributeValue dsPositional "type" "positional"
+            infrastructure.Element.SetAttributeValue dsTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue sortPositional "type" "positional"
+            infrastructure.Element.SetAttributeValue sortTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue joinPositional "type" "positional"
+            infrastructure.Element.SetAttributeValue joinTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue aggregatePositional "type" "positional"
+            infrastructure.Element.SetAttributeValue aggregateTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue filterPositional "type" "positional"
+            infrastructure.Element.SetAttributeValue filterTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue posAND "type" "positional"
+            infrastructure.Element.SetAttributeValue posOR "type" "positional"
+            infrastructure.Element.SetAttributeValue posNOT "type" "positional"
 
             ()

@@ -209,6 +209,15 @@ module Model =
         else
             Seq.head nodes
 
+    /// Searches for nodes in a given model by name.
+    let findNodes (model: IModel) name =
+        let nodes = model.Nodes |> Seq.filter (fun m -> m.Name = name)
+
+        if Seq.isEmpty nodes then
+            raise (InvalidSemanticOperationException <| sprintf "Nodes %s not found in model %s" name model.Name)
+        else
+            nodes
+
     /// Searches for a given node in a given model by name, returns None if not found or found more than one.
     let tryFindNode (model: IModel) name =
         let nodes = model.Nodes |> Seq.filter (fun m -> m.Name = name)

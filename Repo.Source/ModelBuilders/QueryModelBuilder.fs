@@ -14,6 +14,7 @@
 
 namespace Repo.Metametamodels
 
+open Repo
 open Repo.DataLayer
 open Repo.CoreSemanticLayer
 open Repo.InfrastructureSemanticLayer
@@ -26,10 +27,24 @@ type QueryModelBuilder() =
             let metamodel = Repo.findModel repo "QueryMetamodel"
 
             let metamodelAbstractQueryBlock = Model.findNode metamodel "AbstractQueryBlock"
-            let metamodelMaterializationPlank = Model.findNode metamodel "MaterializationPlank"
-            let metamodelSort = Model.findNode metamodel "Sort"
-            let metamodelAggregate = Model.findNode metamodel "Aggregate"
-            let metamodelJoin = Model.findNode metamodel "Join"
+            let metamodelMaterializationLine = Model.findNode metamodel "MaterializationLine"
+
+            let findNodeWithAttribute nodes attributeName attributeValue =
+                let node = nodes |> Seq.filter (fun m -> infrastructure.Element.AttributeValue m attributeName = attributeValue)
+                if Seq.isEmpty node then
+                    raise (InvalidSemanticOperationException <| sprintf "Node with attribute %s value %s not found" attributeName attributeValue)
+                elif Seq.length node <> 1 then
+                    raise (InvalidSemanticOperationException
+                        <| sprintf "Node with attribute %s value %s appears more than once" attributeName attributeValue)
+                else
+                    Seq.head node
+
+            let metamodelSorts = Model.findNodes metamodel "Sort"
+            let metamodelSort = findNodeWithAttribute metamodelSorts "type" "tuple"
+            let metamodelAggregates = Model.findNodes metamodel "Aggregate"
+            let metamodelAggregate = findNodeWithAttribute metamodelAggregates "type" "tuple"
+            let metamodelJoins = Model.findNodes metamodel "Join"
+            let metamodelJoin = findNodeWithAttribute metamodelJoins "type" "positional"
             let metamodelRead = Model.findNode metamodel "Read"
             let metamodelOperatorInternals = Model.findNode metamodel "OperatorInternals"
 
@@ -37,9 +52,9 @@ type QueryModelBuilder() =
 
             let model = repo.CreateModel("QueryModel", metamodel)
 
-            let materializationPlank = infrastructure.Instantiate model metamodelMaterializationPlank
-            infrastructure.Element.SetAttributeValue materializationPlank "xCoordinate" "100"
-            infrastructure.Element.SetAttributeValue materializationPlank "yCoordinate" "220"
+            let materializationLine = infrastructure.Instantiate model metamodelMaterializationLine
+            infrastructure.Element.SetAttributeValue materializationLine "xCoordinate" "100"
+            infrastructure.Element.SetAttributeValue materializationLine "yCoordinate" "220"
 
             let sort = infrastructure.Instantiate model metamodelSort
             infrastructure.Element.SetAttributeValue sort "xCoordinate" "235"
