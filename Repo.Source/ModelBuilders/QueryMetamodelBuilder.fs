@@ -80,10 +80,8 @@ type QueryMetamodelBuilder() =
             infrastructure.Element.AddAttribute materializationLine "kind" "AttributeKind.String" "materializationLine"
             infrastructure.Element.AddAttribute materializationLine "width" "AttributeKind.Int" "350"
 
-            let dsPositional = +("DS", false)
-            let dsTuple = +("DS", false)
-            infrastructure.Element.AddAttribute dsPositional "argument" "AttributeKind.String" ""
-            infrastructure.Element.AddAttribute dsTuple "argument" "AttributeKind.String" ""
+            let ds = +("DS", false)
+            infrastructure.Element.AddAttribute ds "argument" "AttributeKind.String" ""
             let sortPositional = +("Sort", false)
             let sortTuple = +("Sort", false)
             let joinPositional = +("Join", false)
@@ -100,8 +98,7 @@ type QueryMetamodelBuilder() =
 
             let link = abstractQueryBlock ---> (abstractQueryBlock, "target", "link")
 
-            dsPositional --|> operator
-            dsTuple --|> operator
+            ds --|> operator
             sortPositional --|> operator
             sortTuple --|> operator
             joinPositional --|> operator
@@ -120,8 +117,7 @@ type QueryMetamodelBuilder() =
             materializationLine --|> abstractQueryBlock
             operatorInternals --|> abstractQueryBlock
 
-            infrastructure.Element.SetAttributeValue dsPositional "type" "positional"
-            infrastructure.Element.SetAttributeValue dsTuple "type" "tuple"
+            infrastructure.Element.SetAttributeValue ds "type" "positional"
             infrastructure.Element.SetAttributeValue sortPositional "type" "positional"
             infrastructure.Element.SetAttributeValue sortTuple "type" "tuple"
             infrastructure.Element.SetAttributeValue joinPositional "type" "positional"

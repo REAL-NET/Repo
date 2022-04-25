@@ -47,8 +47,7 @@ type QueryTestModelBuilder() =
             let metamodelJoin = findNodeWithAttribute metamodelJoins "type" "positional"
             let metamodelFilters = Model.findNodes metamodel "Filter"
             let metamodelFilter = findNodeWithAttribute metamodelFilters "type" "positional"
-            let metamodelDSs = Model.findNodes metamodel "DS"
-            let metamodelDS = findNodeWithAttribute metamodelDSs "type" "tuple"
+            let metamodelDS = Model.findNode metamodel "DS"
             let metamodelRead = Model.findNode metamodel "Read"
             let metamodelOperatorInternals = Model.findNode metamodel "OperatorInternals"
 
