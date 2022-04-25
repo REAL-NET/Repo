@@ -47,6 +47,8 @@ type QueryTestModelBuilder() =
             let metamodelJoin = findNodeWithAttribute metamodelJoins "type" "positional"
             let metamodelFilters = Model.findNodes metamodel "Filter"
             let metamodelFilter = findNodeWithAttribute metamodelFilters "type" "positional"
+            let metamodelDSs = Model.findNodes metamodel "DS"
+            let metamodelDS = findNodeWithAttribute metamodelDSs "type" "tuple"
             let metamodelRead = Model.findNode metamodel "Read"
             let metamodelOperatorInternals = Model.findNode metamodel "OperatorInternals"
 
@@ -73,6 +75,8 @@ type QueryTestModelBuilder() =
             infrastructure.Element.SetAttributeValue read2 "argument" "lo_orderdate"
 
             let filter = infrastructure.Instantiate model metamodelFilter
+
+            let ds = infrastructure.Instantiate model metamodelDS
 
             let read3 = infrastructure.Instantiate model metamodelRead
             infrastructure.Element.SetAttributeValue read3 "argument" "p_category"
@@ -102,5 +106,6 @@ type QueryTestModelBuilder() =
             aggregate --> join |> ignore
             join --> read2 |> ignore
             filter --> read3 |> ignore
+            join --> ds |> ignore
 
             ()
