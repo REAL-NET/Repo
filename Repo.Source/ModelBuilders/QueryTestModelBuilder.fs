@@ -41,8 +41,7 @@ type QueryTestModelBuilder() =
 
             let metamodelSorts = Model.findNodes metamodel "Sort"
             let metamodelSort = findNodeWithAttribute metamodelSorts "type" "tuple"
-            let metamodelAggregates = Model.findNodes metamodel "Aggregate"
-            let metamodelAggregate = findNodeWithAttribute metamodelAggregates "type" "tuple"
+            let metamodelAggregate = Model.findNode metamodel "Aggregate"
             let metamodelJoins = Model.findNodes metamodel "Join"
             let metamodelJoin = findNodeWithAttribute metamodelJoins "type" "positional"
             let metamodelFilters = Model.findNodes metamodel "Filter"
