@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     executor:
-      name: win/vs2022
+      name: win/vs2019
       shell: powershell.exe
     steps:
       - checkout
