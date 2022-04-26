@@ -4,10 +4,8 @@ orbs:
 jobs:
   build:
     executor:
-      name: win/vs2019
+      name: win/vs2022
       shell: powershell.exe
-    docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     steps:
       - checkout
       - run:
