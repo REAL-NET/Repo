@@ -6,6 +6,8 @@ jobs:
     executor:
       name: win/vs2019
       shell: powershell.exe
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     steps:
       - checkout
       - run:
