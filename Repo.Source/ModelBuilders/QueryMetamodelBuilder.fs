@@ -62,19 +62,19 @@ type QueryMetamodelBuilder() =
             let operator = +("Operator", true)
             infrastructure.Element.AddAttribute operator "type" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute operator "kind" "AttributeKind.String" "operator"
-            infrastructure.Element.AddAttribute operator "width" "AttributeKind.Int" "80"
-            infrastructure.Element.AddAttribute operator "height" "AttributeKind.Int" "30"
+            infrastructure.Element.AddAttribute operator "width" "AttributeKind.Int" "90"
+            infrastructure.Element.AddAttribute operator "height" "AttributeKind.Int" "40"
 
             let operatorInternals = +("OperatorInternals", false)
             infrastructure.Element.AddAttribute operatorInternals "kind" "AttributeKind.String" "operatorInternals"
             infrastructure.Element.AddAttribute operatorInternals "width" "AttributeKind.Int" "350"
-            infrastructure.Element.AddAttribute operatorInternals "height" "AttributeKind.Int" "80"
+            infrastructure.Element.AddAttribute operatorInternals "height" "AttributeKind.Int" "90"
 
             let reader = +("Reader", true)
             infrastructure.Element.AddAttribute reader "argument" "AttributeKind.String" ""
             infrastructure.Element.AddAttribute reader "kind" "AttributeKind.String" "reader"
-            infrastructure.Element.AddAttribute reader "width" "AttributeKind.Int" "80"
-            infrastructure.Element.AddAttribute reader "height" "AttributeKind.Int" "30"
+            infrastructure.Element.AddAttribute reader "width" "AttributeKind.Int" "90"
+            infrastructure.Element.AddAttribute reader "height" "AttributeKind.Int" "40"
 
             let materializationLine = +("MaterializationLine", false)
             infrastructure.Element.AddAttribute materializationLine "kind" "AttributeKind.String" "materializationLine"
