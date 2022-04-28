@@ -87,6 +87,7 @@ type QueryMetamodelBuilder() =
             let joinPositional = +("Join", false)
             let joinTuple = +("Join", false)
             let aggregate = +("Aggregate", false)
+            let materialize = +("Materialize", false)
             let filterPositional = +("Filter", false)
             let filterTuple = +("Filter", false)
             //let materialize = +("Materialize", false)
@@ -103,6 +104,7 @@ type QueryMetamodelBuilder() =
             joinPositional --|> operator
             joinTuple --|> operator
             aggregate --|> operator
+            materialize --|> operator
             filterPositional --|> operator
             filterTuple --|> operator
             //materialize --|> operator
@@ -121,6 +123,7 @@ type QueryMetamodelBuilder() =
             infrastructure.Element.SetAttributeValue joinPositional "type" "positional"
             infrastructure.Element.SetAttributeValue joinTuple "type" "tuple"
             infrastructure.Element.SetAttributeValue aggregate "type" "tuple"
+            infrastructure.Element.SetAttributeValue materialize "type" "tuple"
             infrastructure.Element.SetAttributeValue filterPositional "type" "positional"
             infrastructure.Element.SetAttributeValue filterTuple "type" "tuple"
             infrastructure.Element.SetAttributeValue posAND "type" "positional"
