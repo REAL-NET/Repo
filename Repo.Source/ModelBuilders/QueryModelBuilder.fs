@@ -105,9 +105,14 @@ type QueryModelBuilder() =
 
             let joinToRead1 = join --> read1
             infrastructure.Element.SetAttributeValue joinToRead1 "type" "remote"
+            infrastructure.Element.SetAttributeValue joinToRead1 "sourcePort" "left"
+            infrastructure.Element.SetAttributeValue joinToRead1 "targetPort" "right"
 
             sort --> aggregate |> ignore
             aggregate --> join |> ignore
-            join --> read2 |> ignore
+
+            let joinToRead2 = join --> read2
+            infrastructure.Element.SetAttributeValue joinToRead2 "sourcePort" "right"
+            infrastructure.Element.SetAttributeValue joinToRead2 "targetPort" "left"
 
             ()

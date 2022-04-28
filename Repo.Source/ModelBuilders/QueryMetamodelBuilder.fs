@@ -51,8 +51,9 @@ type QueryMetamodelBuilder() =
                 edge.Target <- Some target
                 edge.TargetName <- targetName
 
-                infrastructure.Element.AddAttribute edge "type" "AttributeKind.String" ""
-                infrastructure.Element.SetAttributeValue edge "type" "local"
+                infrastructure.Element.AddAttribute edge "type" "AttributeKind.String" "local"
+                infrastructure.Element.AddAttribute edge "sourcePort" "AttributeKind.String" "bottom"
+                infrastructure.Element.AddAttribute edge "targetPort" "AttributeKind.String" "top"
                 infrastructure.Element.SetAttributeValue edge "name" linkName
 
                 edge
@@ -90,7 +91,6 @@ type QueryMetamodelBuilder() =
             let materialize = +("Materialize", false)
             let filterPositional = +("Filter", false)
             let filterTuple = +("Filter", false)
-            //let materialize = +("Materialize", false)
             let posAND = +("PosAND", false)
             let posOR = +("PosOR", false)
             let posNOT = +("PosNOT", false)
@@ -107,7 +107,6 @@ type QueryMetamodelBuilder() =
             materialize --|> operator
             filterPositional --|> operator
             filterTuple --|> operator
-            //materialize --|> operator
             posAND --|> operator
             posOR --|> operator
             posNOT --|> operator
