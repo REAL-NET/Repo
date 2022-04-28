@@ -317,7 +317,7 @@ module private Operations =
 
         let name =
             match ``class`` with
-            | :? INode as n -> "a" + n.Name
+            | :? INode as n -> n.Name
             | :? IAssociation as a -> a.TargetName
             | _ -> raise (InvalidSemanticOperationException
                     "Trying to instantiate something that should not be instantiated")
