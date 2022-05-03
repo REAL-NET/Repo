@@ -23,7 +23,7 @@ open Repo.InfrastructureSemanticLayer
 type QueryModelBuilder() =
     interface IModelBuilder with
         member this.Build(repo: IRepo): unit =
-            let infrastructure = InfrastructureSemantic(repo)
+            //let infrastructure = InfrastructureSemantic(repo)
             let metamodel = Repo.findModel repo "QueryMetamodel"
 
             //let metamodelAbstractQueryBlock = Model.findNode metamodel "AbstractQueryBlock"
@@ -49,7 +49,7 @@ type QueryModelBuilder() =
 
             //let link = Model.findAssociationWithSource metamodelAbstractQueryBlock "target"
 
-            //let model = repo.CreateModel("QueryModel", metamodel)
+            let model = repo.CreateModel("QueryModel", metamodel)
 
             //let materializationLine = infrastructure.Instantiate model metamodelMaterializationLine
             //infrastructure.Element.SetAttributeValue materializationLine "xCoordinate" "100"
